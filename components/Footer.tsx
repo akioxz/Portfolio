@@ -1,11 +1,14 @@
 "use client";
 
-import React from "react";
-import { VscMail, VscGithub, VscChevronRight } from "react-icons/vsc";
+import React, { useState } from "react";
+import { VscMail, VscGithub, VscCommentDiscussion, VscChevronRight } from "react-icons/vsc";
 import SplitText from "./react-bits/SplitText";
 import GlareHover from "./react-bits/GlareHover";
+import ContactModal from "./ContactModal";
 
 export default function Footer() {
+  const [isContactModalOpen, setIsContactModalOpen] = useState(false);
+
   return (
     <footer
       id="contact"
@@ -32,6 +35,42 @@ export default function Footer() {
         </div>
 
         <div className="flex flex-col gap-4 w-full">
+          <button
+            type="button"
+            onClick={() => setIsContactModalOpen(true)}
+            aria-label="Open contact message form"
+            className="block w-full text-left rounded-lg focus:outline-none focus-visible:ring-1 focus-visible:ring-teal cursor-pointer"
+          >
+            <GlareHover
+              width="100%"
+              height="auto"
+              background="rgb(var(--surface))"
+              borderRadius="8px"
+              borderColor="rgba(var(--text), 0.15)"
+              glareColor="#ffffff"
+              glareOpacity={0.08}
+              glareAngle={-30}
+              glareSize={150}
+              transitionDuration={500}
+              className="p-4 hover:border-cream/40 transition-colors duration-300 cursor-pointer"
+            >
+              <div className="flex items-center justify-between w-full select-none group">
+                <div className="flex items-center gap-3">
+                  <VscCommentDiscussion className="w-5 h-5 text-teal shrink-0" />
+                  <div className="text-left">
+                    <div className="font-mono text-[9px] text-slate tracking-wider">
+                      MESSAGE
+                    </div>
+                    <div className="font-mono text-xs text-cream font-medium">
+                      Send a message
+                    </div>
+                  </div>
+                </div>
+                <VscChevronRight className="w-4 h-4 text-slate group-hover:text-teal group-hover:translate-x-1 transition-all duration-300" />
+              </div>
+            </GlareHover>
+          </button>
+
           <a
             href="mailto:dev.akioxz@gmail.com"
             aria-label="Send email to dev.akioxz@gmail.com"
@@ -111,7 +150,13 @@ export default function Footer() {
           © {new Date().getFullYear()} Axel Villanueva. All rights reserved.
         </p>
       </div>
+
+      <ContactModal
+        isOpen={isContactModalOpen}
+        onClose={() => setIsContactModalOpen(false)}
+      />
     </footer>
   );
 }
+
 
