@@ -5,6 +5,7 @@ import { createPortal } from "react-dom";
 import Image from "next/image";
 import SplitText from "./react-bits/SplitText";
 import Masonry from "./react-bits/Masonry";
+import SpotlightCard from "./react-bits/SpotlightCard";
 
 export default function BeyondTheCode() {
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
@@ -102,29 +103,34 @@ export default function BeyondTheCode() {
           </p>
         </div>
 
-        <button
-          type="button"
-          onClick={() => setIsGalleryOpen(true)}
-          className="group w-[240px] h-[240px] sm:w-[320px] sm:h-[320px] self-center sm:self-auto overflow-hidden rounded-xl border border-slate/10 bg-surface/50 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-slate/25 cursor-pointer"
-          aria-label="View photo gallery"
+        <SpotlightCard
+          className="rounded-xl w-[240px] h-[240px] sm:w-[320px] sm:h-[320px] self-center sm:self-auto"
+          spotlightColor="rgba(255, 255, 255, 0.1)"
         >
-          <div className="grid grid-cols-2 grid-rows-2 gap-0.5 w-full h-full">
-            {previewImages.map((src, index) => (
-              <div
-                key={`${src}-${index}`}
-                className={`relative overflow-hidden bg-slate/10 transition-opacity duration-500 ${isFading ? "opacity-0" : "opacity-100"}`}
-              >
-                <Image
-                  src={src}
-                  alt="Hobby photo preview"
-                  fill
-                  sizes="160px"
-                  className="object-cover"
-                />
-              </div>
-            ))}
-          </div>
-        </button>
+          <button
+            type="button"
+            onClick={() => setIsGalleryOpen(true)}
+            className="group w-full h-full overflow-hidden rounded-xl border border-slate/10 bg-surface/50 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-slate/25 cursor-pointer"
+            aria-label="View photo gallery"
+          >
+            <div className="grid grid-cols-2 grid-rows-2 gap-0.5 w-full h-full">
+              {previewImages.map((src, index) => (
+                <div
+                  key={`${src}-${index}`}
+                  className={`relative overflow-hidden bg-slate/10 transition-opacity duration-500 ${isFading ? "opacity-0" : "opacity-100"}`}
+                >
+                  <Image
+                    src={src}
+                    alt="Hobby photo preview"
+                    fill
+                    sizes="160px"
+                    className="object-cover"
+                  />
+                </div>
+              ))}
+            </div>
+          </button>
+        </SpotlightCard>
       </div>
 
       {isGalleryOpen &&

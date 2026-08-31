@@ -18,6 +18,7 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
 
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string[]> | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [mounted, setMounted] = useState(false);
 
@@ -47,6 +48,7 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
   useEffect(() => {
     if (!isOpen) {
       setErrorMessage(null);
+      setFieldErrors(null);
       setSuccessMessage(null);
       setIsLoading(false);
       setTurnstileToken(null);
@@ -60,6 +62,7 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setErrorMessage(null);
+    setFieldErrors(null);
 
     if (siteKey && !turnstileToken) {
       setErrorMessage("Please complete the verification below.");
@@ -87,6 +90,9 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
           data.error ||
             "Something went wrong — try emailing me directly at dev.akioxz@gmail.com instead."
         );
+        if (data.fieldErrors) {
+          setFieldErrors(data.fieldErrors);
+        }
         setIsLoading(false);
         setTurnstileToken(null);
         return;
@@ -200,6 +206,11 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
                 placeholder="John Doe"
                 className="w-full bg-ink/70 border border-slate/20 rounded-md px-3 py-2 text-cream font-sans text-sm focus:outline-none focus:border-teal transition-colors disabled:opacity-50"
               />
+              {fieldErrors?.name && (
+                <span className="font-mono text-[10px] text-amber">
+                  {fieldErrors.name[0]}
+                </span>
+              )}
             </div>
 
             {/* Email Input */}
@@ -221,6 +232,11 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
                 placeholder="you@example.com"
                 className="w-full bg-ink/70 border border-slate/20 rounded-md px-3 py-2 text-cream font-sans text-sm focus:outline-none focus:border-teal transition-colors disabled:opacity-50"
               />
+              {fieldErrors?.email && (
+                <span className="font-mono text-[10px] text-amber">
+                  {fieldErrors.email[0]}
+                </span>
+              )}
             </div>
 
             {/* Message Input */}
@@ -242,6 +258,11 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
                 placeholder="Hi Axel, I'd like to collaborate on..."
                 className="w-full bg-ink/70 border border-slate/20 rounded-md px-3 py-2 text-cream font-sans text-sm focus:outline-none focus:border-teal transition-colors resize-none disabled:opacity-50"
               />
+              {fieldErrors?.message && (
+                <span className="font-mono text-[10px] text-amber">
+                  {fieldErrors.message[0]}
+                </span>
+              )}
             </div>
 
             {/* Cloudflare Turnstile Widget */}

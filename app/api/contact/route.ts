@@ -18,7 +18,7 @@ const contactSchema = z.object({
     .string()
     .trim()
     .min(10, "Message must be at least 10 characters."),
-  turnstileToken: z.string().optional(),
+  turnstileToken: z.string().nullable().optional(),
 });
 
 function escapeHtml(str: string): string {

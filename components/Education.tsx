@@ -1,5 +1,6 @@
 "use client";
 
+import { motion } from "motion/react";
 import SplitText from "./react-bits/SplitText";
 import { educationData } from "@/data/education";
 
@@ -20,9 +21,13 @@ export default function Education() {
 
       <div className="flex flex-col gap-6">
         {educationData.map((item, index) => (
-          <div
+          <motion.div
             key={index}
-            className="grid grid-cols-1 sm:grid-cols-[120px_1fr] gap-2 sm:gap-6 items-start"
+            initial={{ opacity: 0, y: 14 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-40px" }}
+            transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1], delay: index * 0.08 }}
+            className="grid grid-cols-1 sm:grid-cols-[120px_1fr] gap-2 sm:gap-6 items-start border-l-2 border-teal/20 pl-4"
           >
             <div className="font-mono text-xs text-slate">{item.years}</div>
             <div>
@@ -34,7 +39,7 @@ export default function Education() {
                 {item.campus && ` · ${item.campus} Campus`}
               </p>
             </div>
-          </div>
+          </motion.div>
         ))}
       </div>
     </section>

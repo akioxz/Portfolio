@@ -38,14 +38,13 @@ export default function Header() {
   const navLinks = [
     { label: "projects", href: "#projects" },
     { label: "stack", href: "#stack" },
-    { label: "education", href: "#education" },
     { label: "certs", href: "#certifications" },
     { label: "contact", href: "#contact" },
   ];
 
   return (
     <header className="sticky top-0 z-50 w-full bg-ink/60 backdrop-blur-sm border-b border-slate/10">
-      <div className="mx-auto max-w-4xl px-4 sm:px-6 py-4">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 py-4">
         <div className="flex items-center justify-between gap-4">
           <a
             href="#hero"

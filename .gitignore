@@ -5,3 +5,8 @@ out
 .env.local
 .vercel
 *.log
+.claude/
+.codex/
+.cursor/
+.agents/
+.impeccable/

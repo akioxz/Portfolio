@@ -1,7 +1,16 @@
 "use client";
 
-import { motion } from "motion/react";
+import React from "react";
+import {
+  motion,
+  useScroll,
+  useTransform,
+  useSpring,
+  useReducedMotion,
+  type MotionValue,
+} from "motion/react";
 import SplitText from "./react-bits/SplitText";
+import SpotlightCard from "./react-bits/SpotlightCard";
 import {
   SiReact,
   SiExpo,
@@ -11,24 +20,50 @@ import {
 } from "react-icons/si";
 import { VscCode } from "react-icons/vsc";
 
-const projects = [
+/* ─── Project Data ─── */
+
+interface ProjectData {
+  name: string;
+  eyebrow: string;
+  status: string | null;
+  description: string;
+  tags: string[];
+  image: string | null;
+  specs: { label: string; value: string }[];
+}
+
+const projects: ProjectData[] = [
   {
     name: "Atelier Carven",
+    eyebrow: "FULL-STACK E-COMMERCE",
     status: null,
     description:
-      "Luxury furniture e-commerce app — role-based admin/user navigation, Supabase RLS-secured data layer, and full spec-compliance review.",
+      "A luxury furniture e-commerce platform designed with an emphasis on minimalist aesthetics and seamless purchasing flows. Features a role-based architecture separating the customer storefront from a comprehensive admin dashboard. Powered by a Supabase RLS-secured data layer ensuring strict spec-compliance and data integrity across all user boundaries.",
     tags: ["React Native", "Expo", "TypeScript", "Supabase"],
     image: null,
+    specs: [
+      { label: "Role", value: "Full-Stack Dev" },
+      { label: "Timeline", value: "6 Weeks" },
+      { label: "Platform", value: "iOS / Android" },
+    ],
   },
   {
     name: "Quorin",
+    eyebrow: "INVENTORY MANAGEMENT",
     status: null,
     description:
-      "PC parts e-commerce platform — category-based catalog with spec comparison, role-based admin dashboard, and Supabase-backed inventory management.",
+      "A robust PC parts e-commerce and inventory platform built for high-performance filtering and specification comparisons. Includes a dedicated category-based catalog, real-time stock synchronization, and a role-based admin suite for managing products. Backed by a high-availability Supabase database and Zustand for localized state management.",
     tags: ["Next.js", "TypeScript", "Supabase", "Zustand"],
     image: null,
+    specs: [
+      { label: "Role", value: "Frontend Lead" },
+      { label: "Timeline", value: "4 Weeks" },
+      { label: "Platform", value: "Web App" },
+    ],
   },
 ];
+
+/* ─── Tag Icon Helper ─── */
 
 function getTagIcon(tag: string) {
   switch (tag.toLowerCase()) {
@@ -87,6 +122,8 @@ function getTagIcon(tag: string) {
   }
 }
 
+/* ─── Building Preview (for projects without images) ─── */
+
 function BuildingPreview({ name }: { name: string }) {
   return (
     <div className="relative w-full h-full overflow-hidden bg-surface">
@@ -129,60 +166,197 @@ function BuildingPreview({ name }: { name: string }) {
   );
 }
 
-function ProjectCard({
-  name,
-  status,
-  description,
-  tags,
-  image,
-}: {
-  name: string;
-  status: string | null;
-  description: string;
-  tags: string[];
-  image: string | null;
-}) {
-  return (
-    <div className="group block rounded-xl border border-slate/10 bg-surface/50 overflow-hidden transition-all duration-300 hover:border-slate/25 hover:-translate-y-1 hover:shadow-lg hover:shadow-black/10">
-      <div className="relative aspect-[16/10] bg-surface overflow-hidden">
-        {image ? (
-          <img
-            src={image}
-            alt={`${name} preview`}
-            className="w-full h-full object-cover object-top group-hover:scale-[1.02] transition-transform duration-500"
-          />
-        ) : (
-          <BuildingPreview name={name} />
-        )}
-      </div>
+/* ─── Spring config for buttery scroll ─── */
+const smoothSpring = { stiffness: 300, damping: 40, mass: 0.5 };
 
-      <div className="p-5">
-        <div className="flex items-center gap-2 mb-2">
-          <h3 className="font-mono text-base font-semibold text-cream">
-            {name}
-          </h3>
-          {status && (
-            <span className="font-mono text-[10px] font-semibold tracking-wider uppercase text-amber border border-amber/30 rounded px-1.5 py-0.5 whitespace-nowrap">
-              {status}
-            </span>
+/* ─── Sticky Project Card ─── */
+
+function StickyProjectCard({
+  project,
+  index,
+  total,
+  scrollYProgress,
+}: {
+  project: ProjectData;
+  index: number;
+  total: number;
+  scrollYProgress: MotionValue<number>;
+}) {
+  const reducedMotion = useReducedMotion();
+  const isLast = index === total - 1;
+
+  /*
+   * Scroll math:
+   * Each card gets an equal slice of the total scroll progress.
+   * Card i occupies [i/total, (i+1)/total].
+   *
+   * Within that slice:
+   * - First 25%: card enters (slides up, fades in) — skipped for card 0
+   * - Last 40%: card exits (scales down, dims) — skipped for last card
+   * - Middle: card is fully visible at rest
+   */
+  const segmentStart = index / total;
+  const segmentEnd = (index + 1) / total;
+  const segmentLen = segmentEnd - segmentStart;
+
+  // --- Entry animation (cards after the first) ---
+  const entryEnd = segmentStart + segmentLen * 0.25;
+  const rawY = useTransform(
+    scrollYProgress,
+    [segmentStart, entryEnd],
+    index > 0 && !reducedMotion ? [60, 0] : [0, 0]
+  );
+  const rawEntryOpacity = useTransform(
+    scrollYProgress,
+    [segmentStart, entryEnd],
+    index > 0 ? [0, 1] : [1, 1]
+  );
+
+  // --- Exit animation (all cards except the last) ---
+  const exitStart = segmentEnd - segmentLen * 0.4;
+  const rawScale = useTransform(
+    scrollYProgress,
+    [exitStart, segmentEnd],
+    !isLast && !reducedMotion ? [1, 0.93] : [1, 1]
+  );
+  const rawExitOpacity = useTransform(
+    scrollYProgress,
+    [exitStart, segmentEnd],
+    !isLast && !reducedMotion ? [1, 0.5] : [1, 1]
+  );
+
+  // --- Merge entry and exit opacity into one value ---
+  // Entry controls [0→1] during first 25%, exit controls [1→0.5] during last 40%
+  // We multiply them so both can work independently
+  const rawOpacity = useTransform(
+    () => rawEntryOpacity.get() * rawExitOpacity.get()
+  );
+
+  // --- Apply spring smoothing to prevent jank ---
+  const y = useSpring(rawY, smoothSpring);
+  const scale = useSpring(rawScale, smoothSpring);
+  const opacity = useSpring(rawOpacity, smoothSpring);
+
+  // Stagger the sticky offset for physical depth
+  const stickyTop = `calc(6vh + ${index * 2.5}vh)`;
+
+  return (
+    <div
+      className="sticky"
+      style={{
+        top: stickyTop,
+        zIndex: index + 1,
+        height: "100vh",
+        paddingBottom: "10vh",
+        display: "flex",
+        alignItems: "flex-start",
+      }}
+    >
+      <motion.div
+        style={{ scale, opacity, y, willChange: "transform, opacity" }}
+        className="w-full"
+      >
+        <div className="bg-ink rounded-2xl border border-slate/10 p-6 sm:p-10 shadow-2xl">
+          <div className="flex flex-col lg:flex-row gap-8 lg:gap-14 items-center">
+            {/* Image Column */}
+            <div className="w-full lg:w-7/12">
+              <SpotlightCard
+                className="rounded-2xl"
+                spotlightColor="rgba(255, 255, 255, 0.05)"
+              >
+                <div className="relative aspect-[16/10] sm:aspect-[16/9] w-full rounded-2xl border border-slate/10 overflow-hidden bg-surface transition-all duration-500 hover:border-slate/25 group">
+                  {project.image ? (
+                    <img
+                      src={project.image}
+                      alt={`${project.name} preview`}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                    />
+                  ) : (
+                    <BuildingPreview name={project.name} />
+                  )}
+                </div>
+              </SpotlightCard>
+            </div>
+
+            {/* Text Column */}
+            <div className="w-full lg:w-5/12 flex flex-col justify-center">
+              <span className="font-mono text-[10px] sm:text-xs font-semibold tracking-[0.2em] uppercase text-teal mb-3 sm:mb-4">
+                {project.eyebrow}
+              </span>
+
+              <div className="flex items-center gap-3 mb-4 sm:mb-6">
+                <h3 className="text-2xl sm:text-3xl font-mono font-bold text-cream">
+                  {project.name}
+                </h3>
+                {project.status && (
+                  <span className="font-mono text-[10px] font-semibold tracking-wider uppercase text-amber border border-amber/30 rounded px-2 py-1 whitespace-nowrap">
+                    {project.status}
+                  </span>
+                )}
+              </div>
+
+              <div className="grid grid-cols-3 gap-4 mb-6">
+                {project.specs.map((spec) => (
+                  <div key={spec.label} className="flex flex-col gap-1">
+                    <span className="font-mono text-[10px] uppercase tracking-wider text-slate/70">
+                      {spec.label}
+                    </span>
+                    <span className="font-mono text-xs text-cream">
+                      {spec.value}
+                    </span>
+                  </div>
+                ))}
+              </div>
+
+              <p className="text-slate text-sm sm:text-base leading-relaxed mb-8">
+                {project.description}
+              </p>
+
+              <div className="flex flex-wrap items-center gap-3 sm:gap-4">
+                {project.tags.map((tag) => (
+                  <div
+                    key={tag}
+                    className="flex items-center gap-2 bg-surface/50 border border-slate/10 rounded-full px-3 py-1.5 text-xs text-slate"
+                  >
+                    {getTagIcon(tag)}
+                    <span className="font-mono tracking-wide">{tag}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Scroll affordance — first card only */}
+          {index === 0 && (
+            <div className="hidden lg:flex items-center justify-center mt-8 opacity-40">
+              <motion.span
+                className="font-mono text-[10px] uppercase tracking-widest text-slate"
+                animate={{ y: [0, 6, 0] }}
+                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+              >
+                ↓ scroll to explore
+              </motion.span>
+            </div>
           )}
         </div>
-
-        <p className="text-slate text-sm leading-relaxed mb-4 line-clamp-2">
-          {description}
-        </p>
-
-        <div className="flex flex-wrap items-center gap-3">
-          {tags.map((tag) => getTagIcon(tag))}
-        </div>
-      </div>
+      </motion.div>
     </div>
   );
 }
 
+/* ─── Projects Section (Single Scroll Source) ─── */
+
 export default function Projects() {
+  const containerRef = React.useRef<HTMLDivElement>(null);
+  const total = projects.length;
+
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end end"],
+  });
+
   return (
-    <section id="projects" className="mb-20 scroll-mt-24">
+    <section id="projects" className="scroll-mt-24">
       <SplitText
         text="Projects"
         tag="h2"
@@ -195,9 +369,19 @@ export default function Projects() {
         threshold={0.2}
       />
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-        {projects.map((project) => (
-          <ProjectCard key={project.name} {...project} />
+      <div
+        ref={containerRef}
+        className="relative mt-12"
+        style={{ height: `${(total + 0.5) * 100}vh` }}
+      >
+        {projects.map((project, index) => (
+          <StickyProjectCard
+            key={project.name}
+            project={project}
+            index={index}
+            total={total}
+            scrollYProgress={scrollYProgress}
+          />
         ))}
       </div>
     </section>
