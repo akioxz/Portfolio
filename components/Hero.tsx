@@ -100,11 +100,17 @@ function HeroSidebar() {
               key={item.project}
               initial={{ opacity: 0, x: 12 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1], delay: 0.3 + i * 0.1 }}
+              transition={{
+                duration: 0.5,
+                ease: [0.16, 1, 0.3, 1],
+                delay: 0.3 + i * 0.1,
+              }}
               className="border-l-2 border-slate/15 pl-4 group hover:border-teal/40 transition-colors duration-300"
             >
               <div className="flex items-center gap-2 mb-1">
-                <span className="font-mono text-[10px] text-slate/60">{item.year}</span>
+                <span className="font-mono text-[10px] text-slate/60">
+                  {item.year}
+                </span>
                 <span className="w-1 h-1 rounded-full bg-slate/30" />
                 <span className="font-mono text-[10px] text-teal font-medium tracking-wide">
                   {item.role}
@@ -113,7 +119,9 @@ function HeroSidebar() {
               <h4 className="font-mono text-sm text-cream font-semibold leading-snug">
                 {item.project}
               </h4>
-              <p className="font-mono text-[11px] text-slate/70 mb-1.5">{item.subtitle}</p>
+              <p className="font-mono text-[11px] text-slate/70 mb-1.5">
+                {item.subtitle}
+              </p>
               <p className="text-slate text-xs leading-relaxed">
                 {item.description}
               </p>
@@ -239,7 +247,7 @@ export default function Hero() {
 
         <div className="flex flex-wrap items-baseline gap-2 mb-6">
           <SplitText
-            text="Freelance Web Developer"
+            text="Full-Stack Developer"
             tag="h2"
             className="font-mono text-[1.35rem] font-normal text-cream tracking-tight leading-tight inline-flex items-baseline"
             splitType="words"
@@ -254,7 +262,7 @@ export default function Hero() {
           />
           <span className="inline-flex items-baseline font-mono text-[1.35rem] font-normal tracking-tight leading-tight">
             <span className="text-cream">—</span>
-            <span className="text-slate">&nbsp;React &amp; Mobile</span>
+            <span className="text-slate">&nbsp;— React, Node &amp; Cloud</span>
           </span>
         </div>
 
@@ -262,12 +270,12 @@ export default function Hero() {
           variants={itemVariants}
           className="text-slate text-base leading-[1.85] mb-8 max-w-2xl"
         >
-          4th-year BSIT student passionate about full-stack software engineering —
-          building web and mobile applications with <Badge label="React" />{" "}
+          4th-year BSIT student passionate about full-stack software engineering
+          — building web and mobile applications with <Badge label="React" />{" "}
           and <Badge label="Supabase" />. Lately diving into AI integration and
           generative AI, exploring how these tools can be applied to real-world
-          software development. Still learning, but actively building and shipping
-          projects along the way.
+          software development. Still learning, but actively building and
+          shipping projects along the way.
         </motion.p>
 
         <motion.div variants={itemVariants}>
