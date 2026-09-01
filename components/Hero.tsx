@@ -262,7 +262,7 @@ export default function Hero() {
           />
           <span className="inline-flex items-baseline font-mono text-[1.35rem] font-normal tracking-tight leading-tight">
             <span className="text-cream">—</span>
-            <span className="text-slate">&nbsp; React, Node &amp; Cloud</span>
+            <span className="text-slate">&nbsp;React, Node &amp; Cloud</span>
           </span>
         </div>
 
