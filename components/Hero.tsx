@@ -41,7 +41,7 @@ const experienceData = [
     project: "Reson8",
     subtitle: "Multi-System Podcast Platform",
     description:
-      "Architected a 4-tier podcast platform spanning Next.js (admin), Vue 3 (public), PHP (editor), and Express.js (API). Implemented JWT auth, RESTful API design, and security middleware (CORS, Helmet, rate limiting, CSRF protection).",
+      "Independently architected and built a 4-tier podcast platform spanning Next.js (admin), Vue 3 (public), PHP (editor), and Express.js (API). Implemented JWT auth, RESTful API design, and security middleware (CORS, Helmet, rate limiting, CSRF protection).",
     tags: ["Next.js", "Vue 3", "PHP", "Express.js", "JWT"],
   },
   {
@@ -50,7 +50,7 @@ const experienceData = [
     project: "SCSAGA",
     subtitle: "Smart Campus Student Attendance & Gate Analytics",
     description:
-      "Built a Flask-based analytics system integrated with Google BigQuery/GCP for real-time campus attendance and gate crowd-status tracking. Automated recurring data jobs via Windows Task Scheduler; built Looker Studio dashboards for stakeholders.",
+      "Independently built a Flask-based analytics system integrated with Google BigQuery/GCP for real-time campus attendance and gate crowd-status tracking. Automated recurring data jobs via Windows Task Scheduler; designed crowd-status threshold logic and Looker Studio dashboards for stakeholders.",
     tags: ["Flask", "BigQuery", "GCP", "Looker Studio"],
   },
   {
@@ -59,7 +59,7 @@ const experienceData = [
     project: "Water Station Dashboard",
     subtitle: "Sales Dashboard & ETL Pipeline",
     description:
-      "Designed and implemented an ETL pipeline ingesting CSV sales data into Google BigQuery. Built unified SQL views to consolidate walk-in and delivery channels; developed a Looker Studio dashboard for real-time business reporting.",
+      "Independently designed and implemented an ETL pipeline ingesting CSV sales data into Google BigQuery. Built unified SQL views to consolidate walk-in and delivery channels; developed a Looker Studio dashboard for real-time business reporting.",
     tags: ["BigQuery", "SQL", "ETL", "Looker Studio"],
   },
 ];
