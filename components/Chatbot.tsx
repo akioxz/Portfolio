@@ -108,7 +108,7 @@ export default function Chatbot() {
               scale: 0.95,
               transition: { duration: 0.2 },
             }}
-            className="mb-3 flex h-[min(390px,calc(100dvh-7rem))] w-[calc(100vw-2rem)] flex-col overflow-hidden rounded-2xl border border-slate/20 bg-surface/95 shadow-2xl backdrop-blur-md sm:mb-4 sm:h-[450px] sm:max-h-[calc(100dvh-120px)] sm:w-[340px]"
+            className="mb-3 flex h-[min(360px,calc(100dvh-8rem))] w-[calc(100vw-2rem)] flex-col overflow-hidden rounded-2xl border border-slate/20 bg-surface/95 shadow-2xl backdrop-blur-md sm:mb-4 sm:h-[450px] sm:max-h-[calc(100dvh-120px)] sm:w-[340px]"
           >
             {/* Header */}
             <div className="flex items-center justify-between p-4 border-b border-slate/15 bg-ink/50">
