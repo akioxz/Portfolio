@@ -2,7 +2,15 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { VscMail, VscMailRead, VscChevronDown, VscChevronUp, VscSignOut, VscRefresh } from "react-icons/vsc";
+import {
+  VscMail,
+  VscMailRead,
+  VscChevronDown,
+  VscChevronUp,
+  VscSignOut,
+  VscRefresh,
+  VscError,
+} from "react-icons/vsc";
 
 export interface ContactMessage {
   id: string;
@@ -20,6 +28,9 @@ interface InboxClientProps {
 export default function InboxClient({ initialMessages }: InboxClientProps) {
   const [messages, setMessages] = useState<ContactMessage[]>(initialMessages);
   const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const [actionError, setActionError] = useState<string | null>(null);
   const router = useRouter();
 
   const unreadCount = messages.filter((m) => !m.is_read).length;
@@ -33,22 +44,51 @@ export default function InboxClient({ initialMessages }: InboxClientProps) {
     setExpandedId(id);
 
     if (!currentlyRead) {
+      const previousMessages = messages;
       setMessages((prev) =>
         prev.map((msg) => (msg.id === id ? { ...msg, is_read: true } : msg))
       );
 
       try {
-        await fetch(`/api/admin/messages/${id}/read`, { method: "POST" });
+        const response = await fetch(`/api/admin/messages/${id}/read`, {
+          method: "POST",
+        });
+        if (!response.ok) {
+          throw new Error("The message could not be marked as read.");
+        }
       } catch (err) {
         console.error("Failed to mark message as read:", err);
+        setMessages(previousMessages);
+        setActionError("Could not update the message. Please try again.");
       }
     }
   };
 
+  const handleRefresh = async () => {
+    setActionError(null);
+    setIsRefreshing(true);
+    try {
+      router.refresh();
+    } finally {
+      window.setTimeout(() => setIsRefreshing(false), 500);
+    }
+  };
+
   const handleLogout = async () => {
-    await fetch("/api/admin/logout", { method: "POST" });
-    router.push("/admin/login");
-    router.refresh();
+    setActionError(null);
+    setIsLoggingOut(true);
+    try {
+      const response = await fetch("/api/admin/logout", { method: "POST" });
+      if (!response.ok) {
+        throw new Error("Logout request failed.");
+      }
+      router.push("/admin/login");
+      router.refresh();
+    } catch (err) {
+      console.error("Failed to log out:", err);
+      setActionError("Could not log out. Please try again.");
+      setIsLoggingOut(false);
+    }
   };
 
   return (
@@ -73,22 +113,34 @@ export default function InboxClient({ initialMessages }: InboxClientProps) {
           <div className="flex items-center gap-3 select-none">
             <button
               type="button"
-              onClick={() => router.refresh()}
+              onClick={handleRefresh}
+              disabled={isRefreshing || isLoggingOut}
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-md font-mono text-xs text-slate border border-slate/20 hover:text-cream hover:border-slate/40 transition-colors cursor-pointer"
             >
-              <VscRefresh className="w-3.5 h-3.5" />
-              <span>Refresh</span>
+              <VscRefresh className={`w-3.5 h-3.5 ${isRefreshing ? "animate-spin" : ""}`} />
+              <span>{isRefreshing ? "Refreshing..." : "Refresh"}</span>
             </button>
             <button
               type="button"
               onClick={handleLogout}
+              disabled={isLoggingOut || isRefreshing}
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-md font-mono text-xs text-amber border border-amber/30 hover:bg-amber/10 transition-colors cursor-pointer"
             >
               <VscSignOut className="w-3.5 h-3.5" />
-              <span>Logout</span>
+              <span>{isLoggingOut ? "Logging out..." : "Logout"}</span>
             </button>
           </div>
         </div>
+
+        {actionError && (
+          <div
+            role="alert"
+            className="mb-6 flex items-start gap-2 rounded-lg border border-amber/30 bg-amber/10 p-3 font-mono text-xs text-amber"
+          >
+            <VscError className="mt-0.5 h-4 w-4 shrink-0" />
+            <span>{actionError}</span>
+          </div>
+        )}
 
         {/* Messages List */}
         {messages.length === 0 ? (
@@ -118,9 +170,12 @@ export default function InboxClient({ initialMessages }: InboxClientProps) {
                   }`}
                 >
                   {/* Summary Bar */}
-                  <div
+                  <button
+                    type="button"
                     onClick={() => handleToggleExpand(msg.id, msg.is_read)}
-                    className="p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 cursor-pointer select-none"
+                    aria-expanded={isExpanded}
+                    aria-controls={`message-${msg.id}`}
+                    className="w-full text-left p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 cursor-pointer select-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal/70 focus-visible:ring-inset"
                   >
                     <div className="flex items-start sm:items-center gap-3 flex-1 min-w-0">
                       {/* Unread indicator icon */}
@@ -161,11 +216,14 @@ export default function InboxClient({ initialMessages }: InboxClientProps) {
                         <VscChevronDown className="w-4 h-4 text-slate" />
                       )}
                     </div>
-                  </div>
+                  </button>
 
                   {/* Expanded Full Message Content */}
                   {isExpanded && (
-                    <div className="px-5 pb-5 pt-2 border-t border-slate/10 bg-ink/40 flex flex-col gap-4">
+                    <div
+                      id={`message-${msg.id}`}
+                      className="px-5 pb-5 pt-2 border-t border-slate/10 bg-ink/40 flex flex-col gap-4"
+                    >
                       <div className="flex flex-col gap-1 text-xs font-mono">
                         <div className="text-slate">
                           <strong className="text-cream">From:</strong> {msg.name} &lt;

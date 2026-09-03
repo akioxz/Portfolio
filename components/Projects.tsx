@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Image from "next/image";
 import {
   motion,
   useScroll,
@@ -266,9 +267,11 @@ function StickyProjectCard({
               >
                 <div className="relative aspect-[16/10] sm:aspect-[16/9] w-full rounded-2xl border border-slate/10 overflow-hidden bg-surface transition-all duration-500 hover:border-slate/25 group">
                   {project.image ? (
-                    <img
+                    <Image
                       src={project.image}
                       alt={`${project.name} preview`}
+                      fill
+                      sizes="(min-width: 1024px) 58vw, 100vw"
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
                     />
                   ) : (

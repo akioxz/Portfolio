@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
-    "test": "node --test tests/contact-route.test.cjs"
+    "test": "node --test tests/*.test.cjs"
   },
   "overrides": {
     "postcss": "8.5.15"

@@ -27,10 +27,10 @@ Available project scripts:
 npm run build   # production build and Next.js type checking
 npm run start   # serve the production build
 npm run lint    # ESLint using eslint.config.mjs
-npm run test    # focused contact-route security tests
+npm run test    # contact-route and admin-session security tests
 ```
 
-The focused test file is `tests/contact-route.test.cjs`; run it directly with `node --test tests/contact-route.test.cjs` when iterating on the contact route. For changes, run `npm run lint` and `npm run test`; use `npm run build` when the change affects routing, server/client boundaries, configuration, or TypeScript.
+The focused test files are `tests/contact-route.test.cjs` and `tests/admin-session.test.cjs`; run either directly with `node --test <file>` when iterating. For changes, run `npm run lint` and `npm run test`; use `npm run build` when the change affects routing, server/client boundaries, configuration, or TypeScript.
 
 Temporary scripts or harnesses for isolated behavior checks belong outside the repository or in the session workspace and must be removed after use.
 
