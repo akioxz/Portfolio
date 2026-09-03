@@ -33,6 +33,8 @@ npm run build
 - Refined the chatbot for mobile with a shorter 360px-capped panel, safe-area-aware positioning, Escape-to-close, input autofocus, and improved focus states.
 - Added browser coverage confirming the chatbot opens within a mobile viewport.
 - Optimized Projects scroll performance by removing spring lag from scroll-linked transforms, disabling decorative preview motion on mobile/reduced-motion devices, and reducing mobile card shadow/section spacing.
+- Improved Beyond the Code gallery accessibility with dialog semantics, focus return, keyboard focus trapping, and Escape handling.
+- Paused rotating gallery previews when the section is off-screen or the document is hidden, added a deterministic initial preview, and supplied descriptive image alt text.
 - Replaced the remaining reusable raw image elements with `next/image` while preserving dynamic sources and layout sizing.
 - Added Playwright smoke coverage for the public page and unauthenticated admin redirect (`npm run test:browser`).
 

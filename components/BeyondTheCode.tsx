@@ -1,16 +1,33 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import Image from "next/image";
 import SplitText from "./react-bits/SplitText";
 import Masonry from "./react-bits/Masonry";
 import SpotlightCard from "./react-bits/SpotlightCard";
 
+const galleryItems = [
+  { id: "photo3", img: "/photo3.jpg", alt: "Gaming setup with a monitor", aspectRatio: 0.6 },
+  { id: "photo4", img: "/photo4.jpg", alt: "Personal photo in a room", aspectRatio: 0.7 },
+  { id: "photo5", img: "/photo5.jpg", alt: "Historic church exterior", aspectRatio: 0.63 },
+  { id: "photo6", img: "/photo6.jpg", alt: "Desktop gaming setup", aspectRatio: 0.53 },
+  { id: "photo7", img: "/photo7.jpg", alt: "Anime figure collection", aspectRatio: 0.77 },
+  { id: "photo8", img: "/photo8.jpeg", alt: "Personal photo outdoors", aspectRatio: 0.57 },
+  { id: "photo9", img: "/photo9.jpeg", alt: "Anime figurines on display", aspectRatio: 0.67 },
+  { id: "photo10", img: "/photo10.jpeg", alt: "Gaming setup with keyboard and monitor", aspectRatio: 0.6 },
+  { id: "photo11", img: "/photo11.jpeg", alt: "Personal hobby photo", aspectRatio: 0.73 },
+];
+
 export default function BeyondTheCode() {
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
-  const [previewImages, setPreviewImages] = useState<string[]>([]);
+  const [previewImages, setPreviewImages] = useState<string[]>(
+    galleryItems.slice(0, 4).map((item) => item.img),
+  );
   const [isFading, setIsFading] = useState(false);
+  const sectionRef = useRef<HTMLElement>(null);
+  const galleryButtonRef = useRef<HTMLButtonElement>(null);
+  const dialogRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!isGalleryOpen) return;
@@ -18,6 +35,24 @@ export default function BeyondTheCode() {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
         setIsGalleryOpen(false);
+        return;
+      }
+
+      if (event.key === "Tab" && dialogRef.current) {
+        const focusable = dialogRef.current.querySelectorAll<HTMLElement>(
+          'button, [href], [tabindex]:not([tabindex="-1"])',
+        );
+        if (focusable.length) {
+          const first = focusable[0];
+          const last = focusable[focusable.length - 1];
+          if (event.shiftKey && document.activeElement === first) {
+            event.preventDefault();
+            last.focus();
+          } else if (!event.shiftKey && document.activeElement === last) {
+            event.preventDefault();
+            first.focus();
+          }
+        }
       }
     };
 
@@ -25,26 +60,13 @@ export default function BeyondTheCode() {
     document.body.style.overflow = "hidden";
 
     window.addEventListener("keydown", handleKeyDown);
+    dialogRef.current?.focus();
     return () => {
       document.body.style.overflow = originalOverflow;
       window.removeEventListener("keydown", handleKeyDown);
+      galleryButtonRef.current?.focus();
     };
   }, [isGalleryOpen]);
-
-  const galleryItems = useMemo(
-    () => [
-      { id: "photo3", img: "/photo3.jpg", aspectRatio: 0.6 },
-      { id: "photo4", img: "/photo4.jpg", aspectRatio: 0.7 },
-      { id: "photo5", img: "/photo5.jpg", aspectRatio: 0.63 },
-      { id: "photo6", img: "/photo6.jpg", aspectRatio: 0.53 },
-      { id: "photo7", img: "/photo7.jpg", aspectRatio: 0.77 },
-      { id: "photo8", img: "/photo8.jpeg", aspectRatio: 0.57 },
-      { id: "photo9", img: "/photo9.jpeg", aspectRatio: 0.67 },
-      { id: "photo10", img: "/photo10.jpeg", aspectRatio: 0.6 },
-      { id: "photo11", img: "/photo11.jpeg", aspectRatio: 0.73 },
-    ],
-    [],
-  );
 
   const pickPreviewImages = () => {
     const shuffled = [...galleryItems];
@@ -64,19 +86,37 @@ export default function BeyondTheCode() {
   }, [galleryItems]);
 
   useEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+
+    let isVisible = false;
+    let timeoutId: number | undefined;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        isVisible = entry.isIntersecting;
+      },
+      { rootMargin: "200px" },
+    );
+    observer.observe(section);
+
     const intervalId = window.setInterval(() => {
+      if (!isVisible || document.hidden) return;
       setIsFading(true);
-      window.setTimeout(() => {
+      timeoutId = window.setTimeout(() => {
         setPreviewImages(pickPreviewImages());
         setIsFading(false);
       }, 250);
     }, 4500);
 
-    return () => window.clearInterval(intervalId);
-  }, [galleryItems]);
+    return () => {
+      observer.disconnect();
+      window.clearInterval(intervalId);
+      if (timeoutId) window.clearTimeout(timeoutId);
+    };
+  }, []);
 
   return (
-    <section id="beyond" className="mb-20">
+    <section ref={sectionRef} id="beyond" className="mb-20">
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-10 sm:gap-12">
         <div className="max-w-sm leading-relaxed text-slate">
           <SplitText
@@ -108,6 +148,7 @@ export default function BeyondTheCode() {
           spotlightColor="rgba(255, 255, 255, 0.1)"
         >
           <button
+            ref={galleryButtonRef}
             type="button"
             onClick={() => setIsGalleryOpen(true)}
             className="group w-full h-full overflow-hidden rounded-xl border border-slate/10 bg-surface/50 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-slate/25 cursor-pointer"
@@ -121,7 +162,7 @@ export default function BeyondTheCode() {
                 >
                   <Image
                     src={src}
-                    alt="Hobby photo preview"
+                    alt={galleryItems.find((item) => item.img === src)?.alt ?? "Hobby photo preview"}
                     fill
                     sizes="160px"
                     className="object-cover"
@@ -140,13 +181,18 @@ export default function BeyondTheCode() {
             onClick={() => setIsGalleryOpen(false)}
           >
             <div
+              ref={dialogRef}
               className="relative w-full max-w-5xl h-[80vh] min-h-[400px] overflow-hidden rounded-2xl border border-slate/20 bg-surface/95 p-4 sm:p-6 shadow-2xl flex flex-col"
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="gallery-title"
+              tabIndex={-1}
               onClick={(event) => event.stopPropagation()}
             >
               <div className="flex items-center justify-between pb-3 border-b border-slate/10 mb-3">
-                <span className="font-mono text-xs text-cream font-medium tracking-wider uppercase">
+                <h2 id="gallery-title" className="font-mono text-xs text-cream font-medium tracking-wider uppercase">
                   Gallery — Beyond the Code
-                </span>
+                </h2>
                 <button
                   type="button"
                   onClick={() => setIsGalleryOpen(false)}

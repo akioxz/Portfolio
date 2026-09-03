@@ -7,6 +7,7 @@ import NextImage from "next/image";
 interface MasonryItem {
   id: string;
   img: string;
+  alt?: string;
   aspectRatio: number; // height ÷ width, e.g. 1.2 = 20% taller than wide
 }
 
@@ -240,7 +241,7 @@ const Masonry = ({
         >
           <NextImage
             src={item.img}
-            alt={item.id}
+            alt={item.alt ?? item.id}
             fill
             sizes="(max-width: 768px) 50vw, 33vw"
             className="h-full w-full object-cover"
