@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTheme } from "next-themes";
 import { FiSun, FiMoon } from "react-icons/fi";
 
@@ -8,6 +8,7 @@ export default function ThemeToggle() {
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const [isSwitching, setIsSwitching] = useState(false);
+  const buttonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     setMounted(true);
@@ -23,20 +24,43 @@ export default function ThemeToggle() {
     if (isSwitching) return;
 
     setIsSwitching(true);
-    document.documentElement.style.setProperty(
-      "--theme-transition-color",
-      isDark ? "rgb(0 0 0)" : "rgb(255 255 255)",
-    );
-    document.documentElement.classList.add("theme-switching");
-    setTheme(isDark ? "light" : "dark");
+    const root = document.documentElement;
+    const documentWithTransition = document as Document & {
+      startViewTransition?: (callback: () => void) => void;
+    };
+    const button = buttonRef.current;
+
+    if (
+      typeof documentWithTransition.startViewTransition === "function" &&
+      button
+    ) {
+      const rect = button.getBoundingClientRect();
+      const x = rect.left + rect.width / 2;
+      const y = rect.top + rect.height / 2;
+      const radius = Math.hypot(
+        Math.max(x, window.innerWidth - x),
+        Math.max(y, window.innerHeight - y),
+      );
+
+      root.style.setProperty("--theme-reveal-x", `${x}px`);
+      root.style.setProperty("--theme-reveal-y", `${y}px`);
+      root.style.setProperty("--theme-reveal-radius", `${radius}px`);
+
+      documentWithTransition.startViewTransition(() => {
+        setTheme(isDark ? "light" : "dark");
+      });
+    } else {
+      setTheme(isDark ? "light" : "dark");
+    }
+
     window.setTimeout(() => {
-      document.documentElement.classList.remove("theme-switching");
       setIsSwitching(false);
-    }, 260);
+    }, 380);
   };
 
   return (
     <button
+      ref={buttonRef}
       onClick={handleToggle}
       aria-busy={isSwitching}
       aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}

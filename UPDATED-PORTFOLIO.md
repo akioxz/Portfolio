@@ -67,6 +67,7 @@ npm run build
 - Fixed laggy theme switching by removing the full-page View Transition clip animation and the global all-element color transition. Theme changes are now immediate, while component-level interaction transitions remain intact.
 - Added back a lightweight 260ms theme veil animation. It masks the instant variable swap with a single composited overlay, includes reduced-motion support, and avoids repainting every page element.
 - Corrected the theme veil so it captures the outgoing dark/light color before changing themes; the overlay now visibly fades away instead of resolving to the already-active incoming color.
+- Replaced the veil with a circular View Transition reveal inspired by the supplied 60fps.design reference. The new theme expands from the toggle button over 380ms with a strong ease-out curve; reduced-motion mode collapses the animation to an instant swap.
 
 ## Operational follow-up
 
