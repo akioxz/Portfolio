@@ -24,10 +24,11 @@ npm run build
 - Added admin inbox refresh/logout loading states, request-failure feedback, read-state rollback on failed updates, semantic disclosure buttons, and keyboard focus styling.
 - Replaced the project preview `<img>` path with `next/image` sizing to avoid avoidable image loading and layout-shift costs when previews are added.
 - Confirmed existing contact, admin, and middleware paths retain scoped failure logging; no new external observability service is required for the current deployment.
+- Added middleware coverage for matcher scope, public auth entrypoints, unauthenticated redirects/JSON responses, forged and expired sessions, and valid sessions.
+- Reviewed the remaining generated/theme-only local changes; they are now included in the repository state.
 
-## Next work
+## Operational follow-up
 
-1. Expand security coverage around middleware failure paths.
-2. Add production error aggregation if operational requirements grow beyond Vercel logs.
+Vercel logs plus the existing scoped server-side error logging are sufficient for the current project size. Revisit production error aggregation only if deployment volume or debugging requirements outgrow those logs.
 
 Keep this file and `.github/copilot-instructions.md` aligned when architecture, commands, or operational behavior changes.
