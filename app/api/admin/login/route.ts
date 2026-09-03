@@ -9,7 +9,7 @@ export async function POST(request: Request) {
     if (!password || typeof password !== "string") {
       return NextResponse.json(
         { error: "Password is required." },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -18,11 +18,11 @@ export async function POST(request: Request) {
     if (!isValid) {
       return NextResponse.json(
         { error: "Invalid admin password." },
-        { status: 401 }
+        { status: 401 },
       );
     }
 
-    const cookieInfo = getAdminCookieHeader();
+    const cookieInfo = await getAdminCookieHeader();
     const response = NextResponse.json({ success: true });
 
     response.cookies.set(cookieInfo.name, cookieInfo.value, cookieInfo.options);
@@ -32,7 +32,7 @@ export async function POST(request: Request) {
     console.error("[Admin Login API Error]", error);
     return NextResponse.json(
       { error: "An unexpected error occurred." },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
