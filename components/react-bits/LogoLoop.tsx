@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from 'react';
+import NextImage from 'next/image';
 
 export type LogoItem =
   | {
@@ -140,10 +141,12 @@ const LogoLoop: React.FC<LogoLoopProps> = ({
           const content = isNode ? (
             logo.node
           ) : (
-            <img
+            <NextImage
               src={logo.src}
               alt={logo.alt || ''}
-              srcSet={logo.srcSet}
+              width={logo.width || 1}
+              height={logo.height || 1}
+              unoptimized
               style={{ height: `${logoHeight}px`, width: 'auto' }}
               className="object-contain"
             />

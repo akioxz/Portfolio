@@ -10,7 +10,7 @@ import {
   VscSignOut,
   VscRefresh,
   VscError,
-  VscTrash,
+  VscArchive,
   VscSearch,
 } from "react-icons/vsc";
 
@@ -21,6 +21,7 @@ export interface ContactMessage {
   message: string;
   is_read: boolean;
   created_at: string;
+  archived_at?: string | null;
 }
 
 interface InboxClientProps {
@@ -32,17 +33,18 @@ export default function InboxClient({ initialMessages }: InboxClientProps) {
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
-  const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [archivingId, setArchivingId] = useState<string | null>(null);
   const [actionError, setActionError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
-  const [filter, setFilter] = useState<"all" | "unread">("all");
+  const [filter, setFilter] = useState<"active" | "unread" | "archived">("active");
   const router = useRouter();
 
-  const unreadCount = messages.filter((m) => !m.is_read).length;
+  const unreadCount = messages.filter((m) => !m.archived_at && !m.is_read).length;
   const visibleMessages = messages.filter((message) => {
     const haystack = `${message.name} ${message.email} ${message.message}`.toLowerCase();
     return (
-      (filter === "all" || !message.is_read) &&
+      (filter === "active" || (filter === "unread" && !message.is_read) || (filter === "archived" && message.archived_at)) &&
+      (filter === "archived" ? Boolean(message.archived_at) : !message.archived_at) &&
       haystack.includes(searchQuery.trim().toLowerCase())
     );
   });
@@ -103,27 +105,36 @@ export default function InboxClient({ initialMessages }: InboxClientProps) {
     }
   };
 
-  const handleDelete = async (id: string) => {
-    if (!window.confirm("Delete this message permanently? This cannot be undone.")) {
+  const handleArchive = async (id: string, isArchived: boolean) => {
+    const action = isArchived ? "restore" : "archive";
+    if (!window.confirm(`${isArchived ? "Restore" : "Archive"} this message?`)) {
       return;
     }
 
     setActionError(null);
-    setDeletingId(id);
+    setArchivingId(id);
     try {
       const response = await fetch(`/api/admin/messages/${id}`, {
-        method: "DELETE",
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action }),
       });
       if (!response.ok) {
-        throw new Error("Delete request failed.");
+        throw new Error("Archive request failed.");
       }
-      setMessages((prev) => prev.filter((message) => message.id !== id));
+      setMessages((prev) =>
+        prev.map((message) =>
+          message.id === id
+            ? { ...message, archived_at: isArchived ? null : new Date().toISOString() }
+            : message,
+        ),
+      );
       setExpandedId(null);
     } catch (err) {
-      console.error("Failed to delete message:", err);
-      setActionError("Could not delete the message. Please try again.");
+      console.error("Failed to archive message:", err);
+      setActionError("Could not archive the message. Please try again.");
     } finally {
-      setDeletingId(null);
+      setArchivingId(null);
     }
   };
 
@@ -191,7 +202,7 @@ export default function InboxClient({ initialMessages }: InboxClientProps) {
             />
           </label>
           <div className="flex rounded-md border border-slate/20 p-1 font-mono text-xs">
-            {(["all", "unread"] as const).map((option) => (
+            {(["active", "unread", "archived"] as const).map((option) => (
               <button
                 key={option}
                 type="button"
@@ -327,12 +338,16 @@ export default function InboxClient({ initialMessages }: InboxClientProps) {
                         </a>
                         <button
                           type="button"
-                          onClick={() => handleDelete(msg.id)}
-                          disabled={deletingId === msg.id}
+                          onClick={() => handleArchive(msg.id, Boolean(msg.archived_at))}
+                          disabled={archivingId === msg.id}
                           className="flex items-center gap-2 rounded-md border border-amber/30 bg-amber/10 px-3 py-1.5 font-mono text-xs text-amber transition-colors hover:bg-amber/20 disabled:cursor-wait disabled:opacity-50"
                         >
-                          <VscTrash className="h-3.5 w-3.5" />
-                          <span>{deletingId === msg.id ? "Deleting..." : "Delete"}</span>
+                          <VscArchive className="h-3.5 w-3.5" />
+                          <span>
+                            {archivingId === msg.id
+                              ? msg.archived_at ? "Restoring..." : "Archiving..."
+                              : msg.archived_at ? "Restore" : "Archive"}
+                          </span>
                         </button>
                       </div>
                     </div>

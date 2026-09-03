@@ -2,6 +2,7 @@
 
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { gsap } from "gsap";
+import NextImage from "next/image";
 
 interface MasonryItem {
   id: string;
@@ -237,9 +238,11 @@ const Masonry = ({
           onMouseEnter={(e) => handleMouseEnter(item.id, e.currentTarget)}
           onMouseLeave={(e) => handleMouseLeave(item.id, e.currentTarget)}
         >
-          <img
+          <NextImage
             src={item.img}
             alt={item.id}
+            fill
+            sizes="(max-width: 768px) 50vw, 33vw"
             className="h-full w-full object-cover"
           />
           {colorShiftOnHover && (

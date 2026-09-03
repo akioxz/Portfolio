@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { checkAdminSession } from "@/lib/admin-auth";
 import { createClient } from "@supabase/supabase-js";
 
-export async function DELETE(
+export async function PATCH(
   request: Request,
   { params }: { params: Promise<{ id: string }> },
 ) {
@@ -28,22 +28,33 @@ export async function DELETE(
   }
 
   try {
+    const body = await request.json();
+    if (body.action !== "archive" && body.action !== "restore") {
+      return NextResponse.json({ error: "Unsupported action" }, { status: 400 });
+    }
+
     const supabase = createClient(supabaseUrl, supabaseKey);
     const { error } = await supabase
       .from("contact_messages")
-      .delete()
+      .update({
+        archived_at:
+          body.action === "archive" ? new Date().toISOString() : null,
+      })
       .eq("id", id);
 
     if (error) {
-      console.error("[Delete Message Error]", error);
-      return NextResponse.json({ error: error.message }, { status: 500 });
+      console.error("[Archive Message Error]", error);
+      return NextResponse.json(
+        { error: "Unable to update the message." },
+        { status: 500 },
+      );
     }
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error("[Delete Message Unexpected Error]", error);
+    console.error("[Archive Message Unexpected Error]", error);
     return NextResponse.json(
-      { error: "Unable to delete the message." },
+      { error: "Unable to update the message." },
       { status: 500 },
     );
   }

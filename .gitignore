@@ -11,3 +11,4 @@ out
 .agents/
 .impeccable/
 tsconfig.tsbuildinfo
+test-results/

@@ -27,17 +27,19 @@ npm run build
 - Added middleware coverage for matcher scope, public auth entrypoints, unauthenticated redirects/JSON responses, forged and expired sessions, and valid sessions.
 - Reviewed the remaining generated/theme-only local changes; they are now included in the repository state.
 - Migrated the admin route guard from deprecated `middleware.ts` to Next.js 16's `proxy.ts` convention while preserving matcher scope and authentication behavior.
-- Added protected permanent message deletion with confirmation, loading/error states, and optimistic-list removal only after the API confirms success.
-- Added client-side inbox search and an all/unread filter.
+- Replaced permanent deletion with protected archive/restore actions, confirmation, loading/error states, and server-confirmed client updates. Apply `supabase/migrations/20260904000000_add_archived_at_to_contact_messages.sql` in Supabase before deploying.
+- Added client-side inbox search plus active, unread, and archived filters.
+- Replaced the remaining reusable raw image elements with `next/image` while preserving dynamic sources and layout sizing.
+- Added Playwright smoke coverage for the public page and unauthenticated admin redirect (`npm run test:browser`).
 
 ## Operational follow-up
 
-Vercel logs plus the existing scoped server-side error logging are sufficient for the current project size. Revisit production error aggregation only if deployment volume or debugging requirements outgrow those logs.
+Vercel logs plus the existing scoped server-side error logging are sufficient for the current project size. In Vercel Project Settings, add deployment-failure and function-error notifications, and keep the production log drain/retention defaults unless traffic requires a paid observability service.
 
 ## Launch readiness
 
 The core portfolio, contact flow, admin inbox, security tests, and production guard are ready for launch. Before treating the portfolio as final, manually check the deployed site at mobile and desktop widths, complete one contact-form submission, verify the admin inbox, and confirm the production environment variables remain configured.
 
-Optional after launch: add Playwright browser coverage, configure a custom domain, and convert the remaining generic image components only if their dynamic source constraints are addressed.
+The custom domain remains intentionally deferred due to cost. After applying the Supabase migration, manually verify archive/restore in production and run `BASE_URL=https://your-deployment.vercel.app npm run test:browser` from an environment with Playwright browsers installed.
 
 Keep this file and `.github/copilot-instructions.md` aligned when architecture, commands, or operational behavior changes.
