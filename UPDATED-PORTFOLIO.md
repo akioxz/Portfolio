@@ -45,6 +45,26 @@ npm run build
 - Added `Content-Security-Policy`, `X-Frame-Options`, `X-Content-Type-Options`, and `Strict-Transport-Security` response headers. CSP allows only same-origin resources plus Supabase and Cloudflare Turnstile connections/frames.
 - Ran `npm audit fix` without `--force`: the report decreased from 13 vulnerabilities (7 high, 6 moderate) to 9 (3 high, 6 moderate). Remaining high findings are the Next.js 16.2.9/sharp/PostCSS chain; resolving them requires the out-of-range `next@16.3.4` force upgrade, which was intentionally not applied.
 
+### Production verification
+
+- Production deployment of commit `045d88f` serves all four security headers. An actual request returned `200` with CSP, `X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff`, and HSTS `max-age=31536000; includeSubDomains`.
+- Production `GET /api/admin/login` returned `200` and issued a 64-character CSRF token. A production login POST without the CSRF token returned `403`.
+- Exact production browser command: `$env:BASE_URL='https://axelvillanueva.vercel.app'; npm run test:browser`
+- Exact production Playwright output:
+  ```
+  Running 6 tests using 2 workers
+  ✓ [chromium] public portfolio loads on desktop and mobile
+  ✓ [mobile] public portfolio loads on desktop and mobile
+  ✓ [chromium] admin inbox redirects unauthenticated visitors to login
+  ✓ [mobile] admin inbox redirects unauthenticated visitors to login
+  ✓ [chromium] chatbot opens within the mobile viewport
+  ✓ [mobile] chatbot opens within the mobile viewport
+  6 passed (7.6s)
+  ```
+- Manual production click-through recorded from the user's live-site check: the contact form accepted a real Turnstile submission and the message appeared in the inbox; admin login succeeded; Active, Unread, and Archived filters worked; archive, restore, and mark-read worked; desktop chatbot, theme toggle, and Projects scrolling had no issues; mobile theme toggle and Projects scrolling had no issues, but the chatbot card still appeared too large.
+- Tightened the mobile chatbot card to a 300px height cap and 320px width cap. This requires one post-deploy mobile confirmation before launch readiness is final.
+- Production environment variable names confirmed by the user: `ADMIN_SESSION_SECRET`, `ADMIN_PASSWORD`, `TURNSTILE_SECRET_KEY`, `NEXT_PUBLIC_TURNSTILE_SITE_KEY`, `CONTACT_DESTINATION_EMAIL`, `RESEND_API_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, and `NEXT_PUBLIC_SUPABASE_URL`.
+
 ## Operational follow-up
 
 Vercel logs plus the existing scoped server-side error logging are sufficient for the current project size. In Vercel Project Settings, add deployment-failure and function-error notifications, and keep the production log drain/retention defaults unless traffic requires a paid observability service.
