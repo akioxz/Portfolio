@@ -64,6 +64,7 @@ npm run build
 - Manual production click-through recorded from the user's live-site check: the contact form accepted a real Turnstile submission and the message appeared in the inbox; admin login succeeded; Active, Unread, and Archived filters worked; archive, restore, and mark-read worked; desktop chatbot, theme toggle, and Projects scrolling had no issues; mobile theme toggle and Projects scrolling had no issues, but the chatbot card still appeared too large.
 - Tightened the mobile chatbot card to a 300px height cap and 320px width cap. This requires one post-deploy mobile confirmation before launch readiness is final.
 - Production environment variable names confirmed by the user: `ADMIN_SESSION_SECRET`, `ADMIN_PASSWORD`, `TURNSTILE_SECRET_KEY`, `NEXT_PUBLIC_TURNSTILE_SITE_KEY`, `CONTACT_DESTINATION_EMAIL`, `RESEND_API_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, and `NEXT_PUBLIC_SUPABASE_URL`.
+- Fixed laggy theme switching by removing the full-page View Transition clip animation and the global all-element color transition. Theme changes are now immediate, while component-level interaction transitions remain intact.
 
 ## Operational follow-up
 
