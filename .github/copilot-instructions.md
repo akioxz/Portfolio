@@ -10,7 +10,7 @@ This is a Next.js App Router portfolio site using TypeScript, React 18, Tailwind
 - `app/api/contact/route.ts` is the public contact backend: Zod validates the request, Cloudflare Turnstile is verified server-side, requests are rate-limited, messages are stored in Supabase when configured, and Resend optionally sends notification and auto-reply emails.
 - Contact verification is fail-closed: a missing `TURNSTILE_SECRET_KEY` returns `503`; a missing token, failed verification, malformed response, non-OK verification response, or verification network error returns `400` before persistence or email.
 - `/admin/login` and `/admin/inbox` are the private contact-message inbox. The login route validates `ADMIN_PASSWORD` and issues a seven-day `admin_session` JWT; `lib/admin-session.ts` centralizes the issuer, audience, expiry, and Web Crypto-compatible verification. The inbox server page reads Supabase data and `InboxClient.tsx` handles expansion, optimistic read-state updates, refresh, and logout.
-- `middleware.ts` is defense-in-depth for `/admin/:path*` and `/api/admin/:path*`. Login and logout are allowed through; unauthenticated page requests redirect to login and unauthenticated admin API requests return `401`. Route-level checks remain authoritative.
+- `proxy.ts` is defense-in-depth for `/admin/:path*` and `/api/admin/:path*` using Next.js 16's proxy convention. Login and logout are allowed through; unauthenticated page requests redirect to login and unauthenticated admin API requests return `401`. Route-level checks remain authoritative.
 
 ## Commands
 

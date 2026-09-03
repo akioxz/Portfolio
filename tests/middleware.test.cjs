@@ -16,7 +16,7 @@ const sessionSource = fs
   .replace(/^import .*?;\r?\n/gm, "")
   .replace(/export /g, "");
 const middlewareSource = fs
-  .readFileSync(path.join(root, "middleware.ts"), "utf8")
+  .readFileSync(path.join(root, "proxy.ts"), "utf8")
   .replace(/^import .*?;\r?\n/gm, "")
   .replace(/export /g, "");
 const source = `
@@ -28,7 +28,7 @@ const NextResponse = {
 };
 ${sessionSource}
 ${middlewareSource}
-module.exports = { middleware, config };
+module.exports = { proxy, config };
 `;
 const compiled = ts.transpileModule(source, {
   compilerOptions: {
@@ -50,8 +50,8 @@ const context = {
   module: { exports: {} },
 };
 context.exports = context.module.exports;
-vm.runInNewContext(compiled, context, { filename: path.join(root, "middleware.ts") });
-const { middleware, config } = context.module.exports;
+vm.runInNewContext(compiled, context, { filename: path.join(root, "proxy.ts") });
+const { proxy, config } = context.module.exports;
 
 const secret = "test-admin-session-secret";
 const issuer = "akio-portfolio-admin";
@@ -94,19 +94,19 @@ test("uses the narrow admin matcher", () => {
 
 test("allows login and logout entrypoints without a session", async () => {
   for (const pathname of ["/admin/login", "/api/admin/login", "/api/admin/logout"]) {
-    const response = await middleware(request(pathname));
+    const response = await proxy(request(pathname));
     assert.equal(response.type, "next");
     assert.equal(response.status, 200);
   }
 });
 
 test("redirects unauthenticated admin pages and rejects admin APIs", async () => {
-  const pageResponse = await middleware(request("/admin/inbox"));
+  const pageResponse = await proxy(request("/admin/inbox"));
   assert.equal(pageResponse.type, "redirect");
   assert.equal(pageResponse.status, 307);
   assert.equal(pageResponse.url, "https://example.com/admin/login");
 
-  const apiResponse = await middleware(request("/api/admin/messages/test/read"));
+  const apiResponse = await proxy(request("/api/admin/messages/test/read"));
   assert.equal(apiResponse.type, "json");
   assert.equal(apiResponse.status, 401);
   assert.equal(JSON.stringify(apiResponse.body), '{"error":"Unauthorized"}');
@@ -114,10 +114,10 @@ test("redirects unauthenticated admin pages and rejects admin APIs", async () =>
 
 test("rejects forged and expired sessions", async () => {
   runtimeProcess.env = { ADMIN_SESSION_SECRET: secret };
-  const forgedResponse = await middleware(request("/admin/inbox", "not-a-token"));
+  const forgedResponse = await proxy(request("/admin/inbox", "not-a-token"));
   assert.equal(forgedResponse.status, 307);
   assert.equal(
-    (await middleware(request("/api/admin/messages/test/read", await createToken("0s"))))
+    (await proxy(request("/api/admin/messages/test/read", await createToken("0s"))))
       .status,
     401,
   );
@@ -125,7 +125,7 @@ test("rejects forged and expired sessions", async () => {
 
 test("allows a valid session through", async () => {
   runtimeProcess.env = { ADMIN_SESSION_SECRET: secret };
-  const response = await middleware(
+  const response = await proxy(
     request("/admin/inbox", await createToken()),
   );
   assert.equal(response.type, "next");

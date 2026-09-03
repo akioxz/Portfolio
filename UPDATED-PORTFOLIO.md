@@ -26,9 +26,14 @@ npm run build
 - Confirmed existing contact, admin, and middleware paths retain scoped failure logging; no new external observability service is required for the current deployment.
 - Added middleware coverage for matcher scope, public auth entrypoints, unauthenticated redirects/JSON responses, forged and expired sessions, and valid sessions.
 - Reviewed the remaining generated/theme-only local changes; they are now included in the repository state.
+- Migrated the admin route guard from deprecated `middleware.ts` to Next.js 16's `proxy.ts` convention while preserving matcher scope and authentication behavior.
 
 ## Operational follow-up
 
 Vercel logs plus the existing scoped server-side error logging are sufficient for the current project size. Revisit production error aggregation only if deployment volume or debugging requirements outgrow those logs.
+
+## Launch readiness
+
+The core portfolio, contact flow, admin inbox, security tests, and production guard are ready for launch. Before treating the portfolio as final, manually check the deployed site at mobile and desktop widths, complete one contact-form submission, verify the admin inbox, and confirm the production environment variables remain configured.
 
 Keep this file and `.github/copilot-instructions.md` aligned when architecture, commands, or operational behavior changes.
