@@ -5,19 +5,13 @@ import { Resend } from "resend";
 import crypto from "crypto";
 
 const contactSchema = z.object({
-  name: z
-    .string()
-    .trim()
-    .min(2, "Name must be at least 2 characters."),
+  name: z.string().trim().min(2, "Name must be at least 2 characters."),
   email: z
     .string()
     .trim()
     .toLowerCase()
     .email("Please enter a valid email address."),
-  message: z
-    .string()
-    .trim()
-    .min(10, "Message must be at least 10 characters."),
+  message: z.string().trim().min(10, "Message must be at least 10 characters."),
   turnstileToken: z.string().nullable().optional(),
 });
 
@@ -38,7 +32,7 @@ function isFallbackRateLimited(ip: string): boolean {
   const now = Date.now();
   const timestamps = fallbackRateLimitMap.get(ip) || [];
   const validTimestamps = timestamps.filter(
-    (time) => now - time < RATE_LIMIT_WINDOW_MS
+    (time) => now - time < RATE_LIMIT_WINDOW_MS,
   );
 
   if (validTimestamps.length >= MAX_REQUESTS_PER_WINDOW) {
@@ -53,14 +47,16 @@ function isFallbackRateLimited(ip: string): boolean {
 async function checkAndLogRateLimit(
   clientIp: string,
   supabaseUrl?: string,
-  supabaseKey?: string
+  supabaseKey?: string,
 ): Promise<boolean> {
   const ipHash = crypto.createHash("sha256").update(clientIp).digest("hex");
 
   if (supabaseUrl && supabaseKey) {
     try {
       const supabase = createClient(supabaseUrl, supabaseKey);
-      const tenMinutesAgo = new Date(Date.now() - RATE_LIMIT_WINDOW_MS).toISOString();
+      const tenMinutesAgo = new Date(
+        Date.now() - RATE_LIMIT_WINDOW_MS,
+      ).toISOString();
       const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000).toISOString();
 
       supabase
@@ -82,11 +78,16 @@ async function checkAndLogRateLimit(
           return true;
         }
 
-        await supabase.from("contact_rate_limits").insert([{ ip_hash: ipHash }]);
+        await supabase
+          .from("contact_rate_limits")
+          .insert([{ ip_hash: ipHash }]);
         return false;
       }
     } catch (err) {
-      console.warn("[Rate Limiter] Supabase rate check error, falling back to in-memory:", err);
+      console.warn(
+        "[Rate Limiter] Supabase rate check error, falling back to in-memory:",
+        err,
+      );
     }
   }
 
@@ -97,20 +98,16 @@ export async function POST(request: Request) {
   try {
     const forwardedFor = request.headers.get("x-forwarded-for");
     const realIp = request.headers.get("x-real-ip");
-    const clientIp = (forwardedFor?.split(",")[0] || realIp || "127.0.0.1").trim();
+    const clientIp = (
+      forwardedFor?.split(",")[0] ||
+      realIp ||
+      "127.0.0.1"
+    ).trim();
 
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
     const supabaseKey =
-      process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-
-    const rateLimited = await checkAndLogRateLimit(clientIp, supabaseUrl, supabaseKey);
-
-    if (rateLimited) {
-      return NextResponse.json(
-        { error: "Too many requests, please try again later." },
-        { status: 429 }
-      );
-    }
+      process.env.SUPABASE_SERVICE_ROLE_KEY ||
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
     const body = await request.json();
     const parseResult = contactSchema.safeParse(body);
@@ -122,64 +119,99 @@ export async function POST(request: Request) {
           error: "Invalid form input. Please check the fields below.",
           fieldErrors: flattened.fieldErrors,
         },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
     const { name, email, message, turnstileToken } = parseResult.data;
 
     const turnstileSecret = process.env.TURNSTILE_SECRET_KEY;
-    if (turnstileSecret) {
-      if (!turnstileToken) {
-        return NextResponse.json(
-          { error: "Verification token missing. Please complete Turnstile verification." },
-          { status: 400 }
-        );
-      }
+    if (!turnstileSecret) {
+      console.error("[Turnstile] TURNSTILE_SECRET_KEY is missing.");
+      return NextResponse.json(
+        { error: "Contact verification is temporarily unavailable." },
+        { status: 503 },
+      );
+    }
 
-      try {
-        const verifyRes = await fetch(
-          "https://challenges.cloudflare.com/turnstile/v0/siteverify",
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/x-www-form-urlencoded" },
-            body: new URLSearchParams({
-              secret: turnstileSecret,
-              response: turnstileToken,
-            }),
-          }
-        );
+    if (!turnstileToken) {
+      return NextResponse.json(
+        {
+          error:
+            "Verification token missing. Please complete Turnstile verification.",
+        },
+        { status: 400 },
+      );
+    }
 
-        const verifyData = await verifyRes.json();
-        if (!verifyData.success) {
-          console.warn("[Turnstile Verification Failed]", verifyData);
-          return NextResponse.json(
-            { error: "Verification failed, please try again." },
-            { status: 400 }
-          );
-        }
-      } catch (err) {
-        console.error("[Turnstile Verification Fetch Error]", err);
+    try {
+      const verifyRes = await fetch(
+        "https://challenges.cloudflare.com/turnstile/v0/siteverify",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          body: new URLSearchParams({
+            secret: turnstileSecret,
+            response: turnstileToken,
+          }),
+        },
+      );
+
+      if (!verifyRes.ok) {
+        console.error("[Turnstile Verification HTTP Error]", verifyRes.status);
         return NextResponse.json(
           { error: "Verification failed, please try again." },
-          { status: 400 }
+          { status: 400 },
         );
       }
-    } else {
-      console.warn("[Turnstile] TURNSTILE_SECRET_KEY missing. Bypassing verification for dev.");
+
+      const verifyData: unknown = await verifyRes.json();
+      if (
+        typeof verifyData !== "object" ||
+        verifyData === null ||
+        !("success" in verifyData) ||
+        verifyData.success !== true
+      ) {
+        console.warn("[Turnstile Verification Failed]");
+        return NextResponse.json(
+          { error: "Verification failed, please try again." },
+          { status: 400 },
+        );
+      }
+    } catch (err) {
+      console.error("[Turnstile Verification Fetch Error]", err);
+      return NextResponse.json(
+        { error: "Verification failed, please try again." },
+        { status: 400 },
+      );
+    }
+
+    const rateLimited = await checkAndLogRateLimit(
+      clientIp,
+      supabaseUrl,
+      supabaseKey,
+    );
+
+    if (rateLimited) {
+      return NextResponse.json(
+        { error: "Too many requests, please try again later." },
+        { status: 429 },
+      );
     }
 
     if (supabaseUrl && supabaseKey) {
       try {
         const supabase = createClient(supabaseUrl, supabaseKey);
-        const { error: dbError } = await supabase.from("contact_messages").insert([
-          {
-            name,
-            email,
-            message,
-            is_read: false,
-          },
-        ]);
+        const { error: dbError } = await supabase
+          .from("contact_messages")
+          .insert([
+            {
+              name,
+              email,
+              message,
+              is_read: false,
+            },
+          ]);
 
         if (dbError) {
           console.error("[Supabase Insert Error]", dbError);
@@ -188,14 +220,19 @@ export async function POST(request: Request) {
         console.error("[Supabase Client Connection Error]", dbErr);
       }
     } else {
-      console.warn("[Supabase] Configuration missing. Skipping database record.");
+      console.warn(
+        "[Supabase] Configuration missing. Skipping database record.",
+      );
     }
 
     const resendApiKey = process.env.RESEND_API_KEY;
-    const destinationEmail = process.env.CONTACT_DESTINATION_EMAIL || "dev.akioxz@gmail.com";
+    const destinationEmail =
+      process.env.CONTACT_DESTINATION_EMAIL || "dev.akioxz@gmail.com";
 
     if (!resendApiKey) {
-      console.warn("[Resend] RESEND_API_KEY missing. Message saved to DB only.");
+      console.warn(
+        "[Resend] RESEND_API_KEY missing. Message saved to DB only.",
+      );
       return NextResponse.json({
         success: true,
         message: "Message received! I'll get back to you soon.",
@@ -248,15 +285,18 @@ export async function POST(request: Request) {
     if (notificationResult.status === "rejected") {
       console.error("[Resend Notification Failed]", notificationResult.reason);
       return NextResponse.json(
-        { error: "Failed to send notification email. Please try again or email directly." },
-        { status: 500 }
+        {
+          error:
+            "Failed to send notification email. Please try again or email directly.",
+        },
+        { status: 500 },
       );
     }
 
     if (autoReplyResult.status === "rejected") {
       console.warn(
         "[Resend Auto-Reply Failed (Note: onboarding@resend.dev requires verified domain for strangers)]",
-        autoReplyResult.reason
+        autoReplyResult.reason,
       );
     }
 
@@ -267,8 +307,11 @@ export async function POST(request: Request) {
   } catch (error: any) {
     console.error("[Contact API Unexpected Error]", error);
     return NextResponse.json(
-      { error: "Something went wrong — try emailing me directly at dev.akioxz@gmail.com instead." },
-      { status: 500 }
+      {
+        error:
+          "Something went wrong — try emailing me directly at dev.akioxz@gmail.com instead.",
+      },
+      { status: 500 },
     );
   }
 }
