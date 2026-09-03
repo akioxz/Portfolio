@@ -27,11 +27,14 @@ Available project scripts:
 npm run build   # production build and Next.js type checking
 npm run start   # serve the production build
 npm run lint    # ESLint using eslint.config.mjs
+npm run test    # focused contact-route security tests
 ```
 
-There is currently no test script or test suite, so no single-test command exists. For changes, the supported focused validation is `npm run lint`; use `npm run build` when the change affects routing, server/client boundaries, configuration, or TypeScript.
+The focused test file is `tests/contact-route.test.cjs`; run it directly with `node --test tests/contact-route.test.cjs` when iterating on the contact route. For changes, run `npm run lint` and `npm run test`; use `npm run build` when the change affects routing, server/client boundaries, configuration, or TypeScript.
 
 Temporary scripts or harnesses for isolated behavior checks belong outside the repository or in the session workspace and must be removed after use.
+
+See `UPDATED-PORTFOLIO.md` for the current continuation notes and prioritized follow-up work.
 
 ## Environment configuration
 
