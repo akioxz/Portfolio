@@ -10,3 +10,4 @@ out
 .cursor/
 .agents/
 .impeccable/
+tsconfig.tsbuildinfo
