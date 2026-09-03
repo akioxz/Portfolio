@@ -27,6 +27,8 @@ npm run build
 - Added middleware coverage for matcher scope, public auth entrypoints, unauthenticated redirects/JSON responses, forged and expired sessions, and valid sessions.
 - Reviewed the remaining generated/theme-only local changes; they are now included in the repository state.
 - Migrated the admin route guard from deprecated `middleware.ts` to Next.js 16's `proxy.ts` convention while preserving matcher scope and authentication behavior.
+- Added protected permanent message deletion with confirmation, loading/error states, and optimistic-list removal only after the API confirms success.
+- Added client-side inbox search and an all/unread filter.
 
 ## Operational follow-up
 
@@ -35,5 +37,7 @@ Vercel logs plus the existing scoped server-side error logging are sufficient fo
 ## Launch readiness
 
 The core portfolio, contact flow, admin inbox, security tests, and production guard are ready for launch. Before treating the portfolio as final, manually check the deployed site at mobile and desktop widths, complete one contact-form submission, verify the admin inbox, and confirm the production environment variables remain configured.
+
+Optional after launch: add Playwright browser coverage, configure a custom domain, and convert the remaining generic image components only if their dynamic source constraints are addressed.
 
 Keep this file and `.github/copilot-instructions.md` aligned when architecture, commands, or operational behavior changes.

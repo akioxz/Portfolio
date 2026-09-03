@@ -10,6 +10,8 @@ import {
   VscSignOut,
   VscRefresh,
   VscError,
+  VscTrash,
+  VscSearch,
 } from "react-icons/vsc";
 
 export interface ContactMessage {
@@ -30,10 +32,20 @@ export default function InboxClient({ initialMessages }: InboxClientProps) {
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
   const [actionError, setActionError] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filter, setFilter] = useState<"all" | "unread">("all");
   const router = useRouter();
 
   const unreadCount = messages.filter((m) => !m.is_read).length;
+  const visibleMessages = messages.filter((message) => {
+    const haystack = `${message.name} ${message.email} ${message.message}`.toLowerCase();
+    return (
+      (filter === "all" || !message.is_read) &&
+      haystack.includes(searchQuery.trim().toLowerCase())
+    );
+  });
 
   const handleToggleExpand = async (id: string, currentlyRead: boolean) => {
     if (expandedId === id) {
@@ -91,6 +103,30 @@ export default function InboxClient({ initialMessages }: InboxClientProps) {
     }
   };
 
+  const handleDelete = async (id: string) => {
+    if (!window.confirm("Delete this message permanently? This cannot be undone.")) {
+      return;
+    }
+
+    setActionError(null);
+    setDeletingId(id);
+    try {
+      const response = await fetch(`/api/admin/messages/${id}`, {
+        method: "DELETE",
+      });
+      if (!response.ok) {
+        throw new Error("Delete request failed.");
+      }
+      setMessages((prev) => prev.filter((message) => message.id !== id));
+      setExpandedId(null);
+    } catch (err) {
+      console.error("Failed to delete message:", err);
+      setActionError("Could not delete the message. Please try again.");
+    } finally {
+      setDeletingId(null);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-ink text-cream p-4 sm:p-8 font-sans">
       <div className="max-w-4xl mx-auto">
@@ -142,14 +178,49 @@ export default function InboxClient({ initialMessages }: InboxClientProps) {
           </div>
         )}
 
+        <div className="mb-6 flex flex-col gap-3 sm:flex-row">
+          <label className="relative flex-1">
+            <VscSearch className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate" />
+            <span className="sr-only">Search messages</span>
+            <input
+              type="search"
+              value={searchQuery}
+              onChange={(event) => setSearchQuery(event.target.value)}
+              placeholder="Search messages..."
+              className="w-full rounded-md border border-slate/20 bg-surface/60 py-2 pl-9 pr-3 font-mono text-xs text-cream placeholder:text-slate/70 focus:border-teal focus:outline-none focus:ring-2 focus:ring-teal/30"
+            />
+          </label>
+          <div className="flex rounded-md border border-slate/20 p-1 font-mono text-xs">
+            {(["all", "unread"] as const).map((option) => (
+              <button
+                key={option}
+                type="button"
+                onClick={() => setFilter(option)}
+                aria-pressed={filter === option}
+                className={`rounded px-3 py-1.5 capitalize transition-colors ${
+                  filter === option
+                    ? "bg-teal/15 text-teal"
+                    : "text-slate hover:text-cream"
+                }`}
+              >
+                {option}
+              </button>
+            ))}
+          </div>
+        </div>
+
         {/* Messages List */}
         {messages.length === 0 ? (
           <div className="p-12 text-center border border-slate/15 rounded-xl bg-surface/30 font-mono text-sm text-slate">
             No contact messages received yet.
           </div>
+        ) : visibleMessages.length === 0 ? (
+          <div className="p-12 text-center border border-slate/15 rounded-xl bg-surface/30 font-mono text-sm text-slate">
+            No messages match the current search.
+          </div>
         ) : (
           <div className="flex flex-col gap-3">
-            {messages.map((msg) => {
+            {visibleMessages.map((msg) => {
               const isExpanded = expandedId === msg.id;
               const formattedDate = new Date(msg.created_at).toLocaleString("en-US", {
                 month: "short",
@@ -254,6 +325,15 @@ export default function InboxClient({ initialMessages }: InboxClientProps) {
                           <VscMail className="w-3.5 h-3.5" />
                           <span>Reply via Email</span>
                         </a>
+                        <button
+                          type="button"
+                          onClick={() => handleDelete(msg.id)}
+                          disabled={deletingId === msg.id}
+                          className="flex items-center gap-2 rounded-md border border-amber/30 bg-amber/10 px-3 py-1.5 font-mono text-xs text-amber transition-colors hover:bg-amber/20 disabled:cursor-wait disabled:opacity-50"
+                        >
+                          <VscTrash className="h-3.5 w-3.5" />
+                          <span>{deletingId === msg.id ? "Deleting..." : "Delete"}</span>
+                        </button>
                       </div>
                     </div>
                   )}
