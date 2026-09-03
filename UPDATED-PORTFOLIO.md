@@ -69,6 +69,9 @@ npm run build
 - Corrected the theme veil so it captures the outgoing dark/light color before changing themes; the overlay now visibly fades away instead of resolving to the already-active incoming color.
 - Replaced the veil with a circular View Transition reveal inspired by the supplied 60fps.design reference. The new theme expands from the toggle button over 380ms with a strong ease-out curve; reduced-motion mode collapses the animation to an instant swap.
 - Refined the circular reveal to a smoother 440ms iOS-style ease-out curve, giving the mask a softer finish without adding extra page-wide animation work.
+- Final launch gate closed on 2026-09-04. Production commit `e42e294` includes the circular theme reveal and the previously deployed mobile chatbot sizing fix from `4984e5e`.
+- Live mobile verification at 390x844 confirmed the chatbot panel is 320px wide, remains inside the viewport with no horizontal overflow, and the circular theme transition is supported and completes with the theme state changing correctly. Reduced-motion context was also exercised; no theme-reveal animation was observed beyond the page's independent existing animations.
+- Production Playwright verification remained green: 6 tests passed in 8.9s. The Vercel deployment response identified the live Vercel revision; the authenticated Vercel Source tab was not available from this terminal, so commit provenance was verified through the pushed Git history and live behavior.
 
 ## Operational follow-up
 
@@ -76,7 +79,7 @@ Vercel logs plus the existing scoped server-side error logging are sufficient fo
 
 ## Launch readiness
 
-The core portfolio, contact flow, admin inbox, security tests, and production guard are ready for launch. Before treating the portfolio as final, manually check the deployed site at mobile and desktop widths, complete one contact-form submission, verify the admin inbox, and confirm the production environment variables remain configured.
+**Complete as of 2026-09-04.** The core portfolio, contact flow, admin inbox, security hardening, production browser checks, manual click-through, mobile chatbot sizing, and circular theme reveal have been verified. The custom domain remains intentionally deferred due to cost.
 
 The custom domain remains intentionally deferred due to cost. After applying the Supabase migration, manually verify archive/restore in production and run `BASE_URL=https://your-deployment.vercel.app npm run test:browser` from an environment with Playwright browsers installed.
 
