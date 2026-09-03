@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { VscLock, VscArrowRight } from "react-icons/vsc";
 
@@ -9,6 +9,17 @@ export default function AdminLoginPage() {
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  const [csrfToken, setCsrfToken] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetch("/api/admin/login")
+      .then(async (response) => {
+        if (!response.ok) throw new Error("CSRF token request failed.");
+        const data = await response.json();
+        setCsrfToken(data.csrfToken);
+      })
+      .catch(() => setError("Unable to initialize secure login. Please refresh."));
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -18,7 +29,10 @@ export default function AdminLoginPage() {
     try {
       const res = await fetch("/api/admin/login", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "x-csrf-token": csrfToken || "",
+        },
         body: JSON.stringify({ password }),
       });
 
@@ -75,7 +89,7 @@ export default function AdminLoginPage() {
 
           <button
             type="submit"
-            disabled={isLoading}
+            disabled={isLoading || !csrfToken}
             className="mt-2 flex items-center justify-center gap-2 bg-cream text-ink px-4 py-2.5 rounded-md font-mono text-xs font-semibold hover:bg-cream/90 transition-all cursor-pointer disabled:opacity-50"
           >
             {isLoading ? (

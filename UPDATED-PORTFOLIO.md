@@ -38,6 +38,13 @@ npm run build
 - Replaced the remaining reusable raw image elements with `next/image` while preserving dynamic sources and layout sizing.
 - Added Playwright smoke coverage for the public page and unauthenticated admin redirect (`npm run test:browser`).
 
+## Security hardening in progress
+
+- Added a five-attempt/ten-minute admin-login rate limit using namespaced hashes in the existing `contact_rate_limits` table, with an in-memory fallback.
+- Added double-submit CSRF protection to admin login, archive/restore, and mark-read actions. Login issues a short-lived `csrf_token` cookie; mutations require the matching `x-csrf-token` header.
+- Added `Content-Security-Policy`, `X-Frame-Options`, `X-Content-Type-Options`, and `Strict-Transport-Security` response headers. CSP allows only same-origin resources plus Supabase and Cloudflare Turnstile connections/frames.
+- Ran `npm audit fix` without `--force`: the report decreased from 13 vulnerabilities (7 high, 6 moderate) to 9 (3 high, 6 moderate). Remaining high findings are the Next.js 16.2.9/sharp/PostCSS chain; resolving them requires the out-of-range `next@16.3.4` force upgrade, which was intentionally not applied.
+
 ## Operational follow-up
 
 Vercel logs plus the existing scoped server-side error logging are sufficient for the current project size. In Vercel Project Settings, add deployment-failure and function-error notifications, and keep the production log drain/retention defaults unless traffic requires a paid observability service.

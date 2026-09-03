@@ -14,6 +14,9 @@ import {
   VscSearch,
 } from "react-icons/vsc";
 
+const CSRF_COOKIE_NAME = "csrf_token";
+const CSRF_HEADER_NAME = "x-csrf-token";
+
 export interface ContactMessage {
   id: string;
   name: string;
@@ -43,6 +46,12 @@ export default function InboxClient({ initialMessages }: InboxClientProps) {
   } | null>(null);
   const cancelArchiveRef = useRef<HTMLButtonElement>(null);
   const router = useRouter();
+  const getCsrfToken = () =>
+    document.cookie
+      .split(";")
+      .map((part) => part.trim())
+      .find((part) => part.startsWith(`${CSRF_COOKIE_NAME}=`))
+      ?.slice(CSRF_COOKIE_NAME.length + 1) || "";
 
   useEffect(() => {
     if (!pendingArchive) return;
@@ -83,6 +92,7 @@ export default function InboxClient({ initialMessages }: InboxClientProps) {
       try {
         const response = await fetch(`/api/admin/messages/${id}/read`, {
           method: "POST",
+          headers: { [CSRF_HEADER_NAME]: getCsrfToken() },
         });
         if (!response.ok) {
           throw new Error("The message could not be marked as read.");
@@ -129,7 +139,10 @@ export default function InboxClient({ initialMessages }: InboxClientProps) {
     try {
       const response = await fetch(`/api/admin/messages/${id}`, {
         method: "PATCH",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          [CSRF_HEADER_NAME]: getCsrfToken(),
+        },
         body: JSON.stringify({ action }),
       });
       if (!response.ok) {

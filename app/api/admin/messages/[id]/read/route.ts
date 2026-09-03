@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { checkAdminSession } from "@/lib/admin-auth";
 import { createClient } from "@supabase/supabase-js";
+import { hasValidCsrfToken } from "@/lib/csrf";
 
 export async function POST(
   request: Request,
@@ -9,6 +10,9 @@ export async function POST(
   const isAuthenticated = await checkAdminSession();
   if (!isAuthenticated) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+  if (!hasValidCsrfToken(request)) {
+    return NextResponse.json({ error: "Invalid CSRF token." }, { status: 403 });
   }
 
   const { id } = await params;

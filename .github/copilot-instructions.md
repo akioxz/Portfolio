@@ -61,6 +61,9 @@ Do not expose service-role, Resend, Turnstile secret, password, or session-secre
 - Reuse the existing `react-icons/vsc` and `react-icons/si` icon sets plus Motion/GSAP patterns for interactive UI. Respect `useReducedMotion` where existing scroll or entrance animations use it.
 - API handlers validate untrusted input at the boundary, return JSON with an appropriate HTTP status, log integration failures with a scoped prefix, and escape user-provided values before placing them in HTML email templates. Avoid moving secrets or server-only Supabase access into client components.
 - Admin data comes from the Supabase `contact_messages` table, and rate limiting uses `contact_rate_limits`. Preserve the fallback in-memory rate limiter when Supabase configuration is unavailable.
+- Admin login is protected by a five-attempt, ten-minute server-side limit using namespaced hashes in `contact_rate_limits`, with an in-memory fallback when Supabase is unavailable.
+- Admin login and state-changing inbox actions require the double-submit `csrf_token` cookie plus `x-csrf-token` header; keep these checks fail-closed.
+- `next.config.mjs` applies CSP, clickjacking protection, MIME sniffing protection, and HSTS. Keep CSP allowlists limited to the app, Supabase, and Cloudflare Turnstile.
 - Message archive/restore is a protected `PATCH /api/admin/messages/[id]` operation backed by the `archived_at` Supabase column. Keep confirmation and update client state only after the server confirms success; apply the SQL migration in `supabase/migrations/` before deploying this feature.
 - Inbox archive/restore confirmation uses an in-app accessible dialog; preserve Escape-to-cancel, focus placement, and backdrop cancellation rather than using `window.confirm`.
 - The chatbot uses a compact mobile panel capped at 360px with safe-area positioning, Escape-to-close, input autofocus, and visible keyboard focus; preserve these behaviors when editing `components/Chatbot.tsx`.
