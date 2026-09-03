@@ -6,7 +6,6 @@ import {
   motion,
   useScroll,
   useTransform,
-  useSpring,
   useReducedMotion,
   type MotionValue,
 } from "motion/react";
@@ -126,6 +125,17 @@ function getTagIcon(tag: string) {
 /* ─── Building Preview (for projects without images) ─── */
 
 function BuildingPreview({ name }: { name: string }) {
+  const reducedMotion = useReducedMotion();
+  const [isMobile, setIsMobile] = React.useState(false);
+
+  React.useEffect(() => {
+    const mediaQuery = window.matchMedia("(max-width: 639px)");
+    const update = () => setIsMobile(mediaQuery.matches);
+    update();
+    mediaQuery.addEventListener("change", update);
+    return () => mediaQuery.removeEventListener("change", update);
+  }, []);
+
   return (
     <div className="relative w-full h-full overflow-hidden bg-surface">
       <div
@@ -137,22 +147,24 @@ function BuildingPreview({ name }: { name: string }) {
         }}
       />
 
-      <motion.div
-        className="absolute inset-0"
-        style={{
-          background:
-            "radial-gradient(220px circle at var(--x) var(--y), rgba(var(--spotlight), 0.16), transparent 70%)",
-        }}
-        animate={{
-          "--x": ["10%", "90%", "10%"],
-          "--y": ["20%", "80%", "20%"],
-        }}
-        transition={{
-          duration: 7,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-      />
+      {!isMobile && !reducedMotion && (
+        <motion.div
+          className="absolute inset-0"
+          style={{
+            background:
+              "radial-gradient(220px circle at var(--x) var(--y), rgba(var(--spotlight), 0.16), transparent 70%)",
+          }}
+          animate={{
+            "--x": ["10%", "90%", "10%"],
+            "--y": ["20%", "80%", "20%"],
+          }}
+          transition={{
+            duration: 7,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        />
+      )}
 
       <div className="relative w-full h-full flex flex-col items-center justify-center gap-2">
         <span className="font-mono text-sm text-slate/70 select-none tracking-wide">
@@ -166,9 +178,6 @@ function BuildingPreview({ name }: { name: string }) {
     </div>
   );
 }
-
-/* ─── Spring config for buttery scroll ─── */
-const smoothSpring = { stiffness: 300, damping: 40, mass: 0.5 };
 
 /* ─── Sticky Project Card ─── */
 
@@ -233,11 +242,6 @@ function StickyProjectCard({
     () => rawEntryOpacity.get() * rawExitOpacity.get()
   );
 
-  // --- Apply spring smoothing to prevent jank ---
-  const y = useSpring(rawY, smoothSpring);
-  const scale = useSpring(rawScale, smoothSpring);
-  const opacity = useSpring(rawOpacity, smoothSpring);
-
   // Stagger the sticky offset for physical depth
   const stickyTop = `calc(6vh + ${index * 2.5}vh)`;
 
@@ -254,10 +258,10 @@ function StickyProjectCard({
       }}
     >
       <motion.div
-        style={{ scale, opacity, y, willChange: "transform, opacity" }}
+        style={{ scale: rawScale, opacity: rawOpacity, y: rawY, willChange: "transform, opacity" }}
         className="w-full"
       >
-        <div className="bg-ink rounded-2xl border border-slate/10 p-6 sm:p-10 shadow-2xl">
+        <div className="bg-ink rounded-2xl border border-slate/10 p-6 shadow-xl sm:p-10 sm:shadow-2xl">
           <div className="flex flex-col lg:flex-row gap-8 lg:gap-14 items-center">
             {/* Image Column */}
             <div className="w-full lg:w-7/12">
@@ -363,7 +367,7 @@ export default function Projects() {
       <SplitText
         text="Projects"
         tag="h2"
-        className="text-[2rem] font-mono text-cream mb-8"
+        className="text-[2rem] font-mono text-cream mb-6 sm:mb-8"
         splitType="words"
         delay={40}
         duration={0.5}
@@ -374,7 +378,7 @@ export default function Projects() {
 
       <div
         ref={containerRef}
-        className="relative mt-12"
+        className="relative mt-8 sm:mt-12"
         style={{ height: `${(total + 0.5) * 100}vh` }}
       >
         {projects.map((project, index) => (

@@ -32,6 +32,7 @@ npm run build
 - Replaced the browser-native archive confirmation with a themed, keyboard-accessible in-app dialog that supports Escape and backdrop cancellation.
 - Refined the chatbot for mobile with a shorter 360px-capped panel, safe-area-aware positioning, Escape-to-close, input autofocus, and improved focus states.
 - Added browser coverage confirming the chatbot opens within a mobile viewport.
+- Optimized Projects scroll performance by removing spring lag from scroll-linked transforms, disabling decorative preview motion on mobile/reduced-motion devices, and reducing mobile card shadow/section spacing.
 - Replaced the remaining reusable raw image elements with `next/image` while preserving dynamic sources and layout sizing.
 - Added Playwright smoke coverage for the public page and unauthenticated admin redirect (`npm run test:browser`).
 
