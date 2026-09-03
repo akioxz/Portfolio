@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   VscMail,
@@ -37,7 +37,24 @@ export default function InboxClient({ initialMessages }: InboxClientProps) {
   const [actionError, setActionError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [filter, setFilter] = useState<"active" | "unread" | "archived">("active");
+  const [pendingArchive, setPendingArchive] = useState<{
+    id: string;
+    isArchived: boolean;
+  } | null>(null);
+  const cancelArchiveRef = useRef<HTMLButtonElement>(null);
   const router = useRouter();
+
+  useEffect(() => {
+    if (!pendingArchive) return;
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setPendingArchive(null);
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    cancelArchiveRef.current?.focus();
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [pendingArchive]);
 
   const unreadCount = messages.filter((m) => !m.archived_at && !m.is_read).length;
   const visibleMessages = messages.filter((message) => {
@@ -107,10 +124,6 @@ export default function InboxClient({ initialMessages }: InboxClientProps) {
 
   const handleArchive = async (id: string, isArchived: boolean) => {
     const action = isArchived ? "restore" : "archive";
-    if (!window.confirm(`${isArchived ? "Restore" : "Archive"} this message?`)) {
-      return;
-    }
-
     setActionError(null);
     setArchivingId(id);
     try {
@@ -338,7 +351,12 @@ export default function InboxClient({ initialMessages }: InboxClientProps) {
                         </a>
                         <button
                           type="button"
-                          onClick={() => handleArchive(msg.id, Boolean(msg.archived_at))}
+                          onClick={() =>
+                            setPendingArchive({
+                              id: msg.id,
+                              isArchived: Boolean(msg.archived_at),
+                            })
+                          }
                           disabled={archivingId === msg.id}
                           className="flex items-center gap-2 rounded-md border border-amber/30 bg-amber/10 px-3 py-1.5 font-mono text-xs text-amber transition-colors hover:bg-amber/20 disabled:cursor-wait disabled:opacity-50"
                         >
@@ -358,6 +376,61 @@ export default function InboxClient({ initialMessages }: InboxClientProps) {
           </div>
         )}
       </div>
+
+      {pendingArchive && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-ink/75 p-4 backdrop-blur-sm"
+          role="presentation"
+          onMouseDown={(event) => {
+            if (event.target === event.currentTarget) setPendingArchive(null);
+          }}
+        >
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="archive-dialog-title"
+            aria-describedby="archive-dialog-description"
+            className="w-full max-w-md rounded-xl border border-slate/20 bg-surface p-6 shadow-2xl shadow-black/30"
+          >
+            <div className="mb-5 flex items-start gap-3">
+              <div className="rounded-lg border border-amber/30 bg-amber/10 p-2 text-amber">
+                <VscArchive className="h-5 w-5" />
+              </div>
+              <div>
+                <h2 id="archive-dialog-title" className="font-mono text-sm font-bold uppercase tracking-wide text-cream">
+                  {pendingArchive.isArchived ? "Restore message?" : "Archive message?"}
+                </h2>
+                <p id="archive-dialog-description" className="mt-2 text-sm leading-relaxed text-slate">
+                  {pendingArchive.isArchived
+                    ? "This message will return to your active inbox."
+                    : "This message will be hidden from the active inbox. You can restore it later."}
+                </p>
+              </div>
+            </div>
+            <div className="flex justify-end gap-2">
+              <button
+                ref={cancelArchiveRef}
+                type="button"
+                onClick={() => setPendingArchive(null)}
+                className="rounded-md border border-slate/20 px-3 py-2 font-mono text-xs text-slate transition-colors hover:border-slate/40 hover:text-cream focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal/70"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  const { id, isArchived } = pendingArchive;
+                  setPendingArchive(null);
+                  void handleArchive(id, isArchived);
+                }}
+                className="rounded-md border border-amber/40 bg-amber/15 px-3 py-2 font-mono text-xs text-amber transition-colors hover:bg-amber/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber/70"
+              >
+                {pendingArchive.isArchived ? "Restore message" : "Archive message"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

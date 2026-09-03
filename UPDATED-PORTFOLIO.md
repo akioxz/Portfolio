@@ -29,6 +29,7 @@ npm run build
 - Migrated the admin route guard from deprecated `middleware.ts` to Next.js 16's `proxy.ts` convention while preserving matcher scope and authentication behavior.
 - Replaced permanent deletion with protected archive/restore actions, confirmation, loading/error states, and server-confirmed client updates. Apply `supabase/migrations/20260904000000_add_archived_at_to_contact_messages.sql` in Supabase before deploying.
 - Added client-side inbox search plus active, unread, and archived filters.
+- Replaced the browser-native archive confirmation with a themed, keyboard-accessible in-app dialog that supports Escape and backdrop cancellation.
 - Replaced the remaining reusable raw image elements with `next/image` while preserving dynamic sources and layout sizing.
 - Added Playwright smoke coverage for the public page and unauthenticated admin redirect (`npm run test:browser`).
 
