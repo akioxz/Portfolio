@@ -26,12 +26,25 @@ export default function Chatbot() {
     },
   ]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (isOpen && messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }, [messages, isOpen]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setIsOpen(false);
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    inputRef.current?.focus();
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen]);
 
   const handleSend = (text: string) => {
     if (!text.trim()) return;
@@ -80,7 +93,10 @@ export default function Chatbot() {
   };
 
   return (
-    <div className="fixed bottom-6 right-6 z-[100] flex flex-col items-end">
+    <div
+      data-testid="chatbot-shell"
+      className="fixed bottom-[max(1rem,env(safe-area-inset-bottom))] right-4 z-[100] flex flex-col items-end sm:bottom-6 sm:right-6"
+    >
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -92,8 +108,7 @@ export default function Chatbot() {
               scale: 0.95,
               transition: { duration: 0.2 },
             }}
-            className="w-[calc(100vw-3rem)] sm:w-[340px] mb-4 bg-surface/95 backdrop-blur-md border border-slate/20 rounded-2xl shadow-2xl flex flex-col overflow-hidden"
-            style={{ height: "450px", maxHeight: "calc(100vh - 120px)" }}
+            className="mb-3 flex h-[min(390px,calc(100dvh-7rem))] w-[calc(100vw-2rem)] flex-col overflow-hidden rounded-2xl border border-slate/20 bg-surface/95 shadow-2xl backdrop-blur-md sm:mb-4 sm:h-[450px] sm:max-h-[calc(100dvh-120px)] sm:w-[340px]"
           >
             {/* Header */}
             <div className="flex items-center justify-between p-4 border-b border-slate/15 bg-ink/50">
@@ -105,7 +120,7 @@ export default function Chatbot() {
               </div>
               <button
                 onClick={() => setIsOpen(false)}
-                className="text-slate hover:text-cream transition-colors cursor-pointer"
+                className="rounded-md p-1 text-slate transition-colors hover:text-cream focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal/70"
                 aria-label="Close chat"
               >
                 <VscClose className="w-5 h-5" />
@@ -140,7 +155,7 @@ export default function Chatbot() {
                     <button
                       key={prompt}
                       onClick={() => handleSend(prompt)}
-                      className="text-left bg-surface/50 border border-slate/15 text-slate hover:text-teal hover:border-teal/30 px-3 py-2 rounded-lg text-xs font-mono transition-colors cursor-pointer"
+                      className="rounded-lg border border-slate/15 bg-surface/50 px-3 py-2 text-left text-xs font-mono text-slate transition-colors hover:border-teal/30 hover:text-teal focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal/70"
                     >
                       {prompt}
                     </button>
@@ -160,11 +175,12 @@ export default function Chatbot() {
                 className="relative flex items-center"
               >
                 <input
+                  ref={inputRef}
                   type="text"
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   placeholder="Ask about my projects..."
-                  className="w-full bg-surface border border-slate/20 rounded-full pl-4 pr-10 py-2.5 text-sm text-cream focus:outline-none focus:border-teal transition-colors"
+                  className="w-full rounded-full border border-slate/20 bg-surface py-2.5 pl-4 pr-10 text-sm text-cream transition-colors placeholder:text-slate/70 focus:border-teal focus:outline-none focus:ring-2 focus:ring-teal/30"
                 />
                 <button
                   type="submit"
@@ -183,8 +199,9 @@ export default function Chatbot() {
       {/* Floating Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="relative flex items-center justify-center w-14 h-14 bg-teal rounded-full shadow-[0_0_20px_rgba(var(--teal),0.3)] hover:scale-105 transition-transform duration-300 z-10 cursor-pointer"
+        className="relative z-10 flex h-14 w-14 items-center justify-center rounded-full bg-teal shadow-[0_0_20px_rgba(var(--teal),0.3)] transition-transform duration-300 hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal focus-visible:ring-offset-2 focus-visible:ring-offset-ink"
         aria-label="Toggle chat"
+        aria-expanded={isOpen}
       >
         {isOpen ? (
           <VscClose className="w-6 h-6 text-ink" />

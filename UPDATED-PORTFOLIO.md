@@ -30,6 +30,8 @@ npm run build
 - Replaced permanent deletion with protected archive/restore actions, confirmation, loading/error states, and server-confirmed client updates. Apply `supabase/migrations/20260904000000_add_archived_at_to_contact_messages.sql` in Supabase before deploying.
 - Added client-side inbox search plus active, unread, and archived filters.
 - Replaced the browser-native archive confirmation with a themed, keyboard-accessible in-app dialog that supports Escape and backdrop cancellation.
+- Refined the chatbot for mobile with a shorter responsive panel, safe-area-aware positioning, Escape-to-close, input autofocus, and improved focus states.
+- Added browser coverage confirming the chatbot opens within a mobile viewport.
 - Replaced the remaining reusable raw image elements with `next/image` while preserving dynamic sources and layout sizing.
 - Added Playwright smoke coverage for the public page and unauthenticated admin redirect (`npm run test:browser`).
 
