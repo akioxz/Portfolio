@@ -23,6 +23,10 @@ export default function ThemeToggle() {
     if (isSwitching) return;
 
     setIsSwitching(true);
+    document.documentElement.style.setProperty(
+      "--theme-transition-color",
+      isDark ? "rgb(0 0 0)" : "rgb(255 255 255)",
+    );
     document.documentElement.classList.add("theme-switching");
     setTheme(isDark ? "light" : "dark");
     window.setTimeout(() => {

@@ -24,6 +24,7 @@
 
 html {
   scroll-behavior: smooth;
+  --theme-transition-color: rgb(0 0 0);
 }
 
 body {
@@ -36,13 +37,13 @@ html.theme-switching::after {
   inset: 0;
   z-index: 998;
   pointer-events: none;
-  background: rgb(var(--bg));
+  background: var(--theme-transition-color);
   animation: theme-veil 260ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
 @keyframes theme-veil {
   0% {
-    opacity: 0.78;
+    opacity: 1;
   }
 
   100% {
