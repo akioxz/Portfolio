@@ -65,6 +65,7 @@ npm run build
 - Tightened the mobile chatbot card to a 300px height cap and 320px width cap. This requires one post-deploy mobile confirmation before launch readiness is final.
 - Production environment variable names confirmed by the user: `ADMIN_SESSION_SECRET`, `ADMIN_PASSWORD`, `TURNSTILE_SECRET_KEY`, `NEXT_PUBLIC_TURNSTILE_SITE_KEY`, `CONTACT_DESTINATION_EMAIL`, `RESEND_API_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, and `NEXT_PUBLIC_SUPABASE_URL`.
 - Fixed laggy theme switching by removing the full-page View Transition clip animation and the global all-element color transition. Theme changes are now immediate, while component-level interaction transitions remain intact.
+- Added back a lightweight 260ms theme veil animation. It masks the instant variable swap with a single composited overlay, includes reduced-motion support, and avoids repainting every page element.
 
 ## Operational follow-up
 

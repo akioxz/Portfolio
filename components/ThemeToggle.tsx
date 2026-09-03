@@ -7,6 +7,7 @@ import { FiSun, FiMoon } from "react-icons/fi";
 export default function ThemeToggle() {
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
+  const [isSwitching, setIsSwitching] = useState(false);
 
   useEffect(() => {
     setMounted(true);
@@ -19,12 +20,21 @@ export default function ThemeToggle() {
   const isDark = theme === "dark";
 
   const handleToggle = () => {
+    if (isSwitching) return;
+
+    setIsSwitching(true);
+    document.documentElement.classList.add("theme-switching");
     setTheme(isDark ? "light" : "dark");
+    window.setTimeout(() => {
+      document.documentElement.classList.remove("theme-switching");
+      setIsSwitching(false);
+    }, 260);
   };
 
   return (
     <button
       onClick={handleToggle}
+      aria-busy={isSwitching}
       aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
       className="flex items-center justify-center w-8 h-8 text-slate hover:text-teal transition-colors"
       title={isDark ? "Light mode" : "Dark mode"}

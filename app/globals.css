@@ -30,6 +30,32 @@ body {
   background-color: rgb(var(--bg));
 }
 
+html.theme-switching::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 998;
+  pointer-events: none;
+  background: rgb(var(--bg));
+  animation: theme-veil 260ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes theme-veil {
+  0% {
+    opacity: 0.78;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.theme-switching::after {
+    animation-duration: 1ms;
+  }
+}
+
 body::before {
   content: "";
   position: fixed;
