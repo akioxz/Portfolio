@@ -1,22 +1,14 @@
 import { cookies } from "next/headers";
-import crypto from "crypto";
-import { SignJWT, jwtVerify } from "jose";
+import { SignJWT } from "jose";
+import {
+  getAdminSessionSecret,
+  SESSION_AUDIENCE,
+  SESSION_ISSUER,
+  SESSION_MAX_AGE,
+  verifyAdminSessionToken,
+} from "@/lib/admin-session";
 
 const COOKIE_NAME = "admin_session";
-const SESSION_ISSUER = "akio-portfolio-admin";
-const SESSION_AUDIENCE = "akio-portfolio-admin";
-const SESSION_MAX_AGE = 60 * 60 * 24 * 7;
-
-function getSessionSecret(): Uint8Array | null {
-  const secret = process.env.ADMIN_SESSION_SECRET;
-  if (!secret) {
-    console.warn(
-      "[Admin Auth] ADMIN_SESSION_SECRET environment variable is not set.",
-    );
-    return null;
-  }
-  return new TextEncoder().encode(secret);
-}
 
 export function validateAdminPassword(password: string): boolean {
   const adminPassword = process.env.ADMIN_PASSWORD;
@@ -34,19 +26,7 @@ export async function checkAdminSession(): Promise<boolean> {
   const sessionToken = cookieStore.get(COOKIE_NAME)?.value;
   if (!sessionToken) return false;
 
-  const secret = getSessionSecret();
-  if (!secret) return false;
-
-  try {
-    await jwtVerify(sessionToken, secret, {
-      algorithms: ["HS256"],
-      issuer: SESSION_ISSUER,
-      audience: SESSION_AUDIENCE,
-    });
-    return true;
-  } catch {
-    return false;
-  }
+  return verifyAdminSessionToken(sessionToken);
 }
 
 export async function getAdminCookieHeader(): Promise<{
@@ -54,7 +34,7 @@ export async function getAdminCookieHeader(): Promise<{
   value: string;
   options: any;
 }> {
-  const secret = getSessionSecret();
+  const secret = getAdminSessionSecret();
   if (!secret) {
     throw new Error(
       "[Admin Auth] Cannot issue a session: ADMIN_SESSION_SECRET environment variable is not set.",
@@ -64,7 +44,7 @@ export async function getAdminCookieHeader(): Promise<{
   const token = await new SignJWT({})
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
-    .setJti(crypto.randomUUID())
+    .setJti(globalThis.crypto.randomUUID())
     .setIssuer(SESSION_ISSUER)
     .setAudience(SESSION_AUDIENCE)
     .setExpirationTime(`${SESSION_MAX_AGE}s`)
