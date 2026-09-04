@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { motion, AnimatePresence } from "motion/react";
+import { motion, AnimatePresence, useReducedMotion } from "motion/react";
 import { VscComment, VscClose, VscSend, VscRobot } from "react-icons/vsc";
 import {
   chatbotKnowledge,
@@ -27,12 +27,13 @@ export default function Chatbot() {
   ]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const prefersReducedMotion = useReducedMotion();
 
   useEffect(() => {
     if (isOpen && messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+      messagesEndRef.current.scrollIntoView({ behavior: prefersReducedMotion ? "auto" : "smooth" });
     }
-  }, [messages, isOpen]);
+  }, [messages, isOpen, prefersReducedMotion]);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -100,14 +101,15 @@ export default function Chatbot() {
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, y: 20, scale: 0.95, transformOrigin: "bottom right" }}
+            initial={prefersReducedMotion ? { opacity: 1 } : { opacity: 0, y: 20, scale: 0.95, transformOrigin: "bottom right" }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{
+            exit={prefersReducedMotion ? { opacity: 1 } : {
               opacity: 0,
               y: 20,
               scale: 0.95,
               transition: { duration: 0.2 },
             }}
+            transition={prefersReducedMotion ? { duration: 0 } : undefined}
             className="mb-3 flex h-[min(300px,calc(100dvh-9rem))] w-[min(calc(100vw-2rem),320px)] flex-col overflow-hidden rounded-2xl border border-slate/20 bg-surface/95 shadow-2xl backdrop-blur-md sm:mb-4 sm:h-[450px] sm:max-h-[calc(100dvh-120px)] sm:w-[340px]"
           >
             {/* Header */}

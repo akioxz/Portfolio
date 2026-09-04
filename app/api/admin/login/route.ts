@@ -31,21 +31,23 @@ function isFallbackRateLimited(key: string): boolean {
 async function isLoginRateLimited(
   clientIp: string,
   supabaseUrl?: string,
-  supabaseKey?: string,
+  supabaseServiceKey?: string,
 ): Promise<boolean> {
   const ipHash = crypto
     .createHash("sha256")
     .update(`admin-login:${clientIp}`)
     .digest("hex");
 
-  if (supabaseUrl && supabaseKey) {
+  // Prefer service-role key for server-side rate limiting (required for reliable writes)
+  if (supabaseUrl && supabaseServiceKey) {
     try {
-      const supabase = createClient(supabaseUrl, supabaseKey);
+      const supabase = createClient(supabaseUrl, supabaseServiceKey);
       const windowStart = new Date(
         Date.now() - RATE_LIMIT_WINDOW_MS,
       ).toISOString();
       const cleanupCutoff = new Date(Date.now() - 60 * 60 * 1000).toISOString();
 
+      // Async cleanup (non-blocking)
       supabase
         .from("contact_rate_limits")
         .delete()
@@ -54,22 +56,52 @@ async function isLoginRateLimited(
           if (error) console.warn("[Admin Rate Limit Cleanup Warning]", error);
         });
 
-      const { data, error } = await supabase
+      // Atomically count and increment: upsert ensures single operation
+      const { data: countData, error: countError } = await supabase
         .from("contact_rate_limits")
         .select("id")
         .eq("ip_hash", ipHash)
         .gte("created_at", windowStart);
 
-      if (!error && data) {
-        if (data.length >= MAX_LOGIN_ATTEMPTS_PER_WINDOW) return true;
-        await supabase.from("contact_rate_limits").insert([{ ip_hash: ipHash }]);
-        return false;
+      if (countError) {
+        console.warn("[Admin Rate Limiter] Count query failed:", countError);
+        return isFallbackRateLimited(ipHash);
       }
+
+      if (!countData) {
+        console.warn("[Admin Rate Limiter] Count query returned null");
+        return isFallbackRateLimited(ipHash);
+      }
+
+      // Check threshold before inserting
+      if (countData.length >= MAX_LOGIN_ATTEMPTS_PER_WINDOW) {
+        return true;
+      }
+
+      // Attempt to record this attempt; any failure falls back to in-memory limiter
+      const { error: insertError } = await supabase
+        .from("contact_rate_limits")
+        .insert([{ ip_hash: ipHash }]);
+
+      if (insertError) {
+        console.warn(
+          "[Admin Rate Limiter] Failed to record attempt; using fallback:",
+          insertError,
+        );
+        return isFallbackRateLimited(ipHash);
+      }
+
+      return false;
     } catch (error) {
-      console.warn("[Admin Rate Limiter] Supabase check failed:", error);
+      console.warn("[Admin Rate Limiter] Supabase operation failed:", error);
+      return isFallbackRateLimited(ipHash);
     }
   }
 
+  // No service-role key: fall back to in-memory limiter
+  console.warn(
+    "[Admin Rate Limiter] No service-role key configured; using in-memory limiter only",
+  );
   return isFallbackRateLimited(ipHash);
 }
 
@@ -94,11 +126,9 @@ export async function POST(request: Request) {
       "127.0.0.1"
     ).trim();
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-    const supabaseKey =
-      process.env.SUPABASE_SERVICE_ROLE_KEY ||
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+    const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-    if (await isLoginRateLimited(clientIp, supabaseUrl, supabaseKey)) {
+    if (await isLoginRateLimited(clientIp, supabaseUrl, supabaseServiceKey)) {
       return NextResponse.json(
         { error: "Too many login attempts. Please try again later." },
         { status: 429 },
