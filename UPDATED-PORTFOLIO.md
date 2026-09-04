@@ -84,3 +84,16 @@ Vercel logs plus the existing scoped server-side error logging are sufficient fo
 The custom domain remains intentionally deferred due to cost. After applying the Supabase migration, manually verify archive/restore in production and run `BASE_URL=https://your-deployment.vercel.app npm run test:browser` from an environment with Playwright browsers installed.
 
 Keep this file and `.github/copilot-instructions.md` aligned when architecture, commands, or operational behavior changes.
+
+## Final production contact verification — 2026-09-05
+
+- The user confirmed that `NEXT_PUBLIC_TURNSTILE_SITE_KEY` is present in Vercel Production, Preview, and Development environments.
+- The user directly observed the Cloudflare Turnstile widget rendering and passing verification on the live production contact form; the supplied screenshot confirmed the successful submission flow.
+- A real production contact submission was completed with the following inbox evidence shown in the supplied screenshot:
+  - Sender name: `Test Production`
+  - Sender email: `vaxelvillanueva252004@gmail.com`
+  - Message: `TEST TEST TEST`
+  - Inbox timestamp: `Sep 5, 2026, 6:12 AM`
+- The screenshot showed the message present in the production admin inbox with the `Reply via Email` and `Archive` actions available.
+- This closes the previously open production contact-form and admin-inbox verification item based on the user's direct live-site observation and supplied inbox screenshot.
+- Resend notification delivery remains unconfirmed because no notification-recipient inbox evidence was provided. The contact submission's appearance in Supabase/admin inbox is verified; email notification receipt is not.
