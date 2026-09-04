@@ -56,42 +56,24 @@ async function isLoginRateLimited(
           if (error) console.warn("[Admin Rate Limit Cleanup Warning]", error);
         });
 
-      // Atomically count and increment: upsert ensures single operation
-      const { data: countData, error: countError } = await supabase
-        .from("contact_rate_limits")
-        .select("id")
-        .eq("ip_hash", ipHash)
-        .gte("created_at", windowStart);
+      const { data: rateLimited, error: rpcError } = await supabase.rpc(
+        "check_and_record_admin_login_attempt",
+        {
+          p_ip_hash: ipHash,
+          p_window_start: windowStart,
+          p_max_attempts: MAX_LOGIN_ATTEMPTS_PER_WINDOW,
+        },
+      );
 
-      if (countError) {
-        console.warn("[Admin Rate Limiter] Count query failed:", countError);
-        return isFallbackRateLimited(ipHash);
-      }
-
-      if (!countData) {
-        console.warn("[Admin Rate Limiter] Count query returned null");
-        return isFallbackRateLimited(ipHash);
-      }
-
-      // Check threshold before inserting
-      if (countData.length >= MAX_LOGIN_ATTEMPTS_PER_WINDOW) {
-        return true;
-      }
-
-      // Attempt to record this attempt; any failure falls back to in-memory limiter
-      const { error: insertError } = await supabase
-        .from("contact_rate_limits")
-        .insert([{ ip_hash: ipHash }]);
-
-      if (insertError) {
+      if (rpcError || typeof rateLimited !== "boolean") {
         console.warn(
-          "[Admin Rate Limiter] Failed to record attempt; using fallback:",
-          insertError,
+          "[Admin Rate Limiter] Atomic database check failed; using fallback:",
+          rpcError || "Invalid RPC response",
         );
         return isFallbackRateLimited(ipHash);
       }
 
-      return false;
+      return rateLimited;
     } catch (error) {
       console.warn("[Admin Rate Limiter] Supabase operation failed:", error);
       return isFallbackRateLimited(ipHash);

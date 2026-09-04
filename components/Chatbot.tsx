@@ -209,7 +209,9 @@ export default function Chatbot() {
           <VscClose className="w-6 h-6 text-ink" />
         ) : (
           <>
-            <span className="absolute inset-0 rounded-full animate-ping bg-teal opacity-40"></span>
+            {!prefersReducedMotion && (
+              <span className="absolute inset-0 rounded-full animate-ping bg-teal opacity-40"></span>
+            )}
             <VscComment className="w-6 h-6 text-ink" />
           </>
         )}

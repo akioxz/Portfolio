@@ -119,7 +119,10 @@ export default function InboxClient({ initialMessages }: InboxClientProps) {
     setActionError(null);
     setIsLoggingOut(true);
     try {
-      const response = await fetch("/api/admin/logout", { method: "POST" });
+      const response = await fetch("/api/admin/logout", {
+        method: "POST",
+        headers: { [CSRF_HEADER_NAME]: getCsrfToken() },
+      });
       if (!response.ok) {
         throw new Error("Logout request failed.");
       }
