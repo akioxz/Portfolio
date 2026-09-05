@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { Turnstile } from "@marsidev/react-turnstile";
+import { Turnstile, type TurnstileInstance } from "@marsidev/react-turnstile";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { VscClose, VscSend, VscCheck, VscError, VscMail } from "react-icons/vsc";
 
@@ -16,6 +16,7 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
+  const turnstileRef = useRef<TurnstileInstance | null>(null);
 
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -66,7 +67,10 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
     setErrorMessage(null);
     setFieldErrors(null);
 
-    if (siteKey && !turnstileToken) {
+    const currentTurnstileToken =
+      turnstileRef.current?.getResponse() || turnstileToken;
+
+    if (siteKey && !currentTurnstileToken) {
       setErrorMessage("Please complete the verification below.");
       return;
     }
@@ -81,7 +85,7 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
           name,
           email,
           message,
-          turnstileToken,
+          turnstileToken: currentTurnstileToken,
         }),
       });
 
@@ -393,6 +397,7 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
             {siteKey && (
               <div className="my-1 flex justify-center">
                 <Turnstile
+                  ref={turnstileRef}
                   siteKey={siteKey}
                   onSuccess={(token) => setTurnstileToken(token)}
                   onError={() => setTurnstileToken(null)}
