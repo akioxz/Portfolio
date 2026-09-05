@@ -2,6 +2,15 @@
 
 ## Current state
 
+### Uncommitted contact confirmation work â€” verified 2026-09-05
+
+- `components/ContactModal.tsx` replaces the submitted form with the paper-into-envelope Motion success state. It respects `prefers-reduced-motion`, retains the existing close affordances, and auto-closes after 2.5 seconds.
+- The confirmation now has the neutral heading `Message Received` and renders the API-provided success message. Its fallback is `Your message was received.`, not a delivery claim.
+- `app/api/contact/route.ts` tracks whether the Supabase insert succeeded. When Resend is unavailable, it returns `503` rather than a false success if no message was persisted. A persisted-but-not-emailed message remains an explicit received-message success.
+- `tests/contact-route.test.cjs` covers the Supabase-insert-failure plus missing-Resend case, asserting `503`, no success field, and no Resend calls.
+- Verified in this session: `npm.cmd run test` completed with 16 passed / 0 failed; `npm.cmd run lint` completed with no ESLint diagnostics; `npm.cmd run build` compiled, type-checked, and generated all routes successfully; `git diff --check` returned no whitespace errors. Expected test logs include missing-config and simulated Turnstile/Supabase failure cases.
+- The working tree has substantive modifications in `app/api/contact/route.ts`, `components/ContactModal.tsx`, and `tests/contact-route.test.cjs`. `tsconfig.json` is also shown as modified by Git but has no textual diff.
+
 - Public portfolio is composed in `app/page.tsx` from interactive section components.
 - Contact submissions use Zod validation, Cloudflare Turnstile verification, rate limiting, Supabase persistence, and optional Resend email.
 - Admin inbox access uses signed, expiring JWT sessions and middleware protection for admin pages and APIs.

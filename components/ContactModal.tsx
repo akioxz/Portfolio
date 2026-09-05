@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { Turnstile } from "@marsidev/react-turnstile";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { VscClose, VscSend, VscCheck, VscError, VscMail } from "react-icons/vsc";
 
 interface ContactModalProps {
@@ -21,6 +22,7 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
   const [fieldErrors, setFieldErrors] = useState<Record<string, string[]> | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [mounted, setMounted] = useState(false);
+  const prefersReducedMotion = useReducedMotion();
 
   useEffect(() => {
     setMounted(true);
@@ -98,7 +100,7 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
         return;
       }
 
-      setSuccessMessage(data.message || "Message sent! I'll get back to you soon.");
+      setSuccessMessage(data.message || "Your message was received.");
       setIsLoading(false);
 
       setTimeout(() => {
@@ -148,24 +150,146 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
 
         {/* Modal Body */}
         {successMessage ? (
-          <div className="py-8 text-center flex flex-col items-center justify-center gap-3">
-            <div className="w-12 h-12 rounded-full bg-teal/10 border border-teal/30 flex items-center justify-center text-teal mb-2">
-              <VscCheck className="w-6 h-6" />
+          <AnimatePresence mode="wait">
+            <div className="py-8 text-center flex flex-col items-center justify-center gap-3">
+              <motion.svg
+                viewBox="0 0 160 100"
+                aria-hidden="true"
+                className="mb-2 h-24 w-36 text-teal"
+                initial={prefersReducedMotion ? { opacity: 0 } : { opacity: 1 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: prefersReducedMotion ? 0 : 0.2 }}
+              >
+                <rect
+                  x="10"
+                  y="25"
+                  width="140"
+                  height="65"
+                  rx="8"
+                  fill="currentColor"
+                  fillOpacity="0.08"
+                  stroke="currentColor"
+                  strokeOpacity="0.45"
+                  strokeWidth="2"
+                />
+                <motion.path
+                  d="M10 29 L80 67 L150 29"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeOpacity="0.75"
+                  strokeWidth="2"
+                  initial={
+                    prefersReducedMotion
+                      ? { opacity: 0 }
+                      : { opacity: 1, transform: "rotate(0deg)" }
+                  }
+                  animate={
+                    prefersReducedMotion
+                      ? { opacity: 1 }
+                      : {
+                          opacity: 1,
+                          transform: "rotate(7deg)",
+                        }
+                  }
+                  transition={
+                    prefersReducedMotion
+                      ? { duration: 0 }
+                      : { delay: 0.4, duration: 0.15, ease: [0.23, 1, 0.32, 1] }
+                  }
+                  style={{ transformOrigin: "80px 29px" }}
+                />
+                <motion.path
+                  d="M31 8 H129 V43 H31 Z"
+                  fill="rgb(var(--surface))"
+                  stroke="currentColor"
+                  strokeOpacity="0.65"
+                  strokeWidth="2"
+                  initial={
+                    prefersReducedMotion
+                      ? { opacity: 0 }
+                      : {
+                          opacity: 1,
+                          transform: "translate(0px, 0px) scale(0.96)",
+                        }
+                  }
+                  animate={
+                    prefersReducedMotion
+                      ? { opacity: 1 }
+                      : {
+                          opacity: 0,
+                          transform: "translate(0px, 30px) scale(0.88)",
+                        }
+                  }
+                  transition={
+                    prefersReducedMotion
+                      ? { duration: 0 }
+                      : { duration: 0.4, ease: [0.77, 0, 0.175, 1] }
+                  }
+                  style={{ transformOrigin: "80px 38px" }}
+                />
+                <motion.path
+                  d="M10 25 L80 65 L150 25"
+                  fill="rgb(var(--surface))"
+                  stroke="currentColor"
+                  strokeOpacity="0.75"
+                  strokeWidth="2"
+                  initial={
+                    prefersReducedMotion
+                      ? { opacity: 0 }
+                      : { opacity: 1, transform: "rotate(0deg)" }
+                  }
+                  animate={
+                    prefersReducedMotion
+                      ? { opacity: 1 }
+                      : {
+                          opacity: 1,
+                          transform: "rotate(7deg)",
+                        }
+                  }
+                  transition={
+                    prefersReducedMotion
+                      ? { duration: 0 }
+                      : { delay: 0.4, duration: 0.15, ease: [0.23, 1, 0.32, 1] }
+                  }
+                  style={{ transformOrigin: "80px 25px" }}
+                />
+              </motion.svg>
+              <motion.div
+                initial={
+                  prefersReducedMotion
+                    ? { opacity: 0 }
+                    : { opacity: 0, transform: "translateY(8px)" }
+                }
+                animate={{ opacity: 1, transform: "translateY(0px)" }}
+                transition={
+                  prefersReducedMotion
+                    ? { duration: 0 }
+                    : {
+                        delay: 0.58,
+                        duration: 0.22,
+                        ease: [0.23, 1, 0.32, 1],
+                      }
+                }
+              >
+                <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full border border-teal/30 bg-teal/10 text-teal">
+                  <VscCheck className="h-6 w-6" />
+                </div>
+                <h3 className="mt-3 font-mono text-base font-semibold text-cream">
+                  Message Received
+                </h3>
+                <p className="mx-auto mt-1 max-w-sm font-sans text-sm leading-relaxed text-slate">
+                  {successMessage}
+                </p>
+              </motion.div>
+              <button
+                type="button"
+                onClick={onClose}
+                className="mt-4 px-4 py-2 rounded-md font-mono text-xs text-slate border border-slate/20 hover:text-cream hover:border-slate/40 transition-colors cursor-pointer"
+              >
+                Close Window
+              </button>
             </div>
-            <h3 className="font-mono text-base font-semibold text-cream">
-              Message Received
-            </h3>
-            <p className="text-slate text-sm max-w-sm leading-relaxed font-sans">
-              {successMessage}
-            </p>
-            <button
-              type="button"
-              onClick={onClose}
-              className="mt-4 px-4 py-2 rounded-md font-mono text-xs text-slate border border-slate/20 hover:text-cream hover:border-slate/40 transition-colors cursor-pointer"
-            >
-              Close Window
-            </button>
-          </div>
+          </AnimatePresence>
         ) : (
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             {/* Error Banner */}

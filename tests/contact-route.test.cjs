@@ -17,6 +17,7 @@ const routeSource = fs
 
 let fetchMode = "success";
 let supabaseInserts = 0;
+let supabaseInsertError = null;
 let resendSends = 0;
 
 const source = `
@@ -82,7 +83,9 @@ const context = {
                 }),
                 insert: () => {
                   if (table === "contact_messages") supabaseInserts += 1;
-                  return Promise.resolve({ error: null });
+                  return Promise.resolve({
+                    error: table === "contact_messages" ? supabaseInsertError : null,
+                  });
                 },
               };
             },
@@ -130,10 +133,16 @@ function makeRequest(token = "test-token") {
   });
 }
 
-async function invoke(environment, mode = "success", token = "test-token") {
+async function invoke(
+  environment,
+  mode = "success",
+  token = "test-token",
+  insertError = null,
+) {
   process.env = { ...environment };
   fetchMode = mode;
   supabaseInserts = 0;
+  supabaseInsertError = insertError;
   resendSends = 0;
   const response = await POST(makeRequest(token));
   return { response, supabaseInserts, resendSends };
@@ -179,4 +188,18 @@ test("continues to persistence and email after successful verification", async (
   assert.equal(response.body.success, true);
   assert.equal(supabaseInserts, 1);
   assert.equal(resendSends, 2);
+});
+
+test("does not report success when persistence fails and Resend is unavailable", async () => {
+  const { response, supabaseInserts, resendSends } = await invoke(
+    { ...baseEnvironment, RESEND_API_KEY: "" },
+    "success",
+    "test-token",
+    { message: "insert failed" },
+  );
+  assert.equal(response.status, 503);
+  assert.equal(response.body.success, undefined);
+  assert.match(response.body.error, /couldn't save your message/i);
+  assert.equal(supabaseInserts, 1);
+  assert.equal(resendSends, 0);
 });

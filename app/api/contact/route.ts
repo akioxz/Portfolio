@@ -199,6 +199,8 @@ export async function POST(request: Request) {
       );
     }
 
+    let messagePersisted = false;
+
     if (supabaseUrl && supabaseKey) {
       try {
         const supabase = createClient(supabaseUrl, supabaseKey);
@@ -215,6 +217,8 @@ export async function POST(request: Request) {
 
         if (dbError) {
           console.error("[Supabase Insert Error]", dbError);
+        } else {
+          messagePersisted = true;
         }
       } catch (dbErr) {
         console.error("[Supabase Client Connection Error]", dbErr);
@@ -230,6 +234,19 @@ export async function POST(request: Request) {
       process.env.CONTACT_DESTINATION_EMAIL || "dev.akioxz@gmail.com";
 
     if (!resendApiKey) {
+      if (!messagePersisted) {
+        console.error(
+          "[Contact Delivery Failed] Resend is unavailable and the message was not persisted.",
+        );
+        return NextResponse.json(
+          {
+            error:
+              "We couldn't save your message. Please try again or email directly.",
+          },
+          { status: 503 },
+        );
+      }
+
       console.warn(
         "[Resend] RESEND_API_KEY missing. Message saved to DB only.",
       );
