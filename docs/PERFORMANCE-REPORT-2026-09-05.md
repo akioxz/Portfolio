@@ -1,0 +1,104 @@
+# Production Performance, SEO, and Accessibility Report
+
+**Site:** https://axelvillanueva.vercel.app  
+**Report date:** 2026-09-05  
+**Scope:** Public home page only. The contact form was not submitted during these measurements.
+
+## Executive summary
+
+The portfolio has consistently tested well for accessibility, best practices, SEO, visual stability, and page weight. Lighthouse measured **100/100** for accessibility, best practices, and SEO after the final metadata and accessibility polish. The main metric to monitor is Largest Contentful Paint (LCP): its throttled Lighthouse value varied between **3.1 s** and **3.5 s**, while a direct live browser trace confirmed that the Hero LCP element now appears much earlier after the Hero entrance-delay change.
+
+The site is production-ready. No severe performance, SEO, accessibility, or responsive-layout problem was measured.
+
+## Test conditions and evidence rules
+
+- **Lighthouse:** Local Lighthouse CLI using Playwright Chromium against the live production URL. Lighthouse uses mobile emulation and simulated network/CPU conditions; its scores are lab data, not real-user Core Web Vitals.
+- **Browser samples:** Fresh Playwright visits to the live URL. These are unthrottled synthetic samples from the test machine, not Lighthouse measurements and not field data.
+- **Direct LCP trace:** A `PerformanceObserver` captured the browser's `largest-contentful-paint` entries on the live page.
+- **Static inspection:** Checked the deployed document metadata, responsive overflow, headings, controls, and relevant Next.js source configuration.
+
+## Lighthouse history
+
+| Audit point | Performance | Accessibility | Best practices | SEO | FCP | LCP | TBT | CLS | Speed Index | TTI | Page weight |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| Initial live audit | 94 | 95 | 100 | 100 | 1.0 s | 3.1 s | 30 ms | 0 | 1.5 s | 3.1 s | 416 KiB |
+| After SEO/accessibility polish | 93 | 100 | 100 | 100 | 1.0 s | 3.1 s | 120 ms | 0 | 1.4 s | 3.1 s | 416 KiB |
+| After Hero LCP change | 87 | 100 | 100 | 100 | 2.2 s | 3.5 s | 110 ms | 0.006 | 3.2 s | 3.5 s | 416 KiB |
+
+The final Lighthouse run did **not** show a lower lab LCP. This is important: the Hero change must not be presented as a verified Lighthouse-score improvement. Lighthouse's simulated run conditions vary, especially with a single run, so the final 3.5 s result should be monitored rather than treated as a regression on its own.
+
+## Direct browser measurements
+
+| Audit point | Viewport | TTFB | FCP | DOM content loaded | Load event | Resources | Transfer | Horizontal overflow |
+|---|---|---:|---:|---:|---:|---:|---:|---|
+| Initial live sample | Mobile | 38–41 ms | 264 ms | Not retained | Not retained | 17 | 398,565 bytes | No |
+| Initial live sample | Desktop | 38–41 ms | 308 ms | Not retained | Not retained | 17 | 398,565 bytes | No |
+| Post-polish sample | Mobile | 2,861 ms | 2,976 ms | 2,973 ms | 3,041 ms | 18 | 398,384 bytes | No |
+| Post-polish sample | Desktop | 131 ms | 340 ms | 259 ms | 292 ms | 18 | 398,384 bytes | No |
+
+The 2,861 ms mobile TTFB was one cold sample only. It was not reproduced across the desktop sample and is insufficient to diagnose a persistent server problem. It should be watched in future audits, not reported as a confirmed regression.
+
+## Hero LCP investigation and change
+
+### Measured bottleneck
+
+Before the Hero optimization, the direct LCP trace identified the **Hero introduction paragraph** as the LCP element. It was reported at **1,144 ms**. The trace did not identify an image as the LCP element.
+
+The page's Hero used Motion variants with `initial="hidden"`, which held initial Hero content in an invisible entrance state. This was a plausible, directly observed contributor to later text paint.
+
+### Published change
+
+Commit `c0ee852` changed `components/Hero.tsx` from `initial="hidden"` to `initial={false}` on the Hero Motion container. This keeps the Hero content visible on initial render while preserving the existing visual system and interactions.
+
+### Post-deploy live verification
+
+- GitHub's Vercel deployment status for commit `c0ee852` reported: **"Deployment has completed"**.
+- At 100 ms after navigation, the live Hero paragraph had `opacity: 1` and no transform.
+- A new direct live LCP trace reported the Hero paragraph at **308 ms**.
+- The same trace reported FCP at **248 ms**.
+
+| Direct LCP trace | Before published change | After published change | Difference |
+|---|---:|---:|---:|
+| Hero paragraph LCP | 1,144 ms | 308 ms | 836 ms earlier |
+
+This confirms the behavioral goal: the LCP element is no longer held back by the Hero entrance state. It does not override the separate final Lighthouse lab result, which was slower in that one run.
+
+## SEO and accessibility verification
+
+The final live checks found:
+
+- A descriptive document title: `Axel Villanueva | Full-Stack Developer`.
+- A canonical URL: `https://axelvillanueva.vercel.app/`.
+- A live Open Graph image URL generated by the Next.js `opengraph-image` route.
+- One H1 on the page.
+- No detected unnamed interactive controls in the browser sample.
+- No horizontal overflow at 390 px mobile or 1440 px desktop.
+- Lighthouse accessibility, best-practices, and SEO scores of 100 after the final polish.
+
+Related production improvements included an explicit canonical URL, Open Graph/Twitter image metadata, improved footer accessible names, higher-contrast small text, and decorative technology icons hidden from assistive technology.
+
+## What is working well
+
+- **Page weight:** approximately 416 KiB in Lighthouse and approximately 398 KB transferred in direct browser samples.
+- **Visual stability:** CLS was 0 in the first two Lighthouse runs and 0.006 in the final run, all comfortably within the 0.1 Core Web Vitals threshold.
+- **Interactivity:** TBT remained low, between 30 ms and 120 ms.
+- **Accessibility and SEO:** final Lighthouse scores were 100/100 in both categories.
+- **Responsive containment:** no mobile or desktop horizontal overflow was observed.
+- **First-screen delivery:** the published Hero change made the directly traced LCP paragraph appear 836 ms sooner.
+
+## Remaining item to monitor
+
+### P2 — Repeat LCP measurement before making more code changes
+
+The final single Lighthouse LCP was 3.5 s, above the 2.5 s "good" target and above the earlier 3.1 s lab result. Because the direct live browser trace improved materially and Lighthouse is variable between isolated runs, this is a measurement uncertainty rather than a confirmed performance regression.
+
+**Recommended next step:** run multiple Lighthouse measurements from a consistent environment or collect Vercel Speed Insights / real-user Core Web Vitals after visitors have used the updated site. Only pursue more changes if the median LCP remains above 2.5 s. The next investigation should continue to focus on first-screen rendering and the splash/hero sequence, not broad bundle or image rewrites.
+
+## External-tool status
+
+- **Google PageSpeed Insights:** attempted during the audit cycle but returned HTTP 429 (rate limited), so no PageSpeed scores are claimed.
+- **GTmetrix and WebPageTest:** not used; no paid or login-gated service was required for the completed evidence.
+
+## Change-control note
+
+This report records measurements only. It does not replace future production monitoring or real-user performance data. The unrelated uncommitted `components/Header.tsx` change was deliberately excluded from the Hero performance commit and remains outside this report's scope.
