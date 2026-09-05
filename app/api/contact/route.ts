@@ -78,9 +78,18 @@ async function checkAndLogRateLimit(
           return true;
         }
 
-        await supabase
+        const { error: rateLimitInsertError } = await supabase
           .from("contact_rate_limits")
           .insert([{ ip_hash: ipHash }]);
+
+        if (rateLimitInsertError) {
+          console.warn(
+            "[Rate Limiter] Supabase rate write error, falling back to in-memory:",
+            rateLimitInsertError,
+          );
+          return isFallbackRateLimited(clientIp);
+        }
+
         return false;
       }
     } catch (err) {
@@ -241,7 +250,7 @@ export async function POST(request: Request) {
         return NextResponse.json(
           {
             error:
-              "We couldn't save your message. Please try again or email directly.",
+              "We couldn't save your message. Please try emailing me directly at dev.akioxz@gmail.com instead.",
           },
           { status: 503 },
         );
@@ -299,12 +308,22 @@ export async function POST(request: Request) {
       autoReplyPromise,
     ]);
 
-    if (notificationResult.status === "rejected") {
-      console.error("[Resend Notification Failed]", notificationResult.reason);
+    const notificationFailed =
+      notificationResult.status === "rejected" ||
+      notificationResult.value.error !== null ||
+      notificationResult.value.data === null;
+
+    if (notificationFailed) {
+      console.error(
+        "[Resend Notification Failed]",
+        notificationResult.status === "rejected"
+          ? notificationResult.reason
+          : notificationResult.value.error,
+      );
       return NextResponse.json(
         {
           error:
-            "Failed to send notification email. Please try again or email directly.",
+            "Failed to send notification email. Please try emailing me directly at dev.akioxz@gmail.com instead.",
         },
         { status: 500 },
       );

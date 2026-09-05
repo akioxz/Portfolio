@@ -18,7 +18,9 @@ const routeSource = fs
 let fetchMode = "success";
 let supabaseInserts = 0;
 let supabaseInsertError = null;
+let rateLimitInsertError = null;
 let resendSends = 0;
+let resendError = null;
 
 const source = `
 const { NextResponse } = require("next/server");
@@ -82,9 +84,14 @@ const context = {
                   }),
                 }),
                 insert: () => {
-                  if (table === "contact_messages") supabaseInserts += 1;
+                  if (table === "contact_messages") {
+                    supabaseInserts += 1;
+                  }
                   return Promise.resolve({
-                    error: table === "contact_messages" ? supabaseInsertError : null,
+                    error:
+                      table === "contact_messages"
+                        ? supabaseInsertError
+                        : rateLimitInsertError,
                   });
                 },
               };
@@ -99,7 +106,9 @@ const context = {
           emails = {
             send: async () => {
               resendSends += 1;
-              return { data: { id: "test" }, error: null };
+              return resendError
+                ? { data: null, error: resendError }
+                : { data: { id: "test" }, error: null };
             },
           };
         },
@@ -120,10 +129,13 @@ const baseEnvironment = {
   TURNSTILE_SECRET_KEY: "test-turnstile-secret",
 };
 
-function makeRequest(token = "test-token") {
+function makeRequest(token = "test-token", clientIp = "127.0.0.1") {
   return new Request("http://localhost/api/contact", {
     method: "POST",
-    headers: { "content-type": "application/json" },
+    headers: {
+      "content-type": "application/json",
+      "x-forwarded-for": clientIp,
+    },
     body: JSON.stringify({
       name: "Turnstile Test",
       email: "turnstile-test@example.com",
@@ -138,13 +150,16 @@ async function invoke(
   mode = "success",
   token = "test-token",
   insertError = null,
+  options = {},
 ) {
   process.env = { ...environment };
   fetchMode = mode;
   supabaseInserts = 0;
   supabaseInsertError = insertError;
+  rateLimitInsertError = options.rateLimitInsertError || null;
   resendSends = 0;
-  const response = await POST(makeRequest(token));
+  resendError = options.resendError || null;
+  const response = await POST(makeRequest(token, options.clientIp));
   return { response, supabaseInserts, resendSends };
 }
 
@@ -202,4 +217,45 @@ test("does not report success when persistence fails and Resend is unavailable",
   assert.match(response.body.error, /couldn't save your message/i);
   assert.equal(supabaseInserts, 1);
   assert.equal(resendSends, 0);
+});
+
+test("does not report success when Resend returns a fulfilled error response", async () => {
+  const { response, resendSends } = await invoke(
+    baseEnvironment,
+    "success",
+    "test-token",
+    null,
+    { resendError: { message: "invalid sender", statusCode: 422 } },
+  );
+  assert.equal(response.status, 500);
+  assert.equal(response.body.success, undefined);
+  assert.match(response.body.error, /failed to send notification email/i);
+  assert.equal(resendSends, 2);
+});
+
+test("falls back to in-memory limiting when the Supabase rate write fails", async () => {
+  const options = {
+    clientIp: "rate-limit-write-failure",
+    rateLimitInsertError: { message: "insert failed" },
+  };
+
+  for (let attempt = 0; attempt < 3; attempt += 1) {
+    const { response } = await invoke(
+      { ...baseEnvironment, RESEND_API_KEY: "" },
+      "success",
+      "test-token",
+      null,
+      options,
+    );
+    assert.equal(response.status, 200);
+  }
+
+  const { response } = await invoke(
+    { ...baseEnvironment, RESEND_API_KEY: "" },
+    "success",
+    "test-token",
+    null,
+    options,
+  );
+  assert.equal(response.status, 429);
 });

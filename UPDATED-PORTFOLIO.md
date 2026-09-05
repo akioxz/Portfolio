@@ -11,6 +11,14 @@
 - Verified in this session: `npm.cmd run test` completed with 16 passed / 0 failed; `npm.cmd run lint` completed with no ESLint diagnostics; `npm.cmd run build` compiled, type-checked, and generated all routes successfully; `git diff --check` returned no whitespace errors. Expected test logs include missing-config and simulated Turnstile/Supabase failure cases.
 - The working tree has substantive modifications in `app/api/contact/route.ts`, `components/ContactModal.tsx`, and `tests/contact-route.test.cjs`. `tsconfig.json` is also shown as modified by Git but has no textual diff.
 
+### Contact delivery and rate-limit audit follow-up â€” verified 2026-09-05
+
+- `app/api/contact/route.ts` now treats a fulfilled Resend `{ data: null, error }` response as a notification failure rather than returning a false `success: true` response. The returned fallback wording matches the modal's existing direct-email link condition and includes the destination address.
+- The Supabase-backed contact rate limiter now checks its insert result. If the rate-limit write fails, it falls back to the in-memory limiter instead of allowing unlimited requests.
+- `tests/contact-route.test.cjs` covers both a fulfilled Resend error response and a failed Supabase rate-limit insert, asserting the latter enforces the configured three-request fallback threshold.
+- Verified in this session: `npm.cmd run test` completed with 18 passed / 0 failed; `npm.cmd run lint` completed with no ESLint diagnostics; `npm.cmd run build` compiled, type-checked, and generated all routes successfully; `git diff --check` returned no whitespace errors.
+- These audit follow-up changes are uncommitted. Do not claim production verification until they are deployed and independently tested.
+
 - Public portfolio is composed in `app/page.tsx` from interactive section components.
 - Contact submissions use Zod validation, Cloudflare Turnstile verification, rate limiting, Supabase persistence, and optional Resend email.
 - Admin inbox access uses signed, expiring JWT sessions and middleware protection for admin pages and APIs.
