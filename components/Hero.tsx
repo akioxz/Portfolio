@@ -148,7 +148,7 @@ export default function Hero() {
       id="hero"
       className="mb-4 flex flex-col lg:flex-row gap-16 lg:gap-12 items-start justify-between"
       variants={containerVariants}
-      initial="hidden"
+      initial={false}
       animate="show"
     >
       {/* Left: Bio */}
