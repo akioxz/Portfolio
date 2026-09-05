@@ -69,7 +69,7 @@ export default function Stack() {
       return {
         node: (
           <div className="flex items-center gap-2 text-cream font-mono text-xs border border-slate/15 bg-surface/40 rounded-md px-3 py-2 select-none">
-            <Icon className={`w-4 h-4 ${accentColorClass}`} />
+            <Icon aria-hidden="true" className={`w-4 h-4 ${accentColorClass}`} />
             <span>{item.name}</span>
           </div>
         ),
@@ -141,4 +141,3 @@ export default function Stack() {
     </section>
   );
 }
-

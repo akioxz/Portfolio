@@ -1,10 +1,9 @@
 "use client";
 
-import React, { useMemo, useRef, useState } from "react";
+import React from "react";
 import Image from "next/image";
 import { motion } from "motion/react";
 import SplitText from "./react-bits/SplitText";
-import RotatingText from "./react-bits/RotatingText";
 import PixelTransition from "./react-bits/PixelTransition";
 import SpecularButton from "./react-bits/SpecularButton";
 import { VscMail, VscGithub, VscArrowRight } from "react-icons/vsc";
@@ -144,31 +143,6 @@ function HeroSidebar() {
 }
 
 export default function Hero() {
-  const [step, setStep] = useState(0);
-  const rotatingTextRef = useRef<any>(null);
-
-  const rotatingTexts = useMemo(
-    () => [
-      "View Resume",
-      "Still polishing this",
-      "Almost there",
-      "Thanks for your patience",
-    ],
-    [],
-  );
-
-  const handleButtonClick = () => {
-    if (step >= rotatingTexts.length - 1) {
-      setStep(0);
-      rotatingTextRef.current?.reset();
-      return;
-    }
-
-    const nextStep = step + 1;
-    setStep(nextStep);
-    rotatingTextRef.current?.next();
-  };
-
   return (
     <motion.section
       id="hero"
@@ -281,24 +255,18 @@ export default function Hero() {
         <motion.div variants={itemVariants}>
           <SpecularButton
             size="md"
-            onClick={handleButtonClick}
+            onClick={() =>
+              document.getElementById("projects")?.scrollIntoView({
+                behavior: "smooth",
+              })
+            }
             textColor="rgb(var(--text))"
             lineColor="rgb(var(--text))"
             baseColor="rgb(var(--text-secondary))"
             radius={8}
             className="group select-none"
           >
-            <RotatingText
-              ref={rotatingTextRef}
-              texts={rotatingTexts}
-              auto={false}
-              loop={false}
-              splitBy="words"
-              transition={{ type: "spring", damping: 28, stiffness: 380 }}
-              staggerDuration={0.02}
-              mainClassName="inline-flex items-center"
-              elementLevelClassName="inline-block"
-            />
+            <span>Explore Projects</span>
             <VscArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300 shrink-0" />
           </SpecularButton>
         </motion.div>

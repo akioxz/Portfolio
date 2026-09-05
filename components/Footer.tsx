@@ -120,7 +120,7 @@ export default function Footer() {
         <button
           type="button"
           onClick={() => setIsContactModalOpen(true)}
-          aria-label="Open contact message form"
+          aria-label="Send a message — opens the contact form"
           className="block w-full text-left rounded-lg focus:outline-none focus-visible:ring-1 focus-visible:ring-teal cursor-pointer"
         >
           <MagneticCard
@@ -137,7 +137,7 @@ export default function Footer() {
         {/* Email Card */}
         <a
           href="mailto:dev.akioxz@gmail.com"
-          aria-label="Send email to dev.akioxz@gmail.com"
+          aria-label="Email dev.akioxz@gmail.com"
           className="block rounded-lg focus:outline-none focus-visible:ring-1 focus-visible:ring-teal"
         >
           <MagneticCard
@@ -156,7 +156,7 @@ export default function Footer() {
           href="https://github.com/akioxz"
           target="_blank"
           rel="noopener noreferrer"
-          aria-label="Visit GitHub profile @akioxz"
+          aria-label="GitHub @akioxz"
           className="block rounded-lg focus:outline-none focus-visible:ring-1 focus-visible:ring-teal"
         >
           <MagneticCard
@@ -171,7 +171,7 @@ export default function Footer() {
         </a>
       </div>
 
-      <div className="flex justify-center text-center font-mono text-[10px] text-slate/60 select-none border-t border-slate/10 pt-6">
+      <div className="flex justify-center text-center font-mono text-[10px] text-slate select-none border-t border-slate/10 pt-6">
         <p>
           © {new Date().getFullYear()} Axel Villanueva. All rights reserved.
         </p>

@@ -16,6 +16,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://axelvillanueva.vercel.app"),
   title: "Axel Villanueva | Full-Stack Developer",
   description:
     "4th-year BSIT student & full-stack web & mobile developer specializing in React, Next.js, React Native, and Supabase.",
@@ -33,6 +34,9 @@ export const metadata: Metadata = {
   icons: {
     icon: "/favicon.svg",
   },
+  alternates: {
+    canonical: "/",
+  },
   openGraph: {
     title: "Axel Villanueva | Full-Stack Developer",
     description:
@@ -40,12 +44,14 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     siteName: "Axel Villanueva Portfolio",
+    images: ["/opengraph-image"],
   },
   twitter: {
     card: "summary_large_image",
     title: "Axel Villanueva | Full-Stack Developer",
     description:
       "Full-stack software engineering, web & mobile applications with React, Next.js, React Native, and Supabase.",
+    images: ["/opengraph-image"],
   },
 };
 

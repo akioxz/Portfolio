@@ -305,7 +305,7 @@ function StickyProjectCard({
               <div className="grid grid-cols-3 gap-4 mb-6">
                 {project.specs.map((spec) => (
                   <div key={spec.label} className="flex flex-col gap-1">
-                    <span className="font-mono text-[10px] uppercase tracking-wider text-slate/70">
+                    <span className="font-mono text-[10px] uppercase tracking-wider text-slate">
                       {spec.label}
                     </span>
                     <span className="font-mono text-xs text-cream">
