@@ -16,11 +16,12 @@ const containerVariants = {
 };
 
 const itemVariants = {
-  hidden: { opacity: 0, y: 18 },
+  hidden: { opacity: 0, y: 40, scale: 0.95 },
   show: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] as const },
+    scale: 1,
+    transition: { type: "spring", mass: 2.5, stiffness: 40, damping: 15 },
   },
 };
 
