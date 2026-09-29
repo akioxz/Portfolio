@@ -168,7 +168,7 @@ export default function InboxClient({ initialMessages }: InboxClientProps) {
   };
 
   return (
-    <div className="min-h-screen bg-ink text-cream p-4 sm:p-8 font-sans">
+    <div className="p-4 sm:p-8 font-sans">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 mb-8 border-b border-slate/15">

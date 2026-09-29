@@ -12,3 +12,4 @@ out
 .impeccable/
 tsconfig.tsbuildinfo
 test-results/
+.vercel
