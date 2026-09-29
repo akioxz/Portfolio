@@ -1,0 +1,8 @@
+# Axel Villanueva - Full-Stack Developer
+
+Axel is a 4th-year BSIT student and full-stack web/mobile developer.
+Technologies: React, Next.js, React Native, Supabase, GSAP.
+
+## Projects
+See the portfolio at https://axelvillanueva.vercel.app
+

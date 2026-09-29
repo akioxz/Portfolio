@@ -79,7 +79,7 @@ export default function Stack() {
   };
 
   return (
-    <section id="stack" className="mb-20 scroll-mt-24">
+    <section id="stack" className="mb-20 scroll-mt-24" aria-label="Technology Stack">
       <SplitText
         text="Stack"
         tag="h2"

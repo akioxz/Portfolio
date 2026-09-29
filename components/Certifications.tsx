@@ -10,7 +10,7 @@ export default function Certifications() {
   const visibleCerts = showAll ? certificationsData : certificationsData.slice(0, 3);
 
   return (
-    <section id="certifications" className="mb-20 scroll-mt-24">
+    <section id="certifications" className="mb-20 scroll-mt-24" aria-label="Certifications">
       <div className="flex items-center justify-between mb-8">
         <SplitText
           text="Certifications"
@@ -30,7 +30,7 @@ export default function Certifications() {
             onClick={() => setShowAll(!showAll)}
             className="font-mono text-xs text-slate hover:text-teal transition-colors shrink-0 ml-4 cursor-pointer"
           >
-            {showAll ? "Show Less ←" : "View All →"}
+            {showAll ? `Show Less ${"\u2190"}` : `View All ${"\u2192"}`}
           </button>
         )}
       </div>
@@ -48,7 +48,7 @@ export default function Certifications() {
               </h3>
               <p className="text-slate text-xs mt-1">
                 {cert.issuer}
-                {cert.credentialId && ` · Credential ID ${cert.credentialId}`}
+                {cert.credentialId && ` ${"\u00B7"} Credential ID ${cert.credentialId}`}
               </p>
 
               <div className="mt-3 w-36 h-20 rounded border border-slate/15 bg-surface/30 p-2 flex flex-col justify-between font-mono text-[7px] text-slate/80 select-none shadow-md">

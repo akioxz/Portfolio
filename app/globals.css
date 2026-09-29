@@ -23,7 +23,6 @@
 }
 
 html {
-  scroll-behavior: smooth;
   --theme-reveal-x: 50vw;
   --theme-reveal-y: 50vh;
   --theme-reveal-radius: 0px;

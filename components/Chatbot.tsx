@@ -201,7 +201,7 @@ export default function Chatbot() {
       {/* Floating Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="relative z-10 flex h-14 w-14 items-center justify-center rounded-full bg-teal shadow-[0_0_20px_rgba(var(--teal),0.3)] transition-transform duration-300 hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal focus-visible:ring-offset-2 focus-visible:ring-offset-ink"
+        className="relative z-10 flex h-14 w-14 items-center justify-center rounded-full bg-teal shadow-[0_0_20px_rgb(var(--teal)/0.3)] transition-transform duration-300 hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal focus-visible:ring-offset-2 focus-visible:ring-offset-ink"
         aria-label="Toggle chat"
         aria-expanded={isOpen}
       >

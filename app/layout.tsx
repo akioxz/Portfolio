@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import ThemeProvider from "@/components/ThemeProvider";
+import ReactLenisWrapper from "@/components/ReactLenisWrapper";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -66,13 +67,31 @@ export default function RootLayout({
       className={`${inter.variable} ${geistMono.variable}`}
       suppressHydrationWarning
     >
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Person",
+              "name": "Axel Villanueva",
+              "url": "https://axelvillanueva.vercel.app",
+              "jobTitle": "Full-Stack Developer",
+              "sameAs": ["https://github.com/akioxz"],
+            }),
+          }}
+        />
+      </head>
       <body className="font-sans bg-ink text-cream antialiased">
+
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"
           enableSystem={false}
         >
-          {children}
+          <ReactLenisWrapper>
+            {children}
+          </ReactLenisWrapper>
         </ThemeProvider>
       </body>
     </html>

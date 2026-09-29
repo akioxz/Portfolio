@@ -33,37 +33,16 @@ function Badge({ icon, label }: { icon?: React.ReactNode; label: string }) {
   );
 }
 
-const experienceData = [
-  {
-    year: "2026",
-    role: "Full-Stack Developer",
-    project: "Reson8",
-    subtitle: "Multi-System Podcast Platform",
-    description:
-      "Independently architected and built a 4-tier podcast platform spanning Next.js (admin), Vue 3 (public), PHP (editor), and Express.js (API). Implemented JWT auth, RESTful API design, and security middleware (CORS, Helmet, rate limiting, CSRF protection).",
-    tags: ["Next.js", "Vue 3", "PHP", "Express.js", "JWT"],
-  },
-  {
-    year: "2026",
-    role: "Backend & Data Engineer",
-    project: "SCSAGA",
-    subtitle: "Smart Campus Student Attendance & Gate Analytics",
-    description:
-      "Independently built a Flask-based analytics system integrated with Google BigQuery/GCP for real-time campus attendance and gate crowd-status tracking. Automated recurring data jobs via Windows Task Scheduler; designed crowd-status threshold logic and Looker Studio dashboards for stakeholders.",
-    tags: ["Flask", "BigQuery", "GCP", "Looker Studio"],
-  },
-  {
-    year: "2026",
-    role: "Data & BI Engineer",
-    project: "Water Station Dashboard",
-    subtitle: "Sales Dashboard & ETL Pipeline",
-    description:
-      "Independently designed and implemented an ETL pipeline ingesting CSV sales data into Google BigQuery. Built unified SQL views to consolidate walk-in and delivery channels; developed a Looker Studio dashboard for real-time business reporting.",
-    tags: ["BigQuery", "SQL", "ETL", "Looker Studio"],
-  },
-];
+export interface ExperienceData {
+  year: string;
+  role: string;
+  project: string;
+  subtitle: string;
+  description: string;
+  tags: string[];
+}
 
-function HeroSidebar() {
+function HeroSidebar({ experience }: { experience: ExperienceData[] }) {
   return (
     <motion.div
       variants={itemVariants}
@@ -75,12 +54,12 @@ function HeroSidebar() {
           Education
         </span>
         <div className="border-l-2 border-teal/20 pl-4">
-          <p className="font-mono text-xs text-slate mb-0.5">2023 – Present</p>
+          <p className="font-mono text-xs text-slate mb-0.5">2023 {"\u2013"} Present</p>
           <h3 className="font-mono text-sm text-cream font-medium leading-snug">
             B.S. Information Technology
           </h3>
           <p className="text-slate text-xs mt-0.5">
-            Wesleyan University – Philippines · Cabanatuan City Campus
+            Wesleyan University {"\u2013"} Philippines {"\u00B7"} Cabanatuan City Campus
           </p>
         </div>
       </div>
@@ -94,7 +73,7 @@ function HeroSidebar() {
           Experience
         </span>
         <div className="flex flex-col gap-6">
-          {experienceData.map((item, i) => (
+          {experience.map((item, i) => (
             <motion.div
               key={item.project}
               initial={{ opacity: 0, x: 12 }}
@@ -104,7 +83,7 @@ function HeroSidebar() {
                 ease: [0.16, 1, 0.3, 1],
                 delay: 0.3 + i * 0.1,
               }}
-              className="border-l-2 border-slate/15 pl-4 group hover:border-teal/40 transition-colors duration-300"
+              className="border-l-2 border-slate/15 pl-4 group hover:border-teal/40 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
             >
               <div className="flex items-center gap-2 mb-1">
                 <span className="font-mono text-[10px] text-slate/60">
@@ -142,7 +121,7 @@ function HeroSidebar() {
   );
 }
 
-export default function Hero() {
+export default function Hero({ experience }: { experience: ExperienceData[] }) {
   return (
     <motion.section
       id="hero"
@@ -158,7 +137,7 @@ export default function Hero() {
           className="flex items-center gap-5 mb-6"
         >
           <div
-            className="w-[130px] h-[130px] shrink-0"
+            className="w-[128px] h-[128px] shrink-0"
             style={{ transform: "translateZ(0)", willChange: "transform" }}
           >
             <PixelTransition
@@ -169,7 +148,7 @@ export default function Hero() {
                     alt="Axel Villanueva"
                     fill
                     priority
-                    sizes="130px"
+                    sizes="128px"
                     className="object-cover"
                   />
                 </div>
@@ -181,7 +160,7 @@ export default function Hero() {
                     alt="Axel Villanueva"
                     fill
                     priority
-                    sizes="130px"
+                    sizes="128px"
                     className="object-cover"
                   />
                 </div>
@@ -190,7 +169,7 @@ export default function Hero() {
               pixelColor="rgb(var(--teal))"
               animationStepDuration={0.35}
               aspectRatio="100%"
-              className="!w-[130px] !h-[130px] !rounded-full !border-slate/20 !bg-surface"
+              className="!w-[128px] !h-[128px] !rounded-full !border-slate/20 !bg-surface"
             />
           </div>
 
@@ -203,14 +182,14 @@ export default function Hero() {
                 href="https://github.com/akioxz"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hover:text-teal transition-colors duration-200"
+                className="hover:text-teal transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
                 aria-label="GitHub"
               >
                 <VscGithub className="w-5 h-5" />
               </a>
               <a
                 href="mailto:dev.akioxz@gmail.com"
-                className="hover:text-teal transition-colors duration-200"
+                className="hover:text-teal transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
                 aria-label="Email"
               >
                 <VscMail className="w-5 h-5" />
@@ -235,7 +214,7 @@ export default function Hero() {
             rootMargin="0px"
           />
           <span className="inline-flex items-baseline font-mono text-[1.35rem] font-normal tracking-tight leading-tight">
-            <span className="text-cream">—</span>
+            <span className="text-cream">{"\u2014"}</span>
             <span className="text-slate">&nbsp;React, Node &amp; Cloud</span>
           </span>
         </div>
@@ -245,7 +224,7 @@ export default function Hero() {
           className="text-slate text-base leading-[1.85] mb-8 max-w-2xl"
         >
           4th-year BSIT student passionate about full-stack software engineering
-          — building web and mobile applications with <Badge label="React" />{" "}
+          {"\u2014"} building web and mobile applications with <Badge label="React" />{" "}
           and <Badge label="Supabase" />. Lately diving into AI integration and
           generative AI, exploring how these tools can be applied to real-world
           software development. Still learning, but actively building and
@@ -267,13 +246,13 @@ export default function Hero() {
             className="group select-none"
           >
             <span>Explore Projects</span>
-            <VscArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300 shrink-0" />
+            <VscArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] shrink-0" />
           </SpecularButton>
         </motion.div>
       </div>
 
       {/* Right: Education + Experience Sidebar */}
-      <HeroSidebar />
+      <HeroSidebar experience={experience} />
     </motion.section>
   );
 }

@@ -55,7 +55,7 @@ export default function ThemeToggle() {
 
     window.setTimeout(() => {
       setIsSwitching(false);
-    }, 380);
+    }, 440);
   };
 
   return (

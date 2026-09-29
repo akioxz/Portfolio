@@ -1,7 +1,5 @@
-"use client";
-
-import { useState } from "react";
 import dynamic from "next/dynamic";
+import { createClient } from "@supabase/supabase-js";
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
 import StatsStrip from "@/components/StatsStrip";
@@ -13,22 +11,31 @@ import Certifications from "@/components/Certifications";
 import BeyondTheCode from "@/components/BeyondTheCode";
 import Footer from "@/components/Footer";
 
-const Chatbot = dynamic(() => import("@/components/Chatbot"), { ssr: false });
+const Chatbot = dynamic(() => import("@/components/Chatbot"));
 
-export default function Home() {
-  const [splashDone, setSplashDone] = useState(false);
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "";
+const supabase = createClient(supabaseUrl, supabaseKey);
+
+export const revalidate = 3600; // Revalidate every hour
+
+export default async function Home() {
+  const [{ data: projectsData }, { data: experienceData }] = await Promise.all([
+    supabase.from("projects").select("*").order("sort_order", { ascending: true }),
+    supabase.from("experience").select("*").order("sort_order", { ascending: true }),
+  ]);
 
   return (
     <>
-      {!splashDone && <LogoSplash onComplete={() => setSplashDone(true)} />}
+      <LogoSplash />
 
       <Header />
 
       <main className="mx-auto w-full max-w-7xl flex flex-col gap-10 sm:gap-12 px-4 sm:px-6 pb-10 sm:pb-24 pt-16 sm:pt-20">
-        <Hero />
+        <Hero experience={experienceData || []} />
         <StatsStrip />
 
-        <Projects />
+        <Projects projects={projectsData || []} />
         <Stack />
         <Certifications />
         <BeyondTheCode />
@@ -39,5 +46,3 @@ export default function Home() {
     </>
   );
 }
-
-

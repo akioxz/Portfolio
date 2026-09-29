@@ -3,12 +3,8 @@ const path = require("path");
 const test = require("node:test");
 const assert = require("node:assert/strict");
 const vm = require("vm");
-const ts = require(
-  "C:\\Users\\User\\Documents\\Personal Projects\\portfolio\\node_modules\\typescript",
-);
-const jose = require(
-  "C:\\Users\\User\\Documents\\Personal Projects\\portfolio\\node_modules\\jose",
-);
+const ts = require("C:\\Users\\User\\Documents\\Personal Projects\\portfolio\\node_modules\\typescript");
+const jose = require("C:\\Users\\User\\Documents\\Personal Projects\\portfolio\\node_modules\\jose");
 
 const root = "C:\\Users\\User\\Documents\\Personal Projects\\portfolio";
 const sessionSource = fs
@@ -50,7 +46,9 @@ const context = {
   module: { exports: {} },
 };
 context.exports = context.module.exports;
-vm.runInNewContext(compiled, context, { filename: path.join(root, "proxy.ts") });
+vm.runInNewContext(compiled, context, {
+  filename: path.join(root, "proxy.ts"),
+});
 const { proxy, config } = context.module.exports;
 
 const secret = "test-admin-session-secret";
@@ -93,7 +91,11 @@ test("uses the narrow admin matcher", () => {
 });
 
 test("allows login and logout entrypoints without a session", async () => {
-  for (const pathname of ["/admin/login", "/api/admin/login", "/api/admin/logout"]) {
+  for (const pathname of [
+    "/admin/login",
+    "/api/admin/login",
+    "/api/admin/logout",
+  ]) {
     const response = await proxy(request(pathname));
     assert.equal(response.type, "next");
     assert.equal(response.status, 200);
@@ -117,17 +119,18 @@ test("rejects forged and expired sessions", async () => {
   const forgedResponse = await proxy(request("/admin/inbox", "not-a-token"));
   assert.equal(forgedResponse.status, 307);
   assert.equal(
-    (await proxy(request("/api/admin/messages/test/read", await createToken("0s"))))
-      .status,
+    (
+      await proxy(
+        request("/api/admin/messages/test/read", await createToken("0s")),
+      )
+    ).status,
     401,
   );
 });
 
 test("allows a valid session through", async () => {
   runtimeProcess.env = { ADMIN_SESSION_SECRET: secret };
-  const response = await proxy(
-    request("/admin/inbox", await createToken()),
-  );
+  const response = await proxy(request("/admin/inbox", await createToken()));
   assert.equal(response.type, "next");
   assert.equal(response.status, 200);
 });

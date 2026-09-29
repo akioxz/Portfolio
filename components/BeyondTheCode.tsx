@@ -116,7 +116,7 @@ export default function BeyondTheCode() {
   }, []);
 
   return (
-    <section ref={sectionRef} id="beyond" className="mb-20">
+    <section ref={sectionRef} id="beyond" className="mb-20" aria-label="Beyond the Code">
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-10 sm:gap-12">
         <div className="max-w-sm leading-relaxed text-slate">
           <SplitText
@@ -132,12 +132,12 @@ export default function BeyondTheCode() {
           />
           <p className="text-cream text-sm mb-4">
             Beyond development, I spend my downtime with movies, anime, and
-            online games — and I collect anime figurines on the side. It
+            online games {"\u2014"} and I collect anime figurines on the side. It
             keeps things balanced and gives me space to think outside the
             code.
           </p>
           <p className="text-slate text-sm">
-            A lot of my best debugging happens away from the keyboard —
+            A lot of my best debugging happens away from the keyboard {"\u2014"}
             stepping back into something unrelated is usually what gets me
             unstuck.
           </p>
@@ -191,7 +191,7 @@ export default function BeyondTheCode() {
             >
               <div className="flex items-center justify-between pb-3 border-b border-slate/10 mb-3">
                 <h2 id="gallery-title" className="font-mono text-xs text-cream font-medium tracking-wider uppercase">
-                  Gallery — Beyond the Code
+                  Gallery {"\u2014"} Beyond the Code
                 </h2>
                 <button
                   type="button"
@@ -199,7 +199,7 @@ export default function BeyondTheCode() {
                   className="rounded-full border border-slate/20 bg-surface px-3 py-1 font-mono text-xs text-slate transition hover:text-cream hover:border-slate/40 cursor-pointer"
                   aria-label="Close gallery"
                 >
-                  Esc / Close ✕
+                  Esc / Close {"\u2715"}
                 </button>
               </div>
               <div className="flex-1 w-full relative overflow-y-auto">

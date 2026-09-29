@@ -9,7 +9,7 @@ import ContactModal from "./ContactModal";
 import { useMagneticHover } from "@/hooks/useMagneticHover";
 import { useScrambleText } from "@/hooks/useScrambleText";
 
-/* ─── Pointer capability check (client-only) ─── */
+/* {"\u2500".repeat(3)} Pointer capability check (client-only) ─── */
 function useCanHover() {
   const [canHover, setCanHover] = useState(false);
   useEffect(() => {
@@ -18,7 +18,7 @@ function useCanHover() {
   return canHover;
 }
 
-/* ─── Magnetic + Scramble wrapper for each contact card ─── */
+/* {"\u2500".repeat(3)} Magnetic + Scramble wrapper for each contact card ─── */
 function MagneticCard({
   label,
   sublabel,
@@ -173,7 +173,7 @@ export default function Footer() {
 
       <div className="flex justify-center text-center font-mono text-[10px] text-slate select-none border-t border-slate/10 pt-6">
         <p>
-          © {new Date().getFullYear()} Axel Villanueva. All rights reserved.
+          {"\u00A9"} {new Date().getFullYear()} Axel Villanueva. All rights reserved.
         </p>
       </div>
 

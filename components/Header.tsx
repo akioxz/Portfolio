@@ -1,67 +1,54 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { IoMenu, IoClose } from "react-icons/io5";
+import { useLenis } from "lenis/react";
 import ThemeToggle from "./ThemeToggle";
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
+  const lenis = useLenis();
 
-  const handleNavClick = (
-    e: React.MouseEvent<HTMLAnchorElement>,
-    href: string,
-  ) => {
-    e.preventDefault();
-    setIsOpen(false);
+  const handleNavClick = useCallback(
+    (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+      e.preventDefault();
+      setIsOpen(false);
 
-    document.body.style.pointerEvents = "none";
-
-    if (href === "#hero") {
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    } else {
-      const target = document.querySelector(href);
-      if (target) {
-        target.scrollIntoView({ behavior: "smooth", block: "start" });
+      if (href === "#hero") {
+        lenis?.scrollTo(0, { duration: 1.2 });
+      } else {
+        lenis?.scrollTo(href, { duration: 1.2, offset: -96 });
       }
-    }
-
-    window.setTimeout(() => {
-      document.body.style.pointerEvents = "";
-
-      document.body.style.transform = "translateZ(0)";
-      requestAnimationFrame(() => {
-        document.body.style.transform = "";
-      });
-    }, 650);
-  };
+    },
+    [lenis],
+  );
 
   const navLinks = [
     { label: "projects", href: "#projects" },
     { label: "stack", href: "#stack" },
-    { label: "certs", href: "#certifications" },
     { label: "contact", href: "#contact" },
   ];
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-ink/60 backdrop-blur-sm border-b border-slate/10">
+    <header className="sticky top-0 z-50 w-full bg-ink/60 backdrop-blur-xl border-b border-slate/10">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 py-4">
         <div className="flex items-center justify-between gap-4">
           <a
             href="#hero"
             onClick={(e) => handleNavClick(e, "#hero")}
-            className="font-mono font-bold text-cream text-sm tracking-widest select-none hover:text-teal transition-colors duration-200"
+            className="font-mono font-bold text-cream text-sm tracking-widest select-none hover:text-teal transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
           >
             AJV
           </a>
 
-          <div className="flex items-center gap-3">
-            <nav className="hidden md:flex items-center gap-5 font-mono text-xs uppercase tracking-[0.1em] text-slate">
+          <div className="flex items-center gap-4">
+            <nav className="hidden md:flex items-center gap-6 font-mono text-xs uppercase tracking-[0.1em] text-slate">
               {navLinks.map((link) => (
                 <a
                   key={link.href}
                   href={link.href}
                   onClick={(e) => handleNavClick(e, link.href)}
-                  className="hover:text-teal transition-colors duration-200"
+                  className="hover:text-teal transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
                 >
                   {link.label}
                 </a>
@@ -72,7 +59,7 @@ export default function Header() {
               <ThemeToggle />
               <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="md:hidden flex items-center justify-center w-8 h-8 text-slate hover:text-teal transition-colors"
+                className="md:hidden flex items-center justify-center w-8 h-8 text-slate hover:text-teal transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
                 aria-label="Toggle menu"
                 aria-expanded={isOpen}
               >
@@ -93,7 +80,7 @@ export default function Header() {
                 key={link.href}
                 href={link.href}
                 onClick={(e) => handleNavClick(e, link.href)}
-                className="hover:text-teal transition-colors duration-200"
+                className="hover:text-teal transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
               >
                 {link.label}
               </a>

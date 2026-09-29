@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 
 interface LogoSplashProps {
-  onComplete: () => void;
+  onComplete?: () => void;
   holdDuration?: number;
 }
 
@@ -17,7 +17,9 @@ export default function LogoSplash({
   useEffect(() => {
     const holdTimer = setTimeout(() => {
       setVisible(false);
-      setTimeout(onComplete, 400);
+      if (onComplete) {
+        setTimeout(onComplete, 400);
+      }
     }, holdDuration);
     return () => clearTimeout(holdTimer);
   }, [holdDuration, onComplete]);

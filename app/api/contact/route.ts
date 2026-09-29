@@ -281,7 +281,7 @@ export async function POST(request: Request) {
           <p><strong>Name:</strong> ${safeName}</p>
           <p><strong>Email:</strong> <a href="mailto:${safeEmail}">${safeEmail}</a></p>
           <p><strong>Message:</strong></p>
-          <div style="background: #f9f9f9; padding: 16px; border-left: 4px solid #0070f3; border-radius: 4px; font-size: 14px; white-space: pre-wrap;">
+          <div style="background: #f9f9f9; padding: 16px; border-radius: 4px; font-size: 14px; white-space: pre-wrap;">
             ${safeMessage}
           </div>
           <hr style="margin-top: 24px; border: none; border-top: 1px solid #eee;" />
