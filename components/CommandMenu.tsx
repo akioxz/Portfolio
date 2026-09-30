@@ -54,17 +54,17 @@ export default function CommandMenu() {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-          className="fixed inset-0 z-[100] flex flex-col justify-center px-6 md:px-24 bg-[#0c0c0c]/95 backdrop-blur-md"
+          className="fixed inset-0 z-[100] flex flex-col justify-center px-6 md:px-24 bg-white/70 dark:bg-[#0c0c0c]/70 backdrop-blur-[24px]"
           onClick={(e) => {
             if (e.target === e.currentTarget) setIsOpen(false);
           }}
         >
-          <div className="w-full max-w-4xl mx-auto flex flex-col gap-4">
+          <div className="w-full max-w-3xl mx-auto flex flex-col gap-2">
             <motion.h2 
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1, duration: 0.4 }}
-              className="font-mono text-2xl md:text-4xl text-cream tracking-tight"
+              className="font-mono text-2xl md:text-[32px] text-neutral-900 dark:text-cream tracking-tight font-normal"
             >
               what do you want to ask?
             </motion.h2>
@@ -81,7 +81,7 @@ export default function CommandMenu() {
                 type="text"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                className="w-full bg-transparent font-mono text-xl md:text-3xl text-cream outline-none placeholder:text-white/20 caret-cream"
+                className="w-full bg-transparent font-mono text-2xl md:text-[32px] text-neutral-900 dark:text-cream outline-none placeholder:text-neutral-300 dark:placeholder:text-white/20 caret-teal font-normal"
                 spellCheck={false}
                 autoComplete="off"
               />
@@ -92,10 +92,10 @@ export default function CommandMenu() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.3, duration: 0.4 }}
-              className="absolute bottom-12 left-6 md:left-24 font-mono text-[11px] text-white/30 flex gap-4"
+              className="absolute bottom-10 left-6 md:left-24 font-mono text-[11px] text-neutral-500 dark:text-white/30 flex gap-4"
             >
-              <span>Press <kbd className="border border-white/20 px-1 py-0.5 rounded">Enter</kbd> to submit</span>
-              <span>Press <kbd className="border border-white/20 px-1 py-0.5 rounded">Esc</kbd> to close</span>
+              <span>Press <kbd className="border border-neutral-200 dark:border-white/20 px-1 py-0.5 rounded">Enter</kbd> to submit</span>
+              <span>Press <kbd className="border border-neutral-200 dark:border-white/20 px-1 py-0.5 rounded">Esc</kbd> to close</span>
             </motion.div>
           </div>
         </motion.div>
