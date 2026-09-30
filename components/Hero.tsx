@@ -8,12 +8,27 @@ export default function Hero() {
     <motion.section
       id="hero"
       className="mb-12 flex flex-col md:flex-row gap-10 md:gap-16 items-center md:items-start max-w-4xl pt-10"
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+      initial="hidden"
+      animate="visible"
+      variants={{
+        hidden: { opacity: 0 },
+        visible: {
+          opacity: 1,
+          transition: {
+            delayChildren: 1.5,
+            staggerChildren: 0.15,
+          },
+        },
+      }}
     >
       {/* Left: Stylized Portrait */}
-      <div className="shrink-0">
+      <motion.div 
+        className="shrink-0"
+        variants={{
+          hidden: { opacity: 0, y: 30, filter: "blur(10px)" },
+          visible: { opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: 1, ease: [0.16, 1, 0.3, 1] } }
+        }}
+      >
         <div className="relative w-[200px] h-[240px] md:w-[240px] md:h-[300px] rounded-lg overflow-hidden bg-neutral-100 dark:bg-surface/30">
           <Image
             src="/photo1.png"
@@ -21,47 +36,60 @@ export default function Hero() {
             fill
             priority
             sizes="(max-width: 768px) 200px, 240px"
-            className="object-cover grayscale contrast-125 hover:grayscale-0 hover:contrast-100 transition-all duration-700"
+            className="object-cover grayscale contrast-125 hover:grayscale-0 hover:contrast-100 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]"
           />
         </div>
-      </div>
+      </motion.div>
 
       {/* Right: Typography & Bio */}
       <div className="flex-1 flex flex-col justify-center pt-4 md:pt-2">
-        <h1 className="font-mono text-5xl md:text-6xl font-medium text-neutral-900 dark:text-cream mb-8 tracking-tight">
+        <motion.h1 
+          variants={{
+            hidden: { opacity: 0, y: 20 },
+            visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } }
+          }}
+          className="font-mono text-5xl md:text-6xl font-medium text-neutral-900 dark:text-cream mb-8 tracking-tight"
+        >
           Axel Villanueva
-        </h1>
+        </motion.h1>
         
-        <div className="flex flex-col gap-6 text-slate dark:text-slate/80 text-sm md:text-base leading-relaxed max-w-lg font-sans">
+        <motion.div 
+          variants={{
+            hidden: { opacity: 0, y: 20 },
+            visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } }
+          }}
+          className="flex flex-col gap-6 text-slate dark:text-slate/80 text-sm md:text-base leading-relaxed max-w-lg font-sans"
+        >
           <p>
             4th-year IT student building production-grade web &amp; mobile software. Still learning every day {"\u2014"} currently deep into high-performance interfaces and generative AI.
           </p>
-        </div>
+        </motion.div>
 
-        <div className="mt-10 flex flex-wrap items-center gap-6 font-mono text-xs text-slate">
-          <a
-            href="https://github.com/akioxz"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group flex items-center gap-1 hover:text-neutral-900 dark:hover:text-cream transition-colors"
-          >
-            github <span className="opacity-50 group-hover:opacity-100 transition-opacity">&#8599;</span>
-          </a>
-          <a
-            href="https://linkedin.com/in/akioxz"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group flex items-center gap-1 hover:text-neutral-900 dark:hover:text-cream transition-colors"
-          >
-            linkedin <span className="opacity-50 group-hover:opacity-100 transition-opacity">&#8599;</span>
-          </a>
-          <a
-            href="mailto:dev.akioxz@gmail.com"
-            className="group flex items-center gap-1 hover:text-neutral-900 dark:hover:text-cream transition-colors"
-          >
-            email <span className="opacity-50 group-hover:opacity-100 transition-opacity">&#8599;</span>
-          </a>
-        </div>
+        <motion.div 
+          variants={{
+            hidden: { opacity: 0, y: 20 },
+            visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } }
+          }}
+          className="mt-10 flex flex-wrap items-center gap-6 font-mono text-xs text-slate"
+        >
+          {[
+            { name: "github", url: "https://github.com/akioxz" },
+            { name: "linkedin", url: "https://linkedin.com/in/akioxz" },
+            { name: "email", url: "mailto:dev.akioxz@gmail.com" },
+          ].map((link) => (
+            <motion.a
+              key={link.name}
+              href={link.url}
+              target={link.url.startsWith("http") ? "_blank" : "_self"}
+              rel="noopener noreferrer"
+              whileHover={{ scale: 1.05, color: "var(--cream)" }}
+              whileTap={{ scale: 0.95 }}
+              className="group flex items-center gap-1 hover:text-neutral-900 dark:hover:text-cream transition-colors duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]"
+            >
+              {link.name} <span className="opacity-50 group-hover:opacity-100 transition-opacity">&#8599;</span>
+            </motion.a>
+          ))}
+        </motion.div>
       </div>
     </motion.section>
   );
