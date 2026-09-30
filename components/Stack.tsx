@@ -50,11 +50,12 @@ export default function Stack({ stack = [] }: { stack?: StackItem[] }) {
       const Icon = ICON_MAP[item.icon] || VscCode;
       return {
         node: (
-          <div className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-widest text-slate opacity-60 hover:opacity-100 transition-opacity whitespace-nowrap">
-            <Icon size={16} className={`transition-colors ${accentColorClass}`} />
-            {item.name}
+          <div className="flex items-center gap-2 text-cream font-mono text-xs border border-slate/15 bg-surface/40 rounded-md px-3 py-2 select-none">
+            <Icon aria-hidden="true" className={`w-4 h-4 ${accentColorClass}`} />
+            <span>{item.name}</span>
           </div>
         ),
+        title: item.name,
       };
     });
   };
@@ -66,59 +67,70 @@ export default function Stack({ stack = [] }: { stack?: StackItem[] }) {
   if (stack.length === 0) return null;
 
   return (
-    <section id="stack" className="mb-24 scroll-mt-24" aria-label="Tech Stack">
-      <div className="mb-10">
-        <SplitText
-          text="Stack"
-          tag="h2"
-          className="text-xl font-mono text-cream font-medium"
-          splitType="words"
-          delay={40}
-          duration={0.5}
-          from={{ opacity: 0, y: 16 }}
-          to={{ opacity: 1, y: 0 }}
-          threshold={0.2}
-        />
-      </div>
+    <section id="stack" className="mb-20 scroll-mt-24" aria-label="Technology Stack">
+      <SplitText
+        text="Stack"
+        tag="h2"
+        className="text-xl font-mono text-cream mb-6"
+        splitType="words"
+        delay={40}
+        duration={0.5}
+        from={{ opacity: 0, y: 16 }}
+        to={{ opacity: 1, y: 0 }}
+        threshold={0.2}
+      />
 
-      <div className="relative">
-        <div className="absolute inset-y-0 left-0 w-12 sm:w-20 bg-gradient-to-r from-ink to-transparent z-10 pointer-events-none"></div>
-        <div className="absolute inset-y-0 right-0 w-12 sm:w-20 bg-gradient-to-l from-ink to-transparent z-10 pointer-events-none"></div>
+      <div className="flex flex-col gap-6">
+        {frontendItems.length > 0 && (
+          <div>
+            <p className="font-mono text-xs text-slate mb-3">frontend</p>
+            <LogoLoop
+              logos={getLogoItems(frontendItems, "text-teal")}
+              speed={80}
+              direction="left"
+              logoHeight={32}
+              gap={12}
+              fadeOut
+              fadeOutColor="rgb(var(--bg))"
+              scaleOnHover
+              ariaLabel="Frontend stack"
+            />
+          </div>
+        )}
+        
+        {backendItems.length > 0 && (
+          <div>
+            <p className="font-mono text-xs text-slate mb-3">backend</p>
+            <LogoLoop
+              logos={getLogoItems(backendItems, "text-orange-400")}
+              speed={80}
+              direction="right"
+              logoHeight={32}
+              gap={12}
+              fadeOut
+              fadeOutColor="rgb(var(--bg))"
+              scaleOnHover
+              ariaLabel="Backend stack"
+            />
+          </div>
+        )}
 
-        <div className="flex flex-col gap-5 sm:gap-6">
-          {frontendItems.length > 0 && (
-            <div className="flex items-center gap-4 group">
-              <span className="text-[10px] uppercase font-mono tracking-[0.2em] text-slate/40 min-w-[70px] sm:min-w-[80px] group-hover:text-teal/60 transition-colors">
-                Frontend
-              </span>
-              <div className="flex-1 overflow-hidden mask-edges py-2 sm:py-3 border-y border-white/5 bg-white/[0.01]">
-                <LogoLoop logos={getLogoItems(frontendItems, "group-hover:text-teal")} speed={30} />
-              </div>
-            </div>
-          )}
-
-          {backendItems.length > 0 && (
-            <div className="flex items-center gap-4 group">
-              <span className="text-[10px] uppercase font-mono tracking-[0.2em] text-slate/40 min-w-[70px] sm:min-w-[80px] group-hover:text-orange-400/60 transition-colors">
-                Backend
-              </span>
-              <div className="flex-1 overflow-hidden mask-edges py-2 sm:py-3 border-y border-white/5 bg-white/[0.01]">
-                <LogoLoop logos={getLogoItems(backendItems, "group-hover:text-orange-400")} speed={25} direction="right" />
-              </div>
-            </div>
-          )}
-
-          {toolsItems.length > 0 && (
-            <div className="flex items-center gap-4 group">
-              <span className="text-[10px] uppercase font-mono tracking-[0.2em] text-slate/40 min-w-[70px] sm:min-w-[80px] group-hover:text-purple-400/60 transition-colors">
-                Tools
-              </span>
-              <div className="flex-1 overflow-hidden mask-edges py-2 sm:py-3 border-y border-white/5 bg-white/[0.01]">
-                <LogoLoop logos={getLogoItems(toolsItems, "group-hover:text-purple-400")} speed={35} />
-              </div>
-            </div>
-          )}
-        </div>
+        {toolsItems.length > 0 && (
+          <div>
+            <p className="font-mono text-xs text-slate mb-3">tools</p>
+            <LogoLoop
+              logos={getLogoItems(toolsItems, "text-purple-400")}
+              speed={80}
+              direction="left"
+              logoHeight={32}
+              gap={12}
+              fadeOut
+              fadeOutColor="rgb(var(--bg))"
+              scaleOnHover
+              ariaLabel="Tools stack"
+            />
+          </div>
+        )}
       </div>
     </section>
   );
