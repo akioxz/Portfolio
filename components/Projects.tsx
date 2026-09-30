@@ -67,7 +67,7 @@ export default function Projects({ projects }: { projects: ProjectData[] }) {
         )}
       </div>
 
-      <div className="relative w-full h-[550px] flex items-center justify-center overflow-visible perspective-[2000px]">
+      <div className="relative w-full h-[380px] flex items-center justify-center overflow-visible perspective-[2000px]">
         <AnimatePresence mode="popLayout">
           {projects.map((project, index) => {
             let position = "hidden";
@@ -83,10 +83,10 @@ export default function Projects({ projects }: { projects: ProjectData[] }) {
                 x: "0%", y: "0%", scale: 1, rotateY: 0, rotateZ: 0, zIndex: 30, opacity: 1 
               },
               left: { 
-                x: "-50%", y: "5%", scale: 0.88, rotateY: 15, rotateZ: -6, zIndex: 10, opacity: 0.4 
+                x: "-65%", y: "5%", scale: 0.88, rotateY: 15, rotateZ: -6, zIndex: 10, opacity: 0.4 
               },
               right: { 
-                x: "50%", y: "5%", scale: 0.88, rotateY: -15, rotateZ: 6, zIndex: 20, opacity: 0.4 
+                x: "65%", y: "5%", scale: 0.88, rotateY: -15, rotateZ: 6, zIndex: 20, opacity: 0.4 
               },
             };
 
