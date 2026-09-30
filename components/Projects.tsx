@@ -65,19 +65,19 @@ export default function Projects({ projects }: { projects: ProjectData[] }) {
                 x: "0%", y: "0%", scale: 1, rotateY: 0, rotateZ: 0, zIndex: 30, opacity: 1 
               },
               left: { 
-                x: "-65%", y: "5%", scale: 0.88, rotateY: 15, rotateZ: -6, zIndex: 10, opacity: 1 
+                x: "-65%", y: "5%", scale: 0.88, rotateY: 15, rotateZ: -6, zIndex: 10, opacity: 0.4 
               },
               right: { 
-                x: "65%", y: "5%", scale: 0.88, rotateY: -15, rotateZ: 6, zIndex: 20, opacity: 1 
+                x: "65%", y: "5%", scale: 0.88, rotateY: -15, rotateZ: 6, zIndex: 20, opacity: 0.4 
               },
               centerHover: { 
                 y: "-4%", scale: 1.02, opacity: 1 
               },
               leftHover: { 
-                x: "-72%", y: "2%", scale: 0.92, rotateY: 10, rotateZ: -8, opacity: 1 
+                x: "-72%", y: "2%", scale: 0.92, rotateY: 10, rotateZ: -8, opacity: 0.85 
               },
               rightHover: { 
-                x: "72%", y: "2%", scale: 0.92, rotateY: -10, rotateZ: 8, opacity: 1 
+                x: "72%", y: "2%", scale: 0.92, rotateY: -10, rotateZ: 8, opacity: 0.85 
               },
             };
 
@@ -101,21 +101,6 @@ export default function Projects({ projects }: { projects: ProjectData[] }) {
                   cursor: position === "center" ? "default" : "pointer",
                 }}
               >
-                {/* Dimming overlay for background cards */}
-                <motion.div 
-                  className="absolute inset-0 z-50 bg-neutral-900 dark:bg-[#000000] rounded-[24px] pointer-events-none"
-                  variants={{
-                    center: { opacity: 0 },
-                    left: { opacity: 0.45 },
-                    right: { opacity: 0.45 },
-                    centerHover: { opacity: 0 },
-                    leftHover: { opacity: 0.15 },
-                    rightHover: { opacity: 0.15 },
-                  }}
-                  initial={false}
-                  animate={position}
-                  transition={{ duration: 0.4 }}
-                />
                 <DeckProjectCard project={project} />
               </motion.div>
             );
