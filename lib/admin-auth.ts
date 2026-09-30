@@ -56,7 +56,7 @@ export async function getAdminCookieHeader(): Promise<{
     options: {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
+      sameSite: "strict",
       path: "/",
       maxAge: SESSION_MAX_AGE,
     },
