@@ -32,53 +32,53 @@ export default function AdminDashboardLayout({
   ];
 
   return (
-    <div className="min-h-screen bg-ink flex flex-col md:flex-row font-sans text-cream">
-      {/* Sidebar */}
-      <aside className="w-full md:w-64 border-b md:border-b-0 md:border-r border-slate/15 bg-surface/30 md:min-h-screen flex flex-col">
-        <div className="p-6 border-b border-slate/15 flex items-center justify-between md:block">
+    <div className="min-h-screen bg-ink flex flex-col md:flex-row font-sans text-cream selection:bg-teal/30">
+      {/* Sidebar - Ethereal Glass */}
+      <aside className="w-full md:w-64 border-b md:border-b-0 md:border-r border-white/5 bg-black/40 backdrop-blur-xl md:min-h-screen flex flex-col z-20">
+        <div className="p-8 flex items-center justify-between md:block">
           <div>
-            <h2 className="font-mono font-bold text-lg text-cream uppercase tracking-widest">
+            <h2 className="font-mono font-bold text-xl text-cream tracking-tighter">
               AJV Admin
             </h2>
-            <p className="font-mono text-xs text-slate mt-1">Supabase CMS</p>
+            <p className="font-mono text-[10px] text-slate mt-1.5 uppercase tracking-widest font-medium">Supabase CMS</p>
           </div>
-          <Link href="/" className="md:hidden p-2 rounded hover:bg-slate/10 text-slate hover:text-cream transition-colors">
+          <Link href="/" className="md:hidden p-2 rounded-lg hover:bg-white/5 text-slate hover:text-cream transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] active:scale-[0.98]">
             <VscHome size={20} />
           </Link>
         </div>
 
-        <nav className="flex-1 p-4 flex flex-row md:flex-col gap-2 overflow-x-auto md:overflow-visible">
+        <nav className="flex-1 px-4 py-2 flex flex-row md:flex-col gap-2 overflow-x-auto md:overflow-visible">
           {navItems.map((item) => {
             const isActive = pathname.startsWith(item.href);
             return (
               <Link
                 key={item.href}
                 href={item.href}
-                className={`flex items-center gap-3 px-4 py-3 rounded-lg font-mono text-sm transition-all whitespace-nowrap ${
+                className={`flex items-center gap-3 px-4 py-3 rounded-lg font-mono text-sm transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] active:scale-[0.98] whitespace-nowrap ${
                   isActive
-                    ? "bg-teal/10 text-teal font-medium"
-                    : "text-slate hover:bg-surface hover:text-cream"
+                    ? "bg-white/10 text-cream font-medium shadow-[0_0_15px_rgba(255,255,255,0.05)] border border-white/5"
+                    : "text-slate hover:bg-white/5 hover:text-cream border border-transparent"
                 }`}
               >
-                <item.icon size={18} className={isActive ? "text-teal" : ""} />
+                <item.icon size={16} className={isActive ? "text-cream" : "text-slate"} />
                 {item.name}
               </Link>
             );
           })}
         </nav>
 
-        <div className="p-4 border-t border-slate/15 hidden md:block">
+        <div className="p-4 hidden md:block">
           <Link
             href="/"
-            className="flex items-center gap-3 px-4 py-2 mb-2 rounded-lg font-mono text-sm text-slate hover:text-cream hover:bg-surface transition-colors"
+            className="flex items-center gap-3 px-4 py-3 mb-2 rounded-lg font-mono text-sm text-slate hover:text-cream hover:bg-white/5 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] active:scale-[0.98] border border-transparent"
           >
-            <VscHome size={18} />
+            <VscHome size={16} />
             Back to Site
           </Link>
           <button
             onClick={handleLogout}
             disabled={isLoggingOut}
-            className="w-full flex items-center justify-center gap-2 px-4 py-2 rounded-lg font-mono text-sm font-medium bg-surface/50 text-slate hover:bg-red-500/10 hover:text-red-400 border border-slate/15 hover:border-red-500/30 transition-all disabled:opacity-50"
+            className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-lg font-mono text-sm font-medium bg-white/5 text-slate hover:bg-red-500/10 hover:text-red-400 border border-white/5 hover:border-red-500/20 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] active:scale-[0.98] disabled:opacity-50"
           >
             <VscSignOut size={16} />
             {isLoggingOut ? "Signing out..." : "Sign Out"}
@@ -87,7 +87,7 @@ export default function AdminDashboardLayout({
       </aside>
 
       {/* Main Content Area */}
-      <main className="flex-1 overflow-x-hidden">
+      <main className="flex-1 overflow-x-hidden relative">
         {children}
       </main>
     </div>

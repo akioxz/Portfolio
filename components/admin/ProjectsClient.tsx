@@ -55,53 +55,53 @@ export default function ProjectsClient({ initialProjects }: { initialProjects: a
 
   return (
     <>
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 mb-8 border-b border-slate/15">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-8 mb-8 border-b border-white/5">
         <div>
-          <h1 className="font-mono text-xl font-bold tracking-wider uppercase text-cream">
+          <h1 className="font-mono text-2xl font-bold tracking-tighter uppercase text-cream">
             Manage Projects
           </h1>
-          <p className="font-mono text-xs text-slate mt-1">
+          <p className="font-mono text-[10px] text-slate mt-1.5 uppercase tracking-widest font-medium">
             Add or edit portfolio projects
           </p>
         </div>
         <button 
           onClick={handleOpenNew}
-          className="flex items-center gap-2 px-4 py-2 bg-teal/10 text-teal hover:bg-teal/20 border border-teal/20 rounded-lg font-mono text-sm transition-colors"
+          className="flex items-center gap-2 px-5 py-2.5 bg-white/10 text-cream hover:bg-white/15 border border-white/5 rounded-lg font-mono text-sm transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] active:scale-[0.98]"
         >
           <VscAdd size={16} />
           New Project
         </button>
       </div>
 
-      <div className="bg-surface/30 rounded-xl border border-slate/15 overflow-hidden">
+      <div className="bg-black/40 backdrop-blur-md rounded-2xl border border-white/5 overflow-hidden shadow-2xl">
         <table className="w-full text-left font-mono text-sm">
-          <thead className="bg-surface/50 border-b border-slate/15 text-slate">
+          <thead className="bg-white/5 border-b border-white/5 text-slate">
             <tr>
-              <th className="p-4 font-medium">Name</th>
-              <th className="p-4 font-medium hidden md:table-cell">Description</th>
-              <th className="p-4 font-medium text-right">Actions</th>
+              <th className="p-5 font-medium">Name</th>
+              <th className="p-5 font-medium hidden md:table-cell">Description</th>
+              <th className="p-5 font-medium text-right">Actions</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate/15">
+          <tbody className="divide-y divide-white/5">
             {projects.length === 0 ? (
               <tr>
-                <td colSpan={3} className="p-8 text-center text-slate">
+                <td colSpan={3} className="p-12 text-center text-slate">
                   No projects found.
                 </td>
               </tr>
             ) : (
               projects.map((project) => (
-                <tr key={project.id} className="hover:bg-surface/40 transition-colors group">
-                  <td className="p-4 text-cream font-bold">{project.name}</td>
-                  <td className="p-4 text-slate hidden md:table-cell truncate max-w-xs">
+                <tr key={project.id} className="hover:bg-white/5 transition-colors group">
+                  <td className="p-5 text-cream font-bold">{project.name}</td>
+                  <td className="p-5 text-slate hidden md:table-cell truncate max-w-xs">
                     {project.description}
                   </td>
-                  <td className="p-4 text-right">
-                    <div className="flex items-center justify-end gap-2 opacity-50 group-hover:opacity-100 transition-opacity">
-                      <button onClick={() => handleOpenEdit(project.id)} className="p-2 hover:bg-teal/10 hover:text-teal rounded transition-colors text-slate">
+                  <td className="p-5 text-right">
+                    <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                      <button onClick={() => handleOpenEdit(project.id)} className="p-2 hover:bg-white/10 hover:text-cream rounded-md transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] active:scale-[0.90] text-slate">
                         <VscEdit size={16} />
                       </button>
-                      <button onClick={() => handleDelete(project.id)} className="p-2 hover:bg-red-500/10 hover:text-red-400 rounded transition-colors text-slate">
+                      <button onClick={() => handleDelete(project.id)} className="p-2 hover:bg-red-500/20 hover:text-red-400 rounded-md transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] active:scale-[0.90] text-slate">
                         <VscTrash size={16} />
                       </button>
                     </div>
@@ -114,63 +114,63 @@ export default function ProjectsClient({ initialProjects }: { initialProjects: a
       </div>
 
       {isModalOpen && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-ink/80 backdrop-blur-sm">
-          <div className="bg-surface border border-slate/20 rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl">
-            <div className="flex items-center justify-between p-6 border-b border-slate/15 sticky top-0 bg-surface z-10">
-              <h2 className="font-mono text-lg font-bold text-cream">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-2xl">
+          <div className="bg-ink border border-white/10 rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-[0_0_50px_rgba(0,0,0,0.5)]">
+            <div className="flex items-center justify-between p-6 border-b border-white/5 sticky top-0 bg-ink/90 backdrop-blur-md z-10">
+              <h2 className="font-mono text-lg font-bold text-cream tracking-tight">
                 {editingId ? "Edit Project" : "New Project"}
               </h2>
-              <button onClick={() => setIsModalOpen(false)} className="text-slate hover:text-cream transition-colors">
+              <button onClick={() => setIsModalOpen(false)} className="text-slate hover:text-cream transition-colors duration-300">
                 <VscClose size={24} />
               </button>
             </div>
             
-            <form onSubmit={handleSubmit} className="p-6 space-y-4 font-mono text-sm">
+            <form onSubmit={handleSubmit} className="p-8 space-y-6 font-mono text-sm">
               {error && <div className="p-4 bg-red-500/10 text-red-400 rounded-lg border border-red-500/20">{error}</div>}
               
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-1">
-                  <label className="text-slate">Name *</label>
-                  <input required name="name" defaultValue={editingProject?.name} className="w-full bg-ink border border-slate/20 rounded-lg p-3 text-cream focus:border-teal outline-none transition-colors" />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <label className="text-slate text-xs font-medium uppercase tracking-widest">Name *</label>
+                  <input required name="name" defaultValue={editingProject?.name} className="w-full bg-white/5 border border-white/5 rounded-lg p-3.5 text-cream outline-none transition-all duration-300 focus:bg-white/10 focus:border-white/20 focus:ring-1 focus:ring-white/20" />
                 </div>
-                <div className="space-y-1">
-                  <label className="text-slate">Eyebrow (Subtitle) *</label>
-                  <input required name="eyebrow" defaultValue={editingProject?.eyebrow} className="w-full bg-ink border border-slate/20 rounded-lg p-3 text-cream focus:border-teal outline-none transition-colors" />
-                </div>
-              </div>
-
-              <div className="space-y-1">
-                <label className="text-slate">Description *</label>
-                <textarea required name="description" rows={3} defaultValue={editingProject?.description} className="w-full bg-ink border border-slate/20 rounded-lg p-3 text-cream focus:border-teal outline-none transition-colors" />
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-1">
-                  <label className="text-slate">Tags (comma separated)</label>
-                  <input name="tags" defaultValue={editingProject?.tags?.join(", ")} className="w-full bg-ink border border-slate/20 rounded-lg p-3 text-cream focus:border-teal outline-none transition-colors" />
-                </div>
-                <div className="space-y-1">
-                  <label className="text-slate">Status (e.g. In Progress)</label>
-                  <input name="status" defaultValue={editingProject?.status} className="w-full bg-ink border border-slate/20 rounded-lg p-3 text-cream focus:border-teal outline-none transition-colors" />
+                <div className="space-y-2">
+                  <label className="text-slate text-xs font-medium uppercase tracking-widest">Eyebrow (Subtitle) *</label>
+                  <input required name="eyebrow" defaultValue={editingProject?.eyebrow} className="w-full bg-white/5 border border-white/5 rounded-lg p-3.5 text-cream outline-none transition-all duration-300 focus:bg-white/10 focus:border-white/20 focus:ring-1 focus:ring-white/20" />
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-1">
-                  <label className="text-slate">Image URL</label>
-                  <input name="image" defaultValue={editingProject?.image} className="w-full bg-ink border border-slate/20 rounded-lg p-3 text-cream focus:border-teal outline-none transition-colors" />
+              <div className="space-y-2">
+                <label className="text-slate text-xs font-medium uppercase tracking-widest">Description *</label>
+                <textarea required name="description" rows={3} defaultValue={editingProject?.description} className="w-full bg-white/5 border border-white/5 rounded-lg p-3.5 text-cream outline-none transition-all duration-300 focus:bg-white/10 focus:border-white/20 focus:ring-1 focus:ring-white/20" />
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <label className="text-slate text-xs font-medium uppercase tracking-widest">Tags (comma separated)</label>
+                  <input name="tags" defaultValue={editingProject?.tags?.join(", ")} className="w-full bg-white/5 border border-white/5 rounded-lg p-3.5 text-cream outline-none transition-all duration-300 focus:bg-white/10 focus:border-white/20 focus:ring-1 focus:ring-white/20" />
                 </div>
-                <div className="space-y-1">
-                  <label className="text-slate">Sort Order</label>
-                  <input type="number" name="sort_order" defaultValue={editingProject?.sort_order || 0} className="w-full bg-ink border border-slate/20 rounded-lg p-3 text-cream focus:border-teal outline-none transition-colors" />
+                <div className="space-y-2">
+                  <label className="text-slate text-xs font-medium uppercase tracking-widest">Status (e.g. In Progress)</label>
+                  <input name="status" defaultValue={editingProject?.status} className="w-full bg-white/5 border border-white/5 rounded-lg p-3.5 text-cream outline-none transition-all duration-300 focus:bg-white/10 focus:border-white/20 focus:ring-1 focus:ring-white/20" />
                 </div>
               </div>
 
-              <div className="pt-4 flex justify-end gap-3">
-                <button type="button" onClick={() => setIsModalOpen(false)} className="px-6 py-3 rounded-lg border border-slate/20 text-slate hover:text-cream transition-colors">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <label className="text-slate text-xs font-medium uppercase tracking-widest">Image URL</label>
+                  <input name="image" defaultValue={editingProject?.image} className="w-full bg-white/5 border border-white/5 rounded-lg p-3.5 text-cream outline-none transition-all duration-300 focus:bg-white/10 focus:border-white/20 focus:ring-1 focus:ring-white/20" />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-slate text-xs font-medium uppercase tracking-widest">Sort Order</label>
+                  <input type="number" name="sort_order" defaultValue={editingProject?.sort_order || 0} className="w-full bg-white/5 border border-white/5 rounded-lg p-3.5 text-cream outline-none transition-all duration-300 focus:bg-white/10 focus:border-white/20 focus:ring-1 focus:ring-white/20" />
+                </div>
+              </div>
+
+              <div className="pt-8 flex justify-end gap-4 border-t border-white/5">
+                <button type="button" onClick={() => setIsModalOpen(false)} className="px-6 py-3 rounded-lg text-slate hover:text-cream hover:bg-white/5 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] active:scale-[0.98]">
                   Cancel
                 </button>
-                <button type="submit" disabled={isSubmitting} className="px-6 py-3 rounded-lg bg-teal text-ink font-bold hover:bg-teal/90 transition-colors disabled:opacity-50">
+                <button type="submit" disabled={isSubmitting} className="px-8 py-3 rounded-lg bg-cream text-ink font-bold hover:bg-white transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] active:scale-[0.98] disabled:opacity-50 shadow-[0_0_15px_rgba(255,255,255,0.2)]">
                   {isSubmitting ? "Saving..." : "Save Project"}
                 </button>
               </div>
