@@ -33,7 +33,7 @@ export default async function AdminProjectsPage() {
   }
 
   return (
-    <div className="p-4 sm:p-8 font-sans max-w-5xl mx-auto">
+    <div className="p-4 sm:p-8 font-sans w-full max-w-screen-xl">
       <ProjectsClient initialProjects={projects} />
     </div>
   );

@@ -168,7 +168,7 @@ export default function InboxClient({ initialMessages }: InboxClientProps) {
 
   return (
     <div className="p-6 sm:p-10 font-sans">
-      <div className="max-w-4xl mx-auto">
+      <div className="w-full max-w-screen-xl">
         {/* Header — ultra minimal */}
         <div className="flex items-center justify-between mb-10">
           <div className="flex items-baseline gap-3">
