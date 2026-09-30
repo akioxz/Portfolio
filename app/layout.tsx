@@ -59,7 +59,6 @@ export const metadata: Metadata = {
   },
 };
 
-console.log("Cache busted!");
 export default function RootLayout({
   children,
 }: {
