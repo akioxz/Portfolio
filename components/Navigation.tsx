@@ -62,14 +62,14 @@ export function Sidebar() {
         {/* Theme Toggle Pill */}
         <ThemeToggle />
 
-        {/* Ask Anything (Command K) */}
+        {/* Ask Anything (Alt+K) */}
         <button 
-          onClick={() => window.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', metaKey: true }))}
+          onClick={() => window.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', altKey: true }))}
           className="flex items-center gap-2 text-[12px] text-slate/50 hover:text-neutral-900 dark:hover:text-cream transition-colors group mb-2"
         >
           <span>Ask anything</span>
           <span className="flex items-center gap-1">
-            <kbd className="px-1.5 py-0.5 rounded border border-slate/20 dark:border-white/10 bg-slate/5 dark:bg-white/5 font-mono text-[10px] text-slate/50 group-hover:text-neutral-900 dark:group-hover:text-cream transition-colors">⌘</kbd>
+            <kbd className="px-1.5 py-0.5 rounded border border-slate/20 dark:border-white/10 bg-slate/5 dark:bg-white/5 font-mono text-[10px] text-slate/50 group-hover:text-neutral-900 dark:group-hover:text-cream transition-colors">Alt</kbd>
             <span className="text-[10px]">+</span>
             <kbd className="px-1.5 py-0.5 rounded border border-slate/20 dark:border-white/10 bg-slate/5 dark:bg-white/5 font-mono text-[10px] text-slate/50 group-hover:text-neutral-900 dark:group-hover:text-cream transition-colors">K</kbd>
           </span>
