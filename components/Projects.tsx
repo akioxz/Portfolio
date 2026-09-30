@@ -31,7 +31,7 @@ export default function Projects({ projects }: { projects: ProjectData[] }) {
         <SplitText
           text="Projects"
           tag="h2"
-          className="text-[2rem] font-mono text-cream"
+          className="text-[2rem] font-mono text-neutral-900 dark:text-cream"
           splitType="words"
           delay={40}
           duration={0.5}
@@ -45,19 +45,19 @@ export default function Projects({ projects }: { projects: ProjectData[] }) {
             <button 
               onClick={handlePrev}
               onMouseEnter={playHover}
-              className="p-3 rounded-full border border-slate/20 text-slate hover:text-cream hover:bg-surface transition-all active:scale-95"
+              className="p-3 rounded-full border border-slate/20 text-slate hover:text-neutral-900 dark:hover:text-cream hover:bg-neutral-100 dark:hover:bg-surface transition-all active:scale-95"
               data-magnetic
               aria-label="Previous project"
             >
               <VscChevronLeft className="w-5 h-5" />
             </button>
             <div className="font-mono text-xs text-slate px-2">
-              <span className="text-cream font-medium">0{activeIndex + 1}</span> / 0{total}
+              <span className="text-neutral-900 dark:text-cream font-medium">0{activeIndex + 1}</span> / 0{total}
             </div>
             <button 
               onClick={handleNext}
               onMouseEnter={playHover}
-              className="p-3 rounded-full border border-slate/20 text-slate hover:text-cream hover:bg-surface transition-all active:scale-95"
+              className="p-3 rounded-full border border-slate/20 text-slate hover:text-neutral-900 dark:hover:text-cream hover:bg-neutral-100 dark:hover:bg-surface transition-all active:scale-95"
               data-magnetic
               aria-label="Next project"
             >
@@ -67,7 +67,7 @@ export default function Projects({ projects }: { projects: ProjectData[] }) {
         )}
       </div>
 
-      <div className="relative w-full h-[600px] sm:h-[450px] md:h-[500px] lg:h-[420px] flex items-center justify-center overflow-visible perspective-[2000px]">
+      <div className="relative w-full h-[550px] flex items-center justify-center overflow-visible perspective-[2000px]">
         <AnimatePresence mode="popLayout">
           {projects.map((project, index) => {
             let position = "hidden";
@@ -77,22 +77,23 @@ export default function Projects({ projects }: { projects: ProjectData[] }) {
 
             if (position === "hidden") return null;
 
+            // X offsets are relative to the card's width (max-w-sm is ~384px)
             const variants = {
               center: { 
                 x: "0%", y: "0%", scale: 1, rotateY: 0, rotateZ: 0, zIndex: 30, opacity: 1 
               },
               left: { 
-                x: "-35%", y: "5%", scale: 0.85, rotateY: 15, rotateZ: -4, zIndex: 10, opacity: 0.4 
+                x: "-50%", y: "5%", scale: 0.88, rotateY: 15, rotateZ: -6, zIndex: 10, opacity: 0.4 
               },
               right: { 
-                x: "35%", y: "5%", scale: 0.85, rotateY: -15, rotateZ: 4, zIndex: 20, opacity: 0.4 
+                x: "50%", y: "5%", scale: 0.88, rotateY: -15, rotateZ: 6, zIndex: 20, opacity: 0.4 
               },
             };
 
             return (
               <motion.div
                 key={project.name}
-                className="absolute inset-0 w-full max-w-5xl mx-auto origin-bottom"
+                className="absolute w-full max-w-sm origin-bottom"
                 variants={variants}
                 initial={false}
                 animate={position}
@@ -110,7 +111,7 @@ export default function Projects({ projects }: { projects: ProjectData[] }) {
               >
                 {/* Dimming overlay for background cards */}
                 <motion.div 
-                  className="absolute inset-0 z-50 bg-ink rounded-2xl pointer-events-none"
+                  className="absolute inset-0 z-50 bg-neutral-900 dark:bg-ink rounded-3xl pointer-events-none"
                   initial={false}
                   animate={{ opacity: position === "center" ? 0 : 0.6 }}
                   transition={{ duration: 0.4 }}
