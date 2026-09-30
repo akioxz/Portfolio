@@ -103,3 +103,16 @@ body::before {
     mask-image: radial-gradient(ellipse 80% 80% at 0% 100%, #000 0%, transparent 65%);
   }
 }
+
+/* Completely Hide Scrollbar */
+::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  background: transparent !important;
+}
+
+html, body {
+  -ms-overflow-style: none !important;  /* IE and Edge */
+  scrollbar-width: none !important;  /* Firefox */
+}

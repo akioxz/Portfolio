@@ -1,56 +1,36 @@
-"use client";
-
-import { useState } from "react";
+import React from "react";
+import { createClient } from "@supabase/supabase-js";
 import Link from "next/link";
-import SplitText from "./react-bits/SplitText";
-import Magnetic from "./Magnetic";
 
-interface CertificationItem {
-  id: string;
-  name: string;
-  issuer: string;
-  date: string;
-  link?: string;
-}
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "";
+const supabase = createClient(supabaseUrl, supabaseKey);
 
-export default function Certifications({ certifications = [] }: { certifications?: CertificationItem[] }) {
-  if (certifications.length === 0) return null;
-  const visibleCerts = certifications.slice(0, 3);
+export const revalidate = 3600;
+
+export default async function AllCertificationsPage() {
+  const { data: certifications } = await supabase
+    .from("certifications")
+    .select("*")
+    .order("sort_order", { ascending: true });
 
   return (
-    <section id="certifications" className="mb-20 scroll-mt-24" aria-label="Certifications">
-      <div className="flex items-center justify-between mb-8">
-        <SplitText
-          text="Certifications"
-          tag="h2"
-          className="text-xl font-mono text-cream font-medium"
-          splitType="words"
-          delay={40}
-          duration={0.5}
-          from={{ opacity: 0, y: 16 }}
-          to={{ opacity: 1, y: 0 }}
-          threshold={0.2}
-        />
-
-        {certifications.length > 3 && (
-          <Magnetic>
-            <Link
-              href="/certifications"
-              className="group flex items-center gap-2 font-mono text-xs font-semibold uppercase tracking-[0.2em] text-slate hover:text-neutral-900 dark:hover:text-cream transition-colors"
-              data-magnetic
-            >
-              ALL CERTS 
-              <span className="transform transition-transform group-hover:translate-x-1">&#8594;</span>
-            </Link>
-          </Magnetic>
-        )}
+    <main className="min-h-screen pt-32 pb-24 px-6 md:px-12 max-w-5xl mx-auto">
+      <div className="mb-16">
+        <Link 
+          href="/#certifications" 
+          className="text-xs font-mono uppercase tracking-widest text-slate hover:text-neutral-900 dark:hover:text-cream transition-colors mb-8 inline-block"
+        >
+          &#8592; BACK
+        </Link>
+        <h1 className="text-3xl font-mono text-neutral-900 dark:text-cream">All Certifications</h1>
       </div>
 
       <div className="flex flex-col gap-6">
-        {visibleCerts.map((cert) => (
+        {certifications?.map((cert) => (
           <div
             key={cert.id}
-            className="grid grid-cols-1 sm:grid-cols-[120px_1fr] gap-2 sm:gap-6 items-start"
+            className="grid grid-cols-1 sm:grid-cols-[120px_1fr] gap-2 sm:gap-6 items-start pb-6 border-b border-slate/10"
           >
             <div className="font-mono text-xs text-slate">{cert.date}</div>
             <div>
@@ -87,7 +67,6 @@ export default function Certifications({ certifications = [] }: { certifications
           </div>
         ))}
       </div>
-    </section>
+    </main>
   );
 }
-

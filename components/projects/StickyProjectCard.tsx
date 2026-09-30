@@ -15,6 +15,7 @@ export interface ProjectData {
   tags: string[];
   image: string | null;
   specs: { label: string; value: string }[];
+  link?: string | null;
 }
 
 export function getTagIcon(tag: string) {

@@ -59,7 +59,7 @@ export default function Hero() {
             hidden: { opacity: 0, y: 20 },
             visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } }
           }}
-          className="font-mono text-5xl md:text-6xl font-medium text-neutral-900 dark:text-cream mb-8 tracking-tight"
+          className="font-mono text-4xl md:text-5xl font-medium text-neutral-900 dark:text-white mb-6 tracking-tight"
         >
           Axel Villanueva
         </motion.h1>
@@ -69,7 +69,7 @@ export default function Hero() {
             hidden: { opacity: 0, y: 20 },
             visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } }
           }}
-          className="flex flex-col gap-6 text-slate dark:text-slate/80 text-sm md:text-base leading-relaxed max-w-lg font-sans"
+          className="flex flex-col gap-6 text-zinc-500 text-sm md:text-base leading-relaxed max-w-lg font-sans font-medium"
         >
           <p>
             4th-year IT student building production-grade web &amp; mobile software. Still learning every day {"\u2014"} currently deep into high-performance interfaces and generative AI.
@@ -81,12 +81,12 @@ export default function Hero() {
             hidden: { opacity: 0, y: 20 },
             visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } }
           }}
-          className="mt-10 flex flex-wrap items-center gap-6 font-mono text-xs text-slate"
+          className="mt-10 flex flex-wrap items-center gap-6 font-mono text-xs text-zinc-500"
         >
           {[
-            { name: "github", url: "https://github.com/akioxz" },
-            { name: "linkedin", url: "https://linkedin.com/in/akioxz" },
             { name: "email", url: "mailto:dev.akioxz@gmail.com" },
+            { name: "discord", url: "https://discordapp.com/users/your_discord_id_here" },
+            { name: "github", url: "https://github.com/akioxz" },
           ].map((link) => (
             <motion.a
               key={link.name}

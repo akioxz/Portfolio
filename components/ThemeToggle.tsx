@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useTheme } from "next-themes";
+import { useTheme } from "@wrksz/themes/client";
 import { FiSun, FiMoon, FiMonitor } from "react-icons/fi";
 
 export default function ThemeToggle() {
@@ -19,7 +19,7 @@ export default function ThemeToggle() {
     );
   }
 
-  const handleToggle = (newTheme: string, e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleToggle = (newTheme: "light" | "dark" | "system", e: React.MouseEvent<HTMLButtonElement>) => {
     if (isSwitching || theme === newTheme) {
       if (theme !== newTheme) setTheme(newTheme);
       return;

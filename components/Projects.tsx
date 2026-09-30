@@ -5,6 +5,7 @@ import Link from "next/link";
 import { motion, AnimatePresence } from "motion/react";
 import SplitText from "./react-bits/SplitText";
 import DeckProjectCard from "./projects/DeckProjectCard";
+import Magnetic from "./Magnetic";
 import { ProjectData } from "./projects/StickyProjectCard";
 import { useUISounds } from "@/hooks/useUISounds";
 
@@ -40,14 +41,16 @@ export default function Projects({ projects }: { projects: ProjectData[] }) {
           threshold={0.2}
         />
         
-        <Link 
-          href="/projects" 
-          className="group flex items-center gap-2 font-mono text-xs font-semibold uppercase tracking-[0.2em] text-slate hover:text-neutral-900 dark:hover:text-cream transition-colors"
-          data-magnetic
-        >
-          ALL PROJECTS 
-          <span className="transform transition-transform group-hover:translate-x-1">&#8594;</span>
-        </Link>
+        <Magnetic>
+          <Link 
+            href="/projects" 
+            className="group flex items-center gap-2 font-mono text-xs font-semibold uppercase tracking-[0.2em] text-slate hover:text-neutral-900 dark:hover:text-cream transition-colors"
+            data-magnetic
+          >
+            ALL PROJECTS 
+            <span className="transform transition-transform group-hover:translate-x-1">&#8594;</span>
+          </Link>
+        </Magnetic>
       </div>
 
       <div className="relative w-full h-[380px] flex items-center justify-center overflow-visible perspective-[2000px]">
@@ -92,13 +95,23 @@ export default function Projects({ projects }: { projects: ProjectData[] }) {
                 transition={{ type: "spring", stiffness: 260, damping: 25, mass: 1.2 }}
                 onClick={() => {
                   if (position === "left") handlePrev();
-                  if (position === "right") handleNext();
+                  else if (position === "right") handleNext();
+                  else if (position === "center" && project.link) {
+                    window.open(project.link, "_blank", "noopener,noreferrer");
+                  }
                 }}
                 onMouseEnter={() => {
                   if (position !== "center") playHover();
                 }}
+                drag={position === "center" ? "x" : false}
+                dragConstraints={{ left: 0, right: 0 }}
+                dragElastic={0.6}
+                onDragEnd={(e, { offset }) => {
+                  if (offset.x < -50) handleNext();
+                  else if (offset.x > 50) handlePrev();
+                }}
                 style={{ 
-                  cursor: position === "center" ? "default" : "pointer",
+                  cursor: position === "center" ? (project.link ? "pointer" : "default") : "pointer",
                 }}
               >
                 <DeckProjectCard project={project} />

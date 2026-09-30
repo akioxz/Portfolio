@@ -3,7 +3,6 @@ import { createClient } from "@supabase/supabase-js";
 
 import Hero from "@/components/Hero";
 import Experience from "@/components/Experience";
-import StatsStrip from "@/components/StatsStrip";
 import LogoSplash from "@/components/LogoSplash";
 
 import Projects from "@/components/Projects";
@@ -39,12 +38,12 @@ export default async function Home() {
       <main className="mx-auto w-full max-w-7xl flex flex-col gap-10 sm:gap-12 px-4 sm:px-6 pb-10 sm:pb-24 pt-16 sm:pt-20">
         <Hero />
         <Experience experience={experienceData || []} />
-        <StatsStrip />
 
         <Projects projects={projectsData || []} />
         <Stack stack={stackData || []} />
         <Certifications certifications={certificationsData || []} />
         <BeyondTheCode />
+        
         <Footer />
       </main>
     </>
