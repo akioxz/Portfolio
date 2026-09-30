@@ -2,20 +2,20 @@
 
 import React from "react";
 import Image from "next/image";
-import { motion } from "motion/react";
+import { motion, Variants } from "motion/react";
 import SplitText from "./react-bits/SplitText";
 import PixelTransition from "./react-bits/PixelTransition";
 import SpecularButton from "./react-bits/SpecularButton";
 import { VscMail, VscGithub, VscArrowRight } from "react-icons/vsc";
 
-const containerVariants = {
+const containerVariants: Variants = {
   hidden: {},
   show: {
     transition: { staggerChildren: 0.12, delayChildren: 0.05 },
   },
 };
 
-const itemVariants = {
+const itemVariants: Variants = {
   hidden: { opacity: 0, y: 40, scale: 0.95 },
   show: {
     opacity: 1,
