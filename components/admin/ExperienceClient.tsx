@@ -75,12 +75,15 @@ export default function ExperienceClient({ initialExperience }: { initialExperie
           </p>
         ) : (
           experience.map((job) => (
-            <div key={job.id} className="flex items-center justify-between py-3 border-b border-cream/5 group">
-              <div className="flex items-center gap-4">
-                <span className="font-mono text-sm font-bold text-cream">{job.role}</span>
-                <span className="font-mono text-sm text-cream/20 hidden md:inline">{job.project}</span>
-              </div>
-              <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            <div key={job.id} className="flex py-3 border-b border-cream/5 group">
+              <div className="grid grid-cols-12 gap-4 items-center w-full min-w-0">
+                <div className="col-span-10 md:col-span-4">
+                  <span className="font-mono text-sm font-bold text-cream truncate block">{job.role}</span>
+                </div>
+                <div className="hidden md:block md:col-span-6">
+                  <span className="font-mono text-sm text-cream/20 truncate block">{job.project}</span>
+                </div>
+                <div className="col-span-2 flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                 <button onClick={() => handleOpenEdit(job.id)} className="p-1.5 hover:text-cream transition-colors duration-300 text-cream/20">
                   <VscEdit size={14} />
                 </button>

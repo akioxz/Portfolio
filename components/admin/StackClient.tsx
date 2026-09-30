@@ -84,7 +84,7 @@ export default function StackClient({ initialStack }: { initialStack: any[] }) {
           stack.map((skill) => (
             <div
               key={skill.id}
-              className="flex items-center justify-between py-3 border-b border-cream/5 group"
+              className="flex py-3 border-b border-cream/5 group"
             >
               <div className="flex items-center gap-4">
                 <span className="font-mono text-sm font-bold text-cream">

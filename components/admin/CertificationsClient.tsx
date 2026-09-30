@@ -87,7 +87,7 @@ export default function CertificationsClient({ initialCertifications }: { initia
           certifications.map((cert) => (
             <div
               key={cert.id}
-              className="flex items-center justify-between py-4 border-b border-cream/5 group"
+              className="flex py-4 border-b border-cream/5 group"
             >
               <div className="min-w-0">
                 <span className="font-mono text-sm font-bold text-cream">
