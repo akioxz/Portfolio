@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { createPortal } from "react-dom";
+import { motion, useMotionValue, useSpring, useTransform } from "motion/react";
 import SplitText from "./react-bits/SplitText";
 import Masonry from "./react-bits/Masonry";
 
@@ -20,13 +21,45 @@ const galleryItems = [
 
 export default function BeyondTheCode() {
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
-  const [previewImages, setPreviewImages] = useState<string[]>(
-    galleryItems.slice(0, 4).map((item) => item.img),
-  );
-  const [isFading, setIsFading] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
-  const galleryButtonRef = useRef<HTMLButtonElement>(null);
   const dialogRef = useRef<HTMLDivElement>(null);
+
+  // Curated static images for the bento grid preview (no more auto-fading)
+  const previewImages = [
+    galleryItems[6].img, // Anime figurines (Tall slot)
+    galleryItems[1].img, // Personal photo (Wide slot)
+    galleryItems[2].img, // Church (Small slot)
+    galleryItems[0].img, // Gaming setup (Small slot)
+  ];
+
+  // 3D Magnetic Hover Physics
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+
+  const mouseXSpring = useSpring(x, { stiffness: 300, damping: 30 });
+  const mouseYSpring = useSpring(y, { stiffness: 300, damping: 30 });
+
+  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["5deg", "-5deg"]);
+  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-5deg", "5deg"]);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const width = rect.width;
+    const height = rect.height;
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
+
+    const xPct = mouseX / width - 0.5;
+    const yPct = mouseY / height - 0.5;
+
+    x.set(xPct);
+    y.set(yPct);
+  };
+
+  const handleMouseLeave = () => {
+    x.set(0);
+    y.set(0);
+  };
 
   useEffect(() => {
     if (!isGalleryOpen) return;
@@ -35,23 +68,6 @@ export default function BeyondTheCode() {
       if (event.key === "Escape") {
         setIsGalleryOpen(false);
         return;
-      }
-
-      if (event.key === "Tab" && dialogRef.current) {
-        const focusable = dialogRef.current.querySelectorAll<HTMLElement>(
-          'button, [href], [tabindex]:not([tabindex="-1"])',
-        );
-        if (focusable.length) {
-          const first = focusable[0];
-          const last = focusable[focusable.length - 1];
-          if (event.shiftKey && document.activeElement === first) {
-            event.preventDefault();
-            last.focus();
-          } else if (!event.shiftKey && document.activeElement === last) {
-            event.preventDefault();
-            first.focus();
-          }
-        }
       }
     };
 
@@ -63,56 +79,8 @@ export default function BeyondTheCode() {
     return () => {
       document.body.style.overflow = originalOverflow;
       window.removeEventListener("keydown", handleKeyDown);
-      galleryButtonRef.current?.focus();
     };
   }, [isGalleryOpen]);
-
-  const pickPreviewImages = () => {
-    const shuffled = [...galleryItems];
-    for (let index = shuffled.length - 1; index > 0; index -= 1) {
-      const swapIndex = Math.floor(Math.random() * (index + 1));
-      [shuffled[index], shuffled[swapIndex]] = [
-        shuffled[swapIndex],
-        shuffled[index],
-      ];
-    }
-
-    return shuffled.slice(0, 4).map((item) => item.img);
-  };
-
-  useEffect(() => {
-    setPreviewImages(pickPreviewImages());
-  }, []);
-
-  useEffect(() => {
-    const section = sectionRef.current;
-    if (!section) return;
-
-    let isVisible = false;
-    let timeoutId: number | undefined;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        isVisible = entry.isIntersecting;
-      },
-      { rootMargin: "200px" },
-    );
-    observer.observe(section);
-
-    const intervalId = window.setInterval(() => {
-      if (!isVisible || document.hidden) return;
-      setIsFading(true);
-      timeoutId = window.setTimeout(() => {
-        setPreviewImages(pickPreviewImages());
-        setIsFading(false);
-      }, 350); // slightly longer fade for smoothness
-    }, 5000);
-
-    return () => {
-      observer.disconnect();
-      window.clearInterval(intervalId);
-      if (timeoutId) window.clearTimeout(timeoutId);
-    };
-  }, []);
 
   return (
     <section ref={sectionRef} id="beyond" className="mb-24 scroll-mt-24" aria-label="Beyond the Code">
@@ -146,71 +114,79 @@ export default function BeyondTheCode() {
           </div>
         </div>
 
-        {/* Right: Asymmetric Bento Gallery Preview */}
-        <div className="w-full lg:w-[60%] shrink-0">
-          <button
-            ref={galleryButtonRef}
-            type="button"
+        {/* Right: Asymmetric Bento Gallery Preview with 3D Physics */}
+        <div className="w-full lg:w-[60%] shrink-0" style={{ perspective: 1000 }}>
+          <motion.div
             onClick={() => setIsGalleryOpen(true)}
+            onMouseMove={handleMouseMove}
+            onMouseLeave={handleMouseLeave}
+            style={{
+              rotateX,
+              rotateY,
+              transformStyle: "preserve-3d",
+            }}
             className="w-full relative group cursor-pointer focus:outline-none"
             aria-label="View photo gallery"
           >
             {/* Bento Grid layout: 3 columns, 2 rows */}
-            <div className="grid grid-cols-3 grid-rows-2 gap-3 sm:gap-4 h-[340px] sm:h-[460px] w-full">
+            <div className="grid grid-cols-3 grid-rows-2 gap-3 sm:gap-4 h-[340px] sm:h-[460px] w-full" style={{ transform: "translateZ(30px)" }}>
               
               {/* Image 1: Tall (col-span-1, row-span-2) */}
-              <div className="relative col-span-1 row-span-2 rounded-2xl overflow-hidden bg-neutral-100 dark:bg-surface/30">
+              <div className="relative col-span-1 row-span-2 rounded-2xl overflow-hidden bg-neutral-100 dark:bg-surface/30 shadow-lg">
                 <Image
                   src={previewImages[0]}
                   alt="Gallery preview 1"
                   fill
                   sizes="(max-width: 768px) 33vw, 20vw"
-                  className={`object-cover transition-all duration-700 grayscale contrast-125 group-hover:grayscale-0 group-hover:contrast-100 ${isFading ? "opacity-0 scale-95" : "opacity-100 scale-100"}`}
+                  className="object-cover transition-all duration-700 grayscale contrast-125 group-hover:grayscale-0 group-hover:contrast-100 group-hover:scale-105"
                 />
               </div>
 
               {/* Image 2: Wide (col-span-2, row-span-1) */}
-              <div className="relative col-span-2 row-span-1 rounded-2xl overflow-hidden bg-neutral-100 dark:bg-surface/30">
+              <div className="relative col-span-2 row-span-1 rounded-2xl overflow-hidden bg-neutral-100 dark:bg-surface/30 shadow-lg">
                 <Image
                   src={previewImages[1]}
                   alt="Gallery preview 2"
                   fill
                   sizes="(max-width: 768px) 66vw, 40vw"
-                  className={`object-cover transition-all duration-700 grayscale contrast-125 group-hover:grayscale-0 group-hover:contrast-100 ${isFading ? "opacity-0 scale-95" : "opacity-100 scale-100"}`}
+                  className="object-cover transition-all duration-700 grayscale contrast-125 group-hover:grayscale-0 group-hover:contrast-100 group-hover:scale-105"
                 />
               </div>
 
               {/* Image 3: Small Square (col-span-1, row-span-1) */}
-              <div className="relative col-span-1 row-span-1 rounded-2xl overflow-hidden bg-neutral-100 dark:bg-surface/30">
+              <div className="relative col-span-1 row-span-1 rounded-2xl overflow-hidden bg-neutral-100 dark:bg-surface/30 shadow-lg">
                 <Image
                   src={previewImages[2]}
                   alt="Gallery preview 3"
                   fill
                   sizes="(max-width: 768px) 33vw, 20vw"
-                  className={`object-cover transition-all duration-700 grayscale contrast-125 group-hover:grayscale-0 group-hover:contrast-100 ${isFading ? "opacity-0 scale-95" : "opacity-100 scale-100"}`}
+                  className="object-cover transition-all duration-700 grayscale contrast-125 group-hover:grayscale-0 group-hover:contrast-100 group-hover:scale-105"
                 />
               </div>
 
               {/* Image 4: Small Square (col-span-1, row-span-1) */}
-              <div className="relative col-span-1 row-span-1 rounded-2xl overflow-hidden bg-neutral-100 dark:bg-surface/30">
+              <div className="relative col-span-1 row-span-1 rounded-2xl overflow-hidden bg-neutral-100 dark:bg-surface/30 shadow-lg">
                 <Image
                   src={previewImages[3]}
                   alt="Gallery preview 4"
                   fill
                   sizes="(max-width: 768px) 33vw, 20vw"
-                  className={`object-cover transition-all duration-700 grayscale contrast-125 group-hover:grayscale-0 group-hover:contrast-100 ${isFading ? "opacity-0 scale-95" : "opacity-100 scale-100"}`}
+                  className="object-cover transition-all duration-700 grayscale contrast-125 group-hover:grayscale-0 group-hover:contrast-100 group-hover:scale-105"
                 />
               </div>
 
             </div>
             
-            {/* Hover Action Pill */}
-            <div className="absolute bottom-6 right-6 opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10 pointer-events-none">
+            {/* Hover Action Pill (lifted closer to user in 3D space) */}
+            <div 
+              className="absolute bottom-6 right-6 opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10 pointer-events-none"
+              style={{ transform: "translateZ(60px)" }}
+            >
               <span className="px-5 py-2.5 rounded-full bg-neutral-900/90 dark:bg-ink/90 text-white dark:text-cream text-[10px] sm:text-xs font-mono tracking-widest uppercase border border-white/10 backdrop-blur-md shadow-2xl">
                 View Gallery &#8599;
               </span>
             </div>
-          </button>
+          </motion.div>
         </div>
       </div>
 
