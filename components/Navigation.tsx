@@ -62,10 +62,23 @@ export function Sidebar() {
         {/* Theme Toggle Pill */}
         <ThemeToggle />
 
-        {/* Contact Info (Bryl Lim Style) */}
+        {/* Ask Anything (Command K) */}
+        <button 
+          onClick={() => window.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', metaKey: true }))}
+          className="flex items-center gap-2 text-[12px] text-slate/50 hover:text-neutral-900 dark:hover:text-cream transition-colors group mb-2"
+        >
+          <span>Ask anything</span>
+          <span className="flex items-center gap-1">
+            <kbd className="px-1.5 py-0.5 rounded border border-slate/20 dark:border-white/10 bg-slate/5 dark:bg-white/5 font-mono text-[10px] text-slate/50 group-hover:text-neutral-900 dark:group-hover:text-cream transition-colors">⌘</kbd>
+            <span className="text-[10px]">+</span>
+            <kbd className="px-1.5 py-0.5 rounded border border-slate/20 dark:border-white/10 bg-slate/5 dark:bg-white/5 font-mono text-[10px] text-slate/50 group-hover:text-neutral-900 dark:group-hover:text-cream transition-colors">K</kbd>
+          </span>
+        </button>
+
+        {/* Contact Info */}
         <div className="flex flex-col gap-3 font-mono text-[11px] text-slate/50">
           <p className="leading-relaxed pr-2">
-            For work, collabs & everything else, reach me at
+            Got an idea? Let's build it together.
           </p>
           <a
             href="mailto:dev.akioxz@gmail.com"
@@ -161,7 +174,7 @@ export function MobileMenu() {
             >
               <ThemeToggle />
               <div className="flex flex-col items-center gap-2 font-mono text-xs text-slate/60 text-center">
-                <p>Reach me at</p>
+                <p>Got an idea? Let's build it.</p>
                 <a
                   href="mailto:dev.akioxz@gmail.com"
                   className="text-neutral-900 dark:text-cream font-medium"

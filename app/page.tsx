@@ -12,7 +12,6 @@ import Certifications from "@/components/Certifications";
 import BeyondTheCode from "@/components/BeyondTheCode";
 import Footer from "@/components/Footer";
 
-const Chatbot = dynamic(() => import("@/components/Chatbot"));
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "";
@@ -48,8 +47,6 @@ export default async function Home() {
         <BeyondTheCode />
         <Footer />
       </main>
-
-      <Chatbot />
     </>
   );
 }

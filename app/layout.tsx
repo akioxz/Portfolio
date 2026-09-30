@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import LayoutWrapper from "@/components/LayoutWrapper";
+import CommandMenu from "@/components/CommandMenu";
 import ThemeProvider from "@/components/ThemeProvider";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
@@ -117,6 +118,7 @@ export default function RootLayout({
         >
           <LayoutWrapper>
             {children}
+            <CommandMenu />
           </LayoutWrapper>
         </ThemeProvider>
         <Analytics />
