@@ -3,10 +3,9 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { VscMail, VscCode, VscBriefcase, VscSignOut, VscHome, VscWorkspaceTrusted, VscLayers, VscRefresh } from "react-icons/vsc";
-import { FiSun, FiMoon } from "react-icons/fi";
 import { useState, useTransition, useEffect } from "react";
-import { useTheme } from "next-themes";
 import { refreshLiveSite } from "@/app/admin/actions";
+import ThemeToggle from "@/components/ThemeToggle";
 
 export default function AdminDashboardLayout({
   children,
@@ -18,10 +17,6 @@ export default function AdminDashboardLayout({
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [isPending, startTransition] = useTransition();
   const [justRefreshed, setJustRefreshed] = useState(false);
-  const { theme, setTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => setMounted(true), []);
 
   const handleLogout = async () => {
     setIsLoggingOut(true);
@@ -55,79 +50,72 @@ export default function AdminDashboardLayout({
   ];
 
   return (
-    <div className="min-h-screen bg-ink flex flex-col md:flex-row font-sans text-cream selection:bg-teal/30">
+    <div className="min-h-screen bg-white dark:bg-ink flex flex-col md:flex-row font-sans text-neutral-900 dark:text-cream selection:bg-teal/30">
       {/* Sidebar */}
-      <aside className="w-full md:w-64 border-b md:border-b-0 md:border-r border-slate/20 bg-surface/50 backdrop-blur-xl md:min-h-screen flex flex-col z-20">
-        <div className="p-8 flex items-center justify-between">
-          <h2 className="font-mono font-bold text-xl text-cream tracking-tighter">
-            AJV
-          </h2>
-          <div className="flex items-center gap-2">
-            {mounted && (
-              <button
-                onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-                aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
-                className="p-2 rounded-lg text-slate hover:text-cream hover:bg-slate/10 transition-all duration-300 active:scale-90"
-              >
-                {theme === "dark" ? <FiSun size={16} /> : <FiMoon size={16} />}
-              </button>
-            )}
-            <Link href="/" className="md:hidden p-2 rounded-lg hover:bg-slate/10 text-slate hover:text-cream transition-all duration-300 active:scale-[0.98]">
-              <VscHome size={20} />
-            </Link>
-          </div>
+      <aside className="w-full md:w-56 border-b md:border-b-0 md:border-r border-slate/10 dark:border-white/[0.06] bg-white/50 dark:bg-[#0c0c0c]/80 backdrop-blur-xl md:min-h-screen flex flex-col z-20">
+        <div className="px-7 py-8">
+          <Link href="/admin/inbox" className="font-mono font-medium text-lg text-neutral-900 dark:text-cream tracking-tight hover:opacity-60 transition-opacity">
+            Axel Villanueva
+          </Link>
         </div>
 
-        <nav className="flex-1 px-4 py-2 flex flex-row md:flex-col gap-1 overflow-x-auto md:overflow-visible">
+        <nav className="flex-1 px-4 py-2 flex flex-row md:flex-col gap-0.5 overflow-x-auto md:overflow-visible font-mono text-[13px]">
           {navItems.map((item) => {
             const isActive = pathname.startsWith(item.href);
             return (
               <Link
                 key={item.href}
                 href={item.href}
-                className={`flex items-center gap-3 px-4 py-3 rounded-lg font-mono text-sm transition-all duration-300 active:scale-[0.98] whitespace-nowrap ${
+                className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200 active:scale-[0.98] whitespace-nowrap ${
                   isActive
-                    ? "bg-slate/20 text-cream font-medium"
-                    : "text-slate hover:bg-slate/10 hover:text-cream"
+                    ? "bg-neutral-100 dark:bg-white/[0.06] text-neutral-900 dark:text-cream font-medium"
+                    : "text-neutral-500 dark:text-white/40 hover:text-neutral-900 dark:hover:text-cream"
                 }`}
               >
-                <item.icon size={16} />
+                <item.icon size={15} />
                 {item.name}
               </Link>
             );
           })}
         </nav>
 
-        <div className="p-4 hidden md:flex flex-col gap-1 border-t border-slate/20 mt-auto">
-          <button
-            onClick={handleRefreshCache}
-            disabled={isPending}
-            className={`flex items-center gap-3 px-4 py-3 rounded-lg font-mono text-sm transition-all duration-300 active:scale-[0.98] whitespace-nowrap text-slate hover:bg-slate/10 hover:text-cream ${isPending ? "opacity-50 cursor-not-allowed" : ""}`}
-          >
-            <VscRefresh className={isPending ? "animate-spin" : ""} size={16} />
-            {isPending ? "Refreshing..." : justRefreshed ? "Refreshed!" : "Push to Live"}
-          </button>
+        <div className="px-4 pb-4 hidden md:flex flex-col gap-0.5 mt-auto">
+          <div className="border-t border-slate/10 dark:border-white/[0.06] pt-4 mb-2 flex flex-col gap-0.5">
+            <button
+              onClick={handleRefreshCache}
+              disabled={isPending}
+              className={`flex items-center gap-3 px-3 py-2.5 rounded-lg font-mono text-[13px] transition-all duration-200 active:scale-[0.98] whitespace-nowrap text-neutral-500 dark:text-white/40 hover:text-neutral-900 dark:hover:text-cream ${isPending ? "opacity-50 cursor-not-allowed" : ""}`}
+            >
+              <VscRefresh className={isPending ? "animate-spin" : ""} size={15} />
+              {isPending ? "Refreshing..." : justRefreshed ? "Refreshed!" : "Push to Live"}
+            </button>
 
-          <Link
-            href="/"
-            className="flex items-center gap-3 px-4 py-3 rounded-lg font-mono text-sm transition-all duration-300 active:scale-[0.98] whitespace-nowrap text-slate hover:bg-slate/10 hover:text-cream"
-          >
-            <VscHome size={16} />
-            Back to Site
-          </Link>
-          <button
-            onClick={handleLogout}
-            disabled={isLoggingOut}
-            className="flex items-center gap-3 px-4 py-3 rounded-lg font-mono text-sm transition-all duration-300 active:scale-[0.98] whitespace-nowrap text-slate hover:bg-red-500/10 hover:text-red-400 disabled:opacity-50"
-          >
-            <VscSignOut size={16} />
-            {isLoggingOut ? "Signing out..." : "Sign Out"}
-          </button>
+            <Link
+              href="/"
+              className="flex items-center gap-3 px-3 py-2.5 rounded-lg font-mono text-[13px] transition-all duration-200 active:scale-[0.98] whitespace-nowrap text-neutral-500 dark:text-white/40 hover:text-neutral-900 dark:hover:text-cream"
+            >
+              <VscHome size={15} />
+              Back to Site
+            </Link>
+            <button
+              onClick={handleLogout}
+              disabled={isLoggingOut}
+              className="flex items-center gap-3 px-3 py-2.5 rounded-lg font-mono text-[13px] transition-all duration-200 active:scale-[0.98] whitespace-nowrap text-neutral-500 dark:text-white/40 hover:text-red-500 dark:hover:text-red-400 disabled:opacity-50"
+            >
+              <VscSignOut size={15} />
+              {isLoggingOut ? "Signing out..." : "Sign Out"}
+            </button>
+          </div>
+
+          {/* Theme Toggle - Bryl Lim style */}
+          <div className="px-3 pt-2">
+            <ThemeToggle />
+          </div>
         </div>
       </aside>
 
       {/* Main Content Area */}
-      <main className="flex-1 overflow-x-hidden relative">
+      <main className="flex-1 overflow-x-hidden relative bg-white dark:bg-ink">
         {children}
       </main>
     </div>
