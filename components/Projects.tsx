@@ -1,11 +1,11 @@
 "use client";
 
 import React, { useState } from "react";
+import Link from "next/link";
 import { motion, AnimatePresence } from "motion/react";
 import SplitText from "./react-bits/SplitText";
 import DeckProjectCard from "./projects/DeckProjectCard";
 import { ProjectData } from "./projects/StickyProjectCard";
-import { VscChevronLeft, VscChevronRight } from "react-icons/vsc";
 import { useUISounds } from "@/hooks/useUISounds";
 
 export default function Projects({ projects }: { projects: ProjectData[] }) {
@@ -40,31 +40,14 @@ export default function Projects({ projects }: { projects: ProjectData[] }) {
           threshold={0.2}
         />
         
-        {total > 1 && (
-          <div className="flex items-center gap-3">
-            <button 
-              onClick={handlePrev}
-              onMouseEnter={playHover}
-              className="p-3 rounded-full border border-slate/20 text-slate hover:text-neutral-900 dark:hover:text-cream hover:bg-neutral-100 dark:hover:bg-surface transition-all active:scale-95"
-              data-magnetic
-              aria-label="Previous project"
-            >
-              <VscChevronLeft className="w-5 h-5" />
-            </button>
-            <div className="font-mono text-xs text-slate px-2">
-              <span className="text-neutral-900 dark:text-cream font-medium">0{activeIndex + 1}</span> / 0{total}
-            </div>
-            <button 
-              onClick={handleNext}
-              onMouseEnter={playHover}
-              className="p-3 rounded-full border border-slate/20 text-slate hover:text-neutral-900 dark:hover:text-cream hover:bg-neutral-100 dark:hover:bg-surface transition-all active:scale-95"
-              data-magnetic
-              aria-label="Next project"
-            >
-              <VscChevronRight className="w-5 h-5" />
-            </button>
-          </div>
-        )}
+        <Link 
+          href="/projects" 
+          className="group flex items-center gap-2 font-mono text-xs font-semibold uppercase tracking-[0.2em] text-slate hover:text-neutral-900 dark:hover:text-cream transition-colors"
+          data-magnetic
+        >
+          ALL PROJECTS 
+          <span className="transform transition-transform group-hover:translate-x-1">→</span>
+        </Link>
       </div>
 
       <div className="relative w-full h-[380px] flex items-center justify-center overflow-visible perspective-[2000px]">

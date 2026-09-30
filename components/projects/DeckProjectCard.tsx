@@ -36,7 +36,7 @@ export default function DeckProjectCard({
         )}
       </div>
       
-      <p className="text-slate text-sm leading-relaxed line-clamp-4 mb-4 flex-1">
+      <p className="text-slate text-sm leading-relaxed truncate mb-4 flex-1">
         {project.description}
       </p>
 
