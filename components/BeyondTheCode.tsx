@@ -1,38 +1,39 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import Image from "next/image";
 import { createPortal } from "react-dom";
-import { motion, useMotionValue, useSpring, useTransform } from "motion/react";
+import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from "motion/react";
 import SplitText from "./react-bits/SplitText";
-import Masonry from "./react-bits/Masonry";
+import { VscChevronLeft, VscChevronRight, VscClose } from "react-icons/vsc";
 
 const galleryItems = [
-  { id: "photo3", img: "/photo3.jpg", alt: "Gaming setup with a monitor", aspectRatio: 0.6 },
-  { id: "photo4", img: "/photo4.jpg", alt: "Personal photo in a room", aspectRatio: 0.7 },
-  { id: "photo5", img: "/photo5.jpg", alt: "Historic church exterior", aspectRatio: 0.63 },
-  { id: "photo6", img: "/photo6.jpg", alt: "Desktop gaming setup", aspectRatio: 0.53 },
-  { id: "photo7", img: "/photo7.jpg", alt: "Anime figure collection", aspectRatio: 0.77 },
-  { id: "photo8", img: "/photo8.jpeg", alt: "Personal photo outdoors", aspectRatio: 0.57 },
-  { id: "photo9", img: "/photo9.jpeg", alt: "Anime figurines on display", aspectRatio: 0.67 },
-  { id: "photo10", img: "/photo10.jpeg", alt: "Gaming setup with keyboard and monitor", aspectRatio: 0.6 },
-  { id: "photo11", img: "/photo11.jpeg", alt: "Personal hobby photo", aspectRatio: 0.73 },
+  { id: "photo3", img: "/photo3.jpg", alt: "Gaming setup with a monitor" },
+  { id: "photo4", img: "/photo4.jpg", alt: "Personal photo in a room" },
+  { id: "photo5", img: "/photo5.jpg", alt: "Historic church exterior" },
+  { id: "photo6", img: "/photo6.jpg", alt: "Desktop gaming setup" },
+  { id: "photo7", img: "/photo7.jpg", alt: "Anime figure collection" },
+  { id: "photo8", img: "/photo8.jpeg", alt: "Personal photo outdoors" },
+  { id: "photo9", img: "/photo9.jpeg", alt: "Anime figurines on display" },
+  { id: "photo10", img: "/photo10.jpeg", alt: "Gaming setup with keyboard and monitor" },
+  { id: "photo11", img: "/photo11.jpeg", alt: "Personal hobby photo" },
 ];
 
 export default function BeyondTheCode() {
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
+  const [galleryIndex, setGalleryIndex] = useState(0);
+  const [direction, setDirection] = useState(0);
+  
   const sectionRef = useRef<HTMLElement>(null);
   const dialogRef = useRef<HTMLDivElement>(null);
 
-  // Curated static images for the bento grid preview (no more auto-fading)
   const previewImages = [
-    galleryItems[6].img, // Anime figurines (Tall slot)
-    galleryItems[1].img, // Personal photo (Wide slot)
-    galleryItems[2].img, // Church (Small slot)
-    galleryItems[0].img, // Gaming setup (Small slot)
+    galleryItems[6].img,
+    galleryItems[1].img,
+    galleryItems[2].img,
+    galleryItems[0].img,
   ];
 
-  // 3D Magnetic Hover Physics
   const x = useMotionValue(0);
   const y = useMotionValue(0);
 
@@ -61,13 +62,26 @@ export default function BeyondTheCode() {
     y.set(0);
   };
 
+  const paginate = useCallback((newDirection: number) => {
+    setDirection(newDirection);
+    setGalleryIndex((prevIndex) => {
+      let nextIndex = prevIndex + newDirection;
+      if (nextIndex < 0) nextIndex = galleryItems.length - 1;
+      if (nextIndex >= galleryItems.length) nextIndex = 0;
+      return nextIndex;
+    });
+  }, []);
+
   useEffect(() => {
     if (!isGalleryOpen) return;
 
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
         setIsGalleryOpen(false);
-        return;
+      } else if (event.key === "ArrowRight") {
+        paginate(1);
+      } else if (event.key === "ArrowLeft") {
+        paginate(-1);
       }
     };
 
@@ -80,13 +94,37 @@ export default function BeyondTheCode() {
       document.body.style.overflow = originalOverflow;
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [isGalleryOpen]);
+  }, [isGalleryOpen, paginate]);
+
+  const sliderVariants = {
+    enter: (direction: number) => ({
+      x: direction > 0 ? 1000 : -1000,
+      opacity: 0,
+      scale: 0.9,
+    }),
+    center: {
+      zIndex: 1,
+      x: 0,
+      opacity: 1,
+      scale: 1,
+    },
+    exit: (direction: number) => ({
+      zIndex: 0,
+      x: direction < 0 ? 1000 : -1000,
+      opacity: 0,
+      scale: 0.9,
+    }),
+  };
+
+  const swipeConfidenceThreshold = 10000;
+  const swipePower = (offset: number, velocity: number) => {
+    return Math.abs(offset) * velocity;
+  };
 
   return (
     <section ref={sectionRef} id="beyond" className="mb-24 scroll-mt-24" aria-label="Beyond the Code">
       <div className="flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-16">
         
-        {/* Left: Typography */}
         <div className="w-full lg:w-[40%] flex flex-col justify-center">
           <SplitText
             text="Beyond the Code"
@@ -114,10 +152,13 @@ export default function BeyondTheCode() {
           </div>
         </div>
 
-        {/* Right: Asymmetric Bento Gallery Preview with 3D Physics */}
         <div className="w-full lg:w-[60%] shrink-0" style={{ perspective: 1000 }}>
           <motion.div
-            onClick={() => setIsGalleryOpen(true)}
+            onClick={() => {
+              setGalleryIndex(0);
+              setDirection(0);
+              setIsGalleryOpen(true);
+            }}
             onMouseMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}
             style={{
@@ -128,10 +169,8 @@ export default function BeyondTheCode() {
             className="w-full relative group cursor-pointer focus:outline-none"
             aria-label="View photo gallery"
           >
-            {/* Bento Grid layout: 3 columns, 2 rows */}
             <div className="grid grid-cols-3 grid-rows-2 gap-3 sm:gap-4 h-[340px] sm:h-[460px] w-full" style={{ transform: "translateZ(30px)" }}>
               
-              {/* Image 1: Tall (col-span-1, row-span-2) */}
               <div className="relative col-span-1 row-span-2 rounded-2xl overflow-hidden bg-neutral-100 dark:bg-surface/30 shadow-lg">
                 <Image
                   src={previewImages[0]}
@@ -142,7 +181,6 @@ export default function BeyondTheCode() {
                 />
               </div>
 
-              {/* Image 2: Wide (col-span-2, row-span-1) */}
               <div className="relative col-span-2 row-span-1 rounded-2xl overflow-hidden bg-neutral-100 dark:bg-surface/30 shadow-lg">
                 <Image
                   src={previewImages[1]}
@@ -153,7 +191,6 @@ export default function BeyondTheCode() {
                 />
               </div>
 
-              {/* Image 3: Small Square (col-span-1, row-span-1) */}
               <div className="relative col-span-1 row-span-1 rounded-2xl overflow-hidden bg-neutral-100 dark:bg-surface/30 shadow-lg">
                 <Image
                   src={previewImages[2]}
@@ -164,7 +201,6 @@ export default function BeyondTheCode() {
                 />
               </div>
 
-              {/* Image 4: Small Square (col-span-1, row-span-1) */}
               <div className="relative col-span-1 row-span-1 rounded-2xl overflow-hidden bg-neutral-100 dark:bg-surface/30 shadow-lg">
                 <Image
                   src={previewImages[3]}
@@ -177,7 +213,6 @@ export default function BeyondTheCode() {
 
             </div>
             
-            {/* Hover Action Pill (lifted closer to user in 3D space) */}
             <div 
               className="absolute bottom-6 right-6 opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10 pointer-events-none"
               style={{ transform: "translateZ(60px)" }}
@@ -193,34 +228,101 @@ export default function BeyondTheCode() {
       {isGalleryOpen &&
         createPortal(
           <div
-            className="fixed inset-0 z-[60] flex items-center justify-center bg-white/90 dark:bg-ink/85 p-4 sm:p-8 backdrop-blur-md"
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-neutral-900/95 dark:bg-ink/95 backdrop-blur-xl"
             onClick={() => setIsGalleryOpen(false)}
           >
-            <div
-              ref={dialogRef}
-              className="relative w-full max-w-5xl h-[80vh] min-h-[400px] overflow-hidden rounded-2xl border border-slate/10 dark:border-slate/20 bg-neutral-50/95 dark:bg-surface/95 p-4 sm:p-6 shadow-2xl flex flex-col"
-              role="dialog"
-              aria-modal="true"
-              aria-labelledby="gallery-title"
-              tabIndex={-1}
-              onClick={(event) => event.stopPropagation()}
+            <div className="absolute top-0 left-0 w-full p-6 flex justify-between items-center z-50 pointer-events-none">
+              <div className="font-mono text-xs text-white/70 tracking-widest pointer-events-auto select-none">
+                {String(galleryIndex + 1).padStart(2, "0")} / {String(galleryItems.length).padStart(2, "0")}
+              </div>
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setIsGalleryOpen(false);
+                }}
+                className="pointer-events-auto rounded-full bg-white/10 hover:bg-white/20 p-3 text-white backdrop-blur-md transition-all active:scale-90"
+                aria-label="Close gallery"
+              >
+                <VscClose className="w-6 h-6" />
+              </button>
+            </div>
+
+            <button
+              className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 z-50 rounded-full bg-white/10 hover:bg-white/20 p-3 text-white backdrop-blur-md transition-all active:scale-90 hidden sm:block"
+              onClick={(e) => {
+                e.stopPropagation();
+                paginate(-1);
+              }}
             >
-              <div className="flex items-center justify-between pb-3 border-b border-slate/10 mb-3">
-                <h2 id="gallery-title" className="font-mono text-xs text-neutral-900 dark:text-cream font-medium tracking-wider uppercase">
-                  Gallery {"\u2014"} Beyond the Code
-                </h2>
-                <button
-                  type="button"
-                  onClick={() => setIsGalleryOpen(false)}
-                  className="rounded-full border border-slate/20 bg-white dark:bg-surface px-3 py-1 font-mono text-xs text-slate transition hover:text-neutral-900 dark:hover:text-cream hover:border-slate/40 cursor-pointer"
-                  aria-label="Close gallery"
+              <VscChevronLeft className="w-8 h-8" />
+            </button>
+            
+            <button
+              className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 z-50 rounded-full bg-white/10 hover:bg-white/20 p-3 text-white backdrop-blur-md transition-all active:scale-90 hidden sm:block"
+              onClick={(e) => {
+                e.stopPropagation();
+                paginate(1);
+              }}
+            >
+              <VscChevronRight className="w-8 h-8" />
+            </button>
+
+            <div 
+              ref={dialogRef}
+              className="relative w-full h-full flex items-center justify-center overflow-hidden outline-none"
+              tabIndex={-1}
+            >
+              <AnimatePresence initial={false} custom={direction}>
+                <motion.div
+                  key={galleryIndex}
+                  custom={direction}
+                  variants={sliderVariants}
+                  initial="enter"
+                  animate="center"
+                  exit="exit"
+                  transition={{
+                    x: { type: "spring", stiffness: 300, damping: 30 },
+                    opacity: { duration: 0.2 },
+                    scale: { duration: 0.4 },
+                  }}
+                  drag="x"
+                  dragConstraints={{ left: 0, right: 0 }}
+                  dragElastic={1}
+                  onDragEnd={(e, { offset, velocity }) => {
+                    const swipe = swipePower(offset.x, velocity.x);
+                    if (swipe < -swipeConfidenceThreshold) {
+                      paginate(1);
+                    } else if (swipe > swipeConfidenceThreshold) {
+                      paginate(-1);
+                    }
+                  }}
+                  onClick={(e) => e.stopPropagation()}
+                  className="absolute w-full max-w-5xl h-[70vh] md:h-[85vh] p-4 cursor-grab active:cursor-grabbing flex items-center justify-center"
                 >
-                  Esc / Close {"\u2715"}
-                </button>
-              </div>
-              <div className="flex-1 w-full relative overflow-y-auto">
-                <Masonry items={galleryItems} />
-              </div>
+                  <div className="relative w-full h-full">
+                    <Image
+                      src={galleryItems[galleryIndex].img}
+                      alt={galleryItems[galleryIndex].alt}
+                      fill
+                      sizes="100vw"
+                      className="object-contain drop-shadow-2xl select-none"
+                      draggable={false}
+                    />
+                  </div>
+                </motion.div>
+              </AnimatePresence>
+            </div>
+            
+            <div className="absolute bottom-8 left-0 w-full text-center z-50 pointer-events-none">
+              <motion.p
+                key={galleryIndex}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="text-white/80 font-mono text-sm tracking-wide bg-black/30 inline-block px-4 py-1.5 rounded-full backdrop-blur-md"
+              >
+                {galleryItems[galleryIndex].alt}
+              </motion.p>
             </div>
           </div>,
           document.body,
