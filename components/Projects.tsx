@@ -6,15 +6,24 @@ import SplitText from "./react-bits/SplitText";
 import DeckProjectCard from "./projects/DeckProjectCard";
 import { ProjectData } from "./projects/StickyProjectCard";
 import { VscChevronLeft, VscChevronRight } from "react-icons/vsc";
+import { useUISounds } from "@/hooks/useUISounds";
 
 export default function Projects({ projects }: { projects: ProjectData[] }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const total = projects.length;
+  const { playHover, playClick } = useUISounds();
 
   if (total === 0) return null;
 
-  const handleNext = () => setActiveIndex((prev) => (prev + 1) % total);
-  const handlePrev = () => setActiveIndex((prev) => (prev - 1 + total) % total);
+  const handleNext = () => {
+    playClick();
+    setActiveIndex((prev) => (prev + 1) % total);
+  };
+  
+  const handlePrev = () => {
+    playClick();
+    setActiveIndex((prev) => (prev - 1 + total) % total);
+  };
 
   return (
     <section id="projects" className="scroll-mt-24 mb-32" aria-label="Projects">
@@ -35,6 +44,7 @@ export default function Projects({ projects }: { projects: ProjectData[] }) {
           <div className="flex items-center gap-3">
             <button 
               onClick={handlePrev}
+              onMouseEnter={playHover}
               className="p-3 rounded-full border border-slate/20 text-slate hover:text-cream hover:bg-surface transition-all active:scale-95"
               data-magnetic
               aria-label="Previous project"
@@ -46,6 +56,7 @@ export default function Projects({ projects }: { projects: ProjectData[] }) {
             </div>
             <button 
               onClick={handleNext}
+              onMouseEnter={playHover}
               className="p-3 rounded-full border border-slate/20 text-slate hover:text-cream hover:bg-surface transition-all active:scale-95"
               data-magnetic
               aria-label="Next project"
@@ -89,6 +100,9 @@ export default function Projects({ projects }: { projects: ProjectData[] }) {
                 onClick={() => {
                   if (position === "left") handlePrev();
                   if (position === "right") handleNext();
+                }}
+                onMouseEnter={() => {
+                  if (position !== "center") playHover();
                 }}
                 style={{ 
                   cursor: position === "center" ? "default" : "pointer",

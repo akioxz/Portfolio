@@ -75,3 +75,18 @@ body::before {
 .light body::before {
   opacity: 0.035;
 }
+@layer utilities {
+  .halftone-bg {
+    background-image: radial-gradient(circle at center, rgba(10, 10, 10, 0.4) 1px, transparent 1.6px);
+    background-size: 11px 11px;
+  }
+  
+  .dark .halftone-bg {
+    background-image: radial-gradient(circle at center, rgba(250, 250, 250, 0.25) 1px, transparent 1.6px);
+  }
+
+  .mask-fade-out {
+    mask-image: radial-gradient(ellipse 100% 100% at 50% 0%, black 10%, transparent 80%);
+    -webkit-mask-image: radial-gradient(ellipse 100% 100% at 50% 0%, black 10%, transparent 80%);
+  }
+}

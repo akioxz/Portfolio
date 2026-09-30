@@ -104,7 +104,12 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="font-sans bg-white dark:bg-ink text-neutral-900 dark:text-cream antialiased">
+      <body className="font-sans bg-white dark:bg-ink text-neutral-900 dark:text-cream antialiased relative">
+        {/* Halftone Blueprint Background */}
+        <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
+          <div className="absolute inset-0 halftone-bg mask-fade-out opacity-60"></div>
+        </div>
+
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"
