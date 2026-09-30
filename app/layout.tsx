@@ -118,8 +118,8 @@ export default function RootLayout({
         >
           <LayoutWrapper>
             {children}
-            <CommandMenu />
           </LayoutWrapper>
+          <CommandMenu />
         </ThemeProvider>
         <Analytics />
         <SpeedInsights />
