@@ -64,7 +64,7 @@ export default function CommandMenu() {
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1, duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-              className="font-mono text-[clamp(1.9rem,5.5vw,3.4rem)] leading-[1.05] text-neutral-900 dark:text-cream tracking-tight font-normal lowercase"
+              className="font-pixel text-[clamp(1.9rem,5.5vw,3.4rem)] leading-[1.05] text-neutral-900 dark:text-cream tracking-tight font-normal lowercase"
             >
               what do you want to ask?
             </motion.h2>
@@ -81,7 +81,7 @@ export default function CommandMenu() {
                 type="text"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                className="w-full bg-transparent font-mono text-[clamp(1.9rem,5.5vw,3.4rem)] leading-[1.05] text-neutral-900 dark:text-cream outline-none placeholder:text-transparent caret-neutral-900 dark:caret-cream font-normal lowercase"
+                className="w-full bg-transparent font-pixel text-[clamp(1.9rem,5.5vw,3.4rem)] leading-[1.05] text-neutral-900 dark:text-cream outline-none placeholder:text-transparent caret-neutral-900 dark:caret-cream font-normal lowercase"
                 spellCheck={false}
                 autoComplete="off"
               />
