@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { Sidebar, MobileMenu } from "@/components/Navigation";
 import ThemeProvider from "@/components/ThemeProvider";
 import ReactLenisWrapper from "@/components/ReactLenisWrapper";
 import MagneticCursor from "@/components/MagneticCursor";
@@ -117,7 +118,11 @@ export default function RootLayout({
           enableSystem={false}
         >
           <ReactLenisWrapper>
-            {children}
+            <Sidebar />
+            <MobileMenu />
+            <div className="lg:pl-[260px] w-full min-h-screen flex flex-col relative z-10">
+              {children}
+            </div>
           </ReactLenisWrapper>
         </ThemeProvider>
         <Analytics />

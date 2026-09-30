@@ -1,6 +1,6 @@
 import dynamic from "next/dynamic";
 import { createClient } from "@supabase/supabase-js";
-import Header from "@/components/Header";
+
 import Hero from "@/components/Hero";
 import StatsStrip from "@/components/StatsStrip";
 import LogoSplash from "@/components/LogoSplash";
@@ -35,8 +35,6 @@ export default async function Home() {
   return (
     <>
       <LogoSplash />
-
-      <Header />
 
       <main className="mx-auto w-full max-w-7xl flex flex-col gap-10 sm:gap-12 px-4 sm:px-6 pb-10 sm:pb-24 pt-16 sm:pt-20">
         <Hero experience={experienceData || []} />
