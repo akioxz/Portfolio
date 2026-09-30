@@ -57,13 +57,13 @@ export function Sidebar() {
         </nav>
       </div>
 
-      <div className="flex flex-col gap-8">
+      <div className="flex flex-col gap-6">
         
         {/* Theme Toggle Pill */}
         <ThemeToggle />
 
         {/* Contact Info (Bryl Lim Style) */}
-        <div className="flex flex-col gap-3 font-mono text-xs text-slate/60">
+        <div className="flex flex-col gap-3 font-mono text-[11px] text-slate/50">
           <p className="leading-relaxed pr-2">
             For work, collabs & everything else, reach me at
           </p>

@@ -58,29 +58,29 @@ export default function ThemeToggle() {
   };
 
   return (
-    <div className="flex items-center gap-1 p-1 rounded-full border border-slate/20 dark:border-white/10 bg-transparent w-fit">
+    <div className="flex items-center gap-0.5 p-[2px] rounded-full border border-slate/20 dark:border-white/10 bg-transparent w-fit">
       <button
         onClick={(e) => handleToggle("system", e)}
         aria-busy={isSwitching}
         aria-label="System theme"
-        className={`flex items-center justify-center w-8 h-8 rounded-full transition-all duration-300 ${
+        className={`flex items-center justify-center w-[26px] h-[26px] rounded-full transition-all duration-300 ${
           theme === "system"
             ? "bg-slate/10 dark:bg-white/10 text-neutral-900 dark:text-cream"
-            : "text-slate/50 hover:text-neutral-900 dark:hover:text-cream"
+            : "text-slate/40 hover:text-neutral-900 dark:hover:text-cream"
         }`}
         title="System theme"
       >
-        <FiMonitor className="w-3.5 h-3.5" />
+        <FiMonitor className="w-3 h-3" />
       </button>
       
       <button
         onClick={(e) => handleToggle("light", e)}
         aria-busy={isSwitching}
         aria-label="Light theme"
-        className={`flex items-center justify-center w-8 h-8 rounded-full transition-all duration-300 ${
+        className={`flex items-center justify-center w-[26px] h-[26px] rounded-full transition-all duration-300 ${
           theme === "light"
             ? "bg-slate/10 dark:bg-white/10 text-neutral-900 dark:text-cream"
-            : "text-slate/50 hover:text-neutral-900 dark:hover:text-cream"
+            : "text-slate/40 hover:text-neutral-900 dark:hover:text-cream"
         }`}
         title="Light theme"
       >
@@ -91,14 +91,14 @@ export default function ThemeToggle() {
         onClick={(e) => handleToggle("dark", e)}
         aria-busy={isSwitching}
         aria-label="Dark theme"
-        className={`flex items-center justify-center w-8 h-8 rounded-full transition-all duration-300 ${
+        className={`flex items-center justify-center w-[26px] h-[26px] rounded-full transition-all duration-300 ${
           theme === "dark"
             ? "bg-slate/10 dark:bg-white/10 text-neutral-900 dark:text-cream"
-            : "text-slate/50 hover:text-neutral-900 dark:hover:text-cream"
+            : "text-slate/40 hover:text-neutral-900 dark:hover:text-cream"
         }`}
         title="Dark theme"
       >
-        <FiMoon className="w-3.5 h-3.5" />
+        <FiMoon className="w-3 h-3" />
       </button>
     </div>
   );
