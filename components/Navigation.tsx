@@ -59,17 +59,8 @@ export function Sidebar() {
       </div>
 
       <div className="flex flex-col gap-6">
-        <div className="text-xs font-mono text-slate/50">
-          <div className="mb-2 flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-teal animate-pulse" />
-            System Online
-          </div>
-        </div>
         <div className="flex items-center gap-4">
           <ThemeToggle />
-          <Link href="/admin/login" className="font-mono text-[10px] uppercase tracking-widest text-slate hover:text-teal transition-colors">
-            Admin
-          </Link>
         </div>
       </div>
     </aside>
@@ -159,9 +150,6 @@ export function MobileMenu() {
               className="flex items-center justify-center gap-6 pb-12"
             >
               <ThemeToggle />
-              <Link href="/admin/login" onClick={() => setIsOpen(false)} className="font-mono text-xs uppercase tracking-widest text-slate hover:text-teal transition-colors">
-                Admin
-              </Link>
             </motion.div>
           </motion.div>
         )}
