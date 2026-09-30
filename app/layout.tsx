@@ -84,7 +84,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="font-sans bg-ink text-cream antialiased">
+      <body className="font-sans bg-white dark:bg-ink text-neutral-900 dark:text-cream antialiased">
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"

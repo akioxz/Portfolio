@@ -213,7 +213,7 @@ export default function InboxClient({ initialMessages }: InboxClientProps) {
               value={searchQuery}
               onChange={(event) => setSearchQuery(event.target.value)}
               placeholder="Search..."
-              className="w-full bg-transparent border-b border-white/10 py-2.5 pl-6 pr-4 font-mono text-sm text-cream placeholder:text-slate/40 outline-none transition-all duration-300 focus:border-white/30"
+              className="w-full bg-transparent border-b border-cream/10 py-2.5 pl-6 pr-4 font-mono text-sm text-cream placeholder:text-slate/40 outline-none transition-all duration-300 focus:border-cream/30"
             />
           </label>
           <div className="flex gap-1 select-none">
@@ -263,7 +263,7 @@ export default function InboxClient({ initialMessages }: InboxClientProps) {
                 <div
                   key={msg.id}
                   className={`transition-colors duration-300 ${
-                    index > 0 ? "border-t border-white/5" : ""
+                    index > 0 ? "border-t border-cream/5" : ""
                   }`}
                 >
                   {/* Summary Row */}
@@ -272,43 +272,43 @@ export default function InboxClient({ initialMessages }: InboxClientProps) {
                     onClick={() => handleToggleExpand(msg.id, msg.is_read)}
                     aria-expanded={isExpanded}
                     aria-controls={`message-${msg.id}`}
-                    className="w-full text-left py-4 px-2 flex items-center gap-4 cursor-pointer select-none focus-visible:outline-none hover:bg-white/[0.03] transition-colors duration-300 group"
+                    className="w-full text-left py-4 px-2 flex items-center gap-4 cursor-pointer select-none focus-visible:outline-none hover:bg-cream/[0.03] transition-colors duration-300 group"
                   >
                     {/* Unread dot */}
                     <div className="w-5 shrink-0 flex justify-center">
                       {!msg.is_read ? (
                         <div className="w-1.5 h-1.5 rounded-full bg-cream" />
                       ) : (
-                        <VscMailRead className="w-3.5 h-3.5 text-white/15" />
+                        <VscMailRead className="w-3.5 h-3.5 text-cream/15" />
                       )}
                     </div>
 
                     {/* Name */}
                     <span
                       className={`font-mono text-sm shrink-0 w-[140px] truncate ${
-                        !msg.is_read ? "font-bold text-cream" : "text-white/50"
+                        !msg.is_read ? "font-bold text-cream" : "text-cream/50"
                       }`}
                     >
                       {msg.name}
                     </span>
 
                     {/* Email */}
-                    <span className="font-mono text-xs text-white/20 shrink-0 w-[180px] truncate hidden md:block">
+                    <span className="font-mono text-xs text-cream/20 shrink-0 w-[180px] truncate hidden md:block">
                       {msg.email}
                     </span>
 
                     {/* Message preview */}
-                    <span className="text-xs text-white/25 truncate flex-1 hidden sm:block">
+                    <span className="text-xs text-cream/25 truncate flex-1 hidden sm:block">
                       {msg.message}
                     </span>
 
                     {/* Date */}
-                    <span className="font-mono text-[11px] text-white/20 whitespace-nowrap shrink-0">
+                    <span className="font-mono text-[11px] text-cream/20 whitespace-nowrap shrink-0">
                       {formattedDate}
                     </span>
 
                     {/* Chevron */}
-                    <div className="shrink-0 text-white/15 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <div className="shrink-0 text-cream/15 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                       {isExpanded ? (
                         <VscChevronUp className="w-3.5 h-3.5" />
                       ) : (
@@ -324,18 +324,18 @@ export default function InboxClient({ initialMessages }: InboxClientProps) {
                       className="pl-11 pr-2 pb-6 pt-2 flex flex-col gap-5"
                     >
                       <div className="flex flex-col gap-1 text-xs font-mono">
-                        <div className="text-white/30">
-                          <span className="text-white/50">From</span>{" "}
+                        <div className="text-cream/30">
+                          <span className="text-cream/50">From</span>{" "}
                           {msg.name} &lt;
                           <a
                             href={`mailto:${msg.email}`}
-                            className="text-white/50 underline underline-offset-2 hover:text-cream transition-colors duration-300"
+                            className="text-cream/50 underline underline-offset-2 hover:text-cream transition-colors duration-300"
                           >
                             {msg.email}
                           </a>
                           &gt;
                         </div>
-                        <div className="text-white/20">
+                        <div className="text-cream/20">
                           {formattedDate}
                         </div>
                       </div>
@@ -349,7 +349,7 @@ export default function InboxClient({ initialMessages }: InboxClientProps) {
                           href={`mailto:${msg.email}?subject=${encodeURIComponent(
                             `Re: Portfolio Contact`
                           )}`}
-                          className="flex items-center gap-2 px-3 py-1.5 rounded-md font-mono text-xs text-white/40 hover:text-cream hover:bg-white/5 transition-all duration-300 active:scale-[0.95]"
+                          className="flex items-center gap-2 px-3 py-1.5 rounded-md font-mono text-xs text-cream/40 hover:text-cream hover:bg-cream/5 transition-all duration-300 active:scale-[0.95]"
                         >
                           <VscMail className="w-3.5 h-3.5" />
                           Reply
@@ -363,7 +363,7 @@ export default function InboxClient({ initialMessages }: InboxClientProps) {
                             })
                           }
                           disabled={archivingId === msg.id}
-                          className="flex items-center gap-2 px-3 py-1.5 rounded-md font-mono text-xs text-white/40 hover:text-red-400 hover:bg-red-500/5 transition-all duration-300 active:scale-[0.95] disabled:opacity-50"
+                          className="flex items-center gap-2 px-3 py-1.5 rounded-md font-mono text-xs text-cream/40 hover:text-red-400 hover:bg-red-500/5 transition-all duration-300 active:scale-[0.95] disabled:opacity-50"
                         >
                           <VscArchive className="h-3.5 w-3.5" />
                           {archivingId === msg.id
@@ -383,7 +383,7 @@ export default function InboxClient({ initialMessages }: InboxClientProps) {
       {/* Archive Confirmation Dialog */}
       {pendingArchive && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-xl"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-ink/80 p-4 backdrop-blur-xl"
           role="presentation"
           onMouseDown={(event) => {
             if (event.target === event.currentTarget) setPendingArchive(null);
@@ -394,12 +394,12 @@ export default function InboxClient({ initialMessages }: InboxClientProps) {
             aria-modal="true"
             aria-labelledby="archive-dialog-title"
             aria-describedby="archive-dialog-description"
-            className="w-full max-w-sm rounded-xl border border-white/10 bg-ink p-6 shadow-2xl"
+            className="w-full max-w-sm rounded-xl border border-cream/10 bg-ink p-6 shadow-2xl"
           >
             <h2 id="archive-dialog-title" className="font-mono text-sm font-bold text-cream mb-2">
               {pendingArchive.isArchived ? "Restore message?" : "Archive message?"}
             </h2>
-            <p id="archive-dialog-description" className="text-xs leading-relaxed text-white/40 mb-6">
+            <p id="archive-dialog-description" className="text-xs leading-relaxed text-cream/40 mb-6">
               {pendingArchive.isArchived
                 ? "This will return the message to your active inbox."
                 : "This will hide the message from view. You can restore it later."}
@@ -409,7 +409,7 @@ export default function InboxClient({ initialMessages }: InboxClientProps) {
                 ref={cancelArchiveRef}
                 type="button"
                 onClick={() => setPendingArchive(null)}
-                className="rounded-md px-4 py-2 font-mono text-xs text-white/40 hover:text-cream transition-colors duration-300 active:scale-[0.95]"
+                className="rounded-md px-4 py-2 font-mono text-xs text-cream/40 hover:text-cream transition-colors duration-300 active:scale-[0.95]"
               >
                 Cancel
               </button>

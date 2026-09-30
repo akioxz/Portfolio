@@ -55,73 +55,60 @@ export default function ProjectsClient({ initialProjects }: { initialProjects: a
 
   return (
     <>
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-8 mb-8 border-b border-white/5">
-        <div>
-          <h1 className="font-mono text-2xl font-bold tracking-tighter uppercase text-cream">
-            Manage Projects
-          </h1>
-          <p className="font-mono text-[10px] text-slate mt-1.5 uppercase tracking-widest font-medium">
-            Add or edit portfolio projects
-          </p>
-        </div>
+      <div className="flex items-center justify-between pb-6 mb-2">
+        <h1 className="font-mono text-xl font-bold tracking-tighter text-cream">
+          Projects
+        </h1>
         <button 
           onClick={handleOpenNew}
-          className="flex items-center gap-2 px-5 py-2.5 bg-white/10 text-cream hover:bg-white/15 border border-white/5 rounded-lg font-mono text-sm transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] active:scale-[0.98]"
+          className="flex items-center gap-1.5 font-mono text-xs text-cream/40 hover:text-cream transition-colors duration-300"
         >
-          <VscAdd size={16} />
-          New Project
+          <VscAdd size={14} />
+          Add
         </button>
       </div>
 
-      <div className="bg-black/40 backdrop-blur-md rounded-2xl border border-white/5 overflow-hidden shadow-2xl">
-        <table className="w-full text-left font-mono text-sm">
-          <thead className="bg-white/5 border-b border-white/5 text-slate">
-            <tr>
-              <th className="p-5 font-medium">Name</th>
-              <th className="p-5 font-medium hidden md:table-cell">Description</th>
-              <th className="p-5 font-medium text-right">Actions</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-white/5">
-            {projects.length === 0 ? (
-              <tr>
-                <td colSpan={3} className="p-12 text-center text-slate">
-                  No projects found.
-                </td>
-              </tr>
-            ) : (
-              projects.map((project) => (
-                <tr key={project.id} className="hover:bg-white/5 transition-colors group">
-                  <td className="p-5 text-cream font-bold">{project.name}</td>
-                  <td className="p-5 text-slate hidden md:table-cell truncate max-w-xs">
-                    {project.description}
-                  </td>
-                  <td className="p-5 text-right">
-                    <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                      <button onClick={() => handleOpenEdit(project.id)} className="p-2 hover:bg-white/10 hover:text-cream rounded-md transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] active:scale-[0.90] text-slate">
-                        <VscEdit size={16} />
-                      </button>
-                      <button onClick={() => handleDelete(project.id)} className="p-2 hover:bg-red-500/20 hover:text-red-400 rounded-md transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] active:scale-[0.90] text-slate">
-                        <VscTrash size={16} />
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))
-            )}
-          </tbody>
-        </table>
+      <div>
+        {projects.length === 0 ? (
+          <p className="py-16 text-center font-mono text-sm text-cream/20">
+            No projects yet.
+          </p>
+        ) : (
+          projects.map((project) => (
+            <div
+              key={project.id}
+              className="flex items-center justify-between py-4 border-b border-cream/5 group"
+            >
+              <div className="min-w-0">
+                <span className="font-mono text-sm font-bold text-cream">
+                  {project.name}
+                </span>
+                <p className="font-mono text-xs text-cream/20 truncate max-w-xs mt-0.5">
+                  {project.description}
+                </p>
+              </div>
+              <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300 shrink-0 ml-4">
+                <button onClick={() => handleOpenEdit(project.id)} className="p-1.5 text-cream/20 hover:text-cream transition-colors duration-300">
+                  <VscEdit size={14} />
+                </button>
+                <button onClick={() => handleDelete(project.id)} className="p-1.5 text-cream/20 hover:text-red-400 transition-colors duration-300">
+                  <VscTrash size={14} />
+                </button>
+              </div>
+            </div>
+          ))
+        )}
       </div>
 
       {isModalOpen && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-2xl">
-          <div className="bg-ink border border-white/10 rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-[0_0_50px_rgba(0,0,0,0.5)]">
-            <div className="flex items-center justify-between p-6 border-b border-white/5 sticky top-0 bg-ink/90 backdrop-blur-md z-10">
-              <h2 className="font-mono text-lg font-bold text-cream tracking-tight">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-ink/80 backdrop-blur-2xl">
+          <div className="bg-ink border border-cream/10 rounded-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-[0_0_50px_rgba(0,0,0,0.5)]">
+            <div className="flex items-center justify-between p-6 border-b border-cream/5 sticky top-0 bg-surface/90 backdrop-blur-md z-10">
+              <h2 className="font-mono text-sm font-bold text-cream tracking-tight">
                 {editingId ? "Edit Project" : "New Project"}
               </h2>
-              <button onClick={() => setIsModalOpen(false)} className="text-slate hover:text-cream transition-colors duration-300">
-                <VscClose size={24} />
+              <button onClick={() => setIsModalOpen(false)} className="text-cream/20 hover:text-cream transition-colors duration-300">
+                <VscClose size={18} />
               </button>
             </div>
             
@@ -130,47 +117,47 @@ export default function ProjectsClient({ initialProjects }: { initialProjects: a
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <label className="text-slate text-xs font-medium uppercase tracking-widest">Name *</label>
-                  <input required name="name" defaultValue={editingProject?.name} className="w-full bg-white/5 border border-white/5 rounded-lg p-3.5 text-cream outline-none transition-all duration-300 focus:bg-white/10 focus:border-white/20 focus:ring-1 focus:ring-white/20" />
+                  <label className="text-cream/30 text-xs font-medium uppercase tracking-widest">Name *</label>
+                  <input required name="name" defaultValue={editingProject?.name} className="w-full bg-transparent border-b border-cream/10 py-2.5 text-cream outline-none transition-all duration-300 focus:border-cream/30 placeholder:text-cream/10" />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-slate text-xs font-medium uppercase tracking-widest">Eyebrow (Subtitle) *</label>
-                  <input required name="eyebrow" defaultValue={editingProject?.eyebrow} className="w-full bg-white/5 border border-white/5 rounded-lg p-3.5 text-cream outline-none transition-all duration-300 focus:bg-white/10 focus:border-white/20 focus:ring-1 focus:ring-white/20" />
+                  <label className="text-cream/30 text-xs font-medium uppercase tracking-widest">Eyebrow (Subtitle) *</label>
+                  <input required name="eyebrow" defaultValue={editingProject?.eyebrow} className="w-full bg-transparent border-b border-cream/10 py-2.5 text-cream outline-none transition-all duration-300 focus:border-cream/30 placeholder:text-cream/10" />
                 </div>
               </div>
 
               <div className="space-y-2">
-                <label className="text-slate text-xs font-medium uppercase tracking-widest">Description *</label>
-                <textarea required name="description" rows={3} defaultValue={editingProject?.description} className="w-full bg-white/5 border border-white/5 rounded-lg p-3.5 text-cream outline-none transition-all duration-300 focus:bg-white/10 focus:border-white/20 focus:ring-1 focus:ring-white/20" />
+                <label className="text-cream/30 text-xs font-medium uppercase tracking-widest">Description *</label>
+                <textarea required name="description" rows={3} defaultValue={editingProject?.description} className="w-full bg-transparent border-b border-cream/10 py-2.5 text-cream outline-none transition-all duration-300 focus:border-cream/30 placeholder:text-cream/10 resize-none" />
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <label className="text-slate text-xs font-medium uppercase tracking-widest">Tags (comma separated)</label>
-                  <input name="tags" defaultValue={editingProject?.tags?.join(", ")} className="w-full bg-white/5 border border-white/5 rounded-lg p-3.5 text-cream outline-none transition-all duration-300 focus:bg-white/10 focus:border-white/20 focus:ring-1 focus:ring-white/20" />
+                  <label className="text-cream/30 text-xs font-medium uppercase tracking-widest">Tags (comma separated)</label>
+                  <input name="tags" defaultValue={editingProject?.tags?.join(", ")} className="w-full bg-transparent border-b border-cream/10 py-2.5 text-cream outline-none transition-all duration-300 focus:border-cream/30 placeholder:text-cream/10" />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-slate text-xs font-medium uppercase tracking-widest">Status (e.g. In Progress)</label>
-                  <input name="status" defaultValue={editingProject?.status} className="w-full bg-white/5 border border-white/5 rounded-lg p-3.5 text-cream outline-none transition-all duration-300 focus:bg-white/10 focus:border-white/20 focus:ring-1 focus:ring-white/20" />
+                  <label className="text-cream/30 text-xs font-medium uppercase tracking-widest">Status (e.g. In Progress)</label>
+                  <input name="status" defaultValue={editingProject?.status} className="w-full bg-transparent border-b border-cream/10 py-2.5 text-cream outline-none transition-all duration-300 focus:border-cream/30 placeholder:text-cream/10" />
                 </div>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <label className="text-slate text-xs font-medium uppercase tracking-widest">Image URL</label>
-                  <input name="image" defaultValue={editingProject?.image} className="w-full bg-white/5 border border-white/5 rounded-lg p-3.5 text-cream outline-none transition-all duration-300 focus:bg-white/10 focus:border-white/20 focus:ring-1 focus:ring-white/20" />
+                  <label className="text-cream/30 text-xs font-medium uppercase tracking-widest">Image URL</label>
+                  <input name="image" defaultValue={editingProject?.image} className="w-full bg-transparent border-b border-cream/10 py-2.5 text-cream outline-none transition-all duration-300 focus:border-cream/30 placeholder:text-cream/10" />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-slate text-xs font-medium uppercase tracking-widest">Sort Order</label>
-                  <input type="number" name="sort_order" defaultValue={editingProject?.sort_order || 0} className="w-full bg-white/5 border border-white/5 rounded-lg p-3.5 text-cream outline-none transition-all duration-300 focus:bg-white/10 focus:border-white/20 focus:ring-1 focus:ring-white/20" />
+                  <label className="text-cream/30 text-xs font-medium uppercase tracking-widest">Sort Order</label>
+                  <input type="number" name="sort_order" defaultValue={editingProject?.sort_order || 0} className="w-full bg-transparent border-b border-cream/10 py-2.5 text-cream outline-none transition-all duration-300 focus:border-cream/30 placeholder:text-cream/10" />
                 </div>
               </div>
 
-              <div className="pt-8 flex justify-end gap-4 border-t border-white/5">
-                <button type="button" onClick={() => setIsModalOpen(false)} className="px-6 py-3 rounded-lg text-slate hover:text-cream hover:bg-white/5 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] active:scale-[0.98]">
+              <div className="pt-8 flex justify-end gap-4 border-t border-cream/5">
+                <button type="button" onClick={() => setIsModalOpen(false)} className="px-6 py-2.5 font-mono text-xs text-cream/40 hover:text-cream transition-colors duration-300">
                   Cancel
                 </button>
-                <button type="submit" disabled={isSubmitting} className="px-8 py-3 rounded-lg bg-cream text-ink font-bold hover:bg-white transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] active:scale-[0.98] disabled:opacity-50 shadow-[0_0_15px_rgba(255,255,255,0.2)]">
+                <button type="submit" disabled={isSubmitting} className="px-8 py-2.5 rounded-lg bg-cream text-ink font-bold hover:hover:bg-white transition-all duration-300 active:scale-[0.98] disabled:opacity-50">
                   {isSubmitting ? "Saving..." : "Save Project"}
                 </button>
               </div>
