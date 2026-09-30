@@ -15,7 +15,7 @@ const galleryItems = [
   { id: "photo7", img: "/photo7.jpg", alt: "Anime figure collection" },
   { id: "photo8", img: "/photo8.jpeg", alt: "Personal photo outdoors" },
   { id: "photo9", img: "/photo9.jpeg", alt: "Anime figurines on display" },
-  { id: "photo10", img: "/photo10.jpeg", alt: "Gaming setup with keyboard and monitor" },
+  { id: "photo10", img: "/photo10.jpeg", alt: "National Museum of Natural History, Manila" },
   { id: "photo11", img: "/photo11.jpeg", alt: "Personal hobby photo" },
 ];
 
