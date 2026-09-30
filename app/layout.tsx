@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
 import { Inter, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { Sidebar, MobileMenu } from "@/components/Navigation";
+import LayoutWrapper from "@/components/LayoutWrapper";
 import ThemeProvider from "@/components/ThemeProvider";
-import ReactLenisWrapper from "@/components/ReactLenisWrapper";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
@@ -116,13 +115,9 @@ export default function RootLayout({
           defaultTheme="system"
           enableSystem
         >
-          <ReactLenisWrapper>
-            <Sidebar />
-            <MobileMenu />
-            <div className="lg:pl-56 w-full min-h-screen flex flex-col relative z-10">
-              {children}
-            </div>
-          </ReactLenisWrapper>
+          <LayoutWrapper>
+            {children}
+          </LayoutWrapper>
         </ThemeProvider>
         <Analytics />
         <SpeedInsights />
