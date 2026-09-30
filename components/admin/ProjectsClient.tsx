@@ -77,9 +77,8 @@ export default function ProjectsClient({ initialProjects }: { initialProjects: a
           projects.map((project) => (
             <div
               key={project.id}
-              className="flex py-4 border-b border-cream/5 group"
+              className="grid grid-cols-12 gap-4 items-center w-full min-w-0 py-4 border-b border-cream/5 group"
             >
-              <div className="grid grid-cols-12 gap-4 items-center w-full min-w-0">
                 <div className="col-span-10 md:col-span-4">
                   <span className="font-mono text-sm font-bold text-cream truncate block">{project.name}</span>
                 </div>

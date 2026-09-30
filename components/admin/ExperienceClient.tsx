@@ -75,8 +75,7 @@ export default function ExperienceClient({ initialExperience }: { initialExperie
           </p>
         ) : (
           experience.map((job) => (
-            <div key={job.id} className="flex py-3 border-b border-cream/5 group">
-              <div className="grid grid-cols-12 gap-4 items-center w-full min-w-0">
+            <div key={job.id} className="grid grid-cols-12 gap-4 items-center w-full min-w-0 py-3 border-b border-cream/5 group">
                 <div className="col-span-10 md:col-span-4">
                   <span className="font-mono text-sm font-bold text-cream truncate block">{job.role}</span>
                 </div>
