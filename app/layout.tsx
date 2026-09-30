@@ -105,9 +105,10 @@ export default function RootLayout({
         />
       </head>
       <body className="font-sans bg-white dark:bg-ink text-neutral-900 dark:text-cream antialiased relative">
-        {/* Halftone Blueprint Background */}
+        {/* Subtle Corner Halftone Accents */}
         <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
-          <div className="absolute inset-0 halftone-bg mask-fade-out opacity-60"></div>
+          <div className="halftone mask-tr absolute right-0 top-0 h-[65vh] w-[55vw] opacity-[0.12] dark:opacity-[0.16]" />
+          <div className="halftone mask-bl absolute bottom-0 left-0 h-[55vh] w-[45vw] opacity-[0.10] dark:opacity-[0.14]" />
         </div>
 
         <ThemeProvider
