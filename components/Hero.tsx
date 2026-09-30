@@ -48,7 +48,7 @@ export default function Hero() {
             rel="noopener noreferrer"
             className="group flex items-center gap-1 hover:text-neutral-900 dark:hover:text-cream transition-colors"
           >
-            github <span className="opacity-50 group-hover:opacity-100 transition-opacity">?</span>
+            github <span className="opacity-50 group-hover:opacity-100 transition-opacity">&#8599;</span>
           </a>
           <a
             href="https://linkedin.com/in/akioxz"
@@ -56,13 +56,13 @@ export default function Hero() {
             rel="noopener noreferrer"
             className="group flex items-center gap-1 hover:text-neutral-900 dark:hover:text-cream transition-colors"
           >
-            linkedin <span className="opacity-50 group-hover:opacity-100 transition-opacity">?</span>
+            linkedin <span className="opacity-50 group-hover:opacity-100 transition-opacity">&#8599;</span>
           </a>
           <a
             href="mailto:dev.akioxz@gmail.com"
             className="group flex items-center gap-1 hover:text-neutral-900 dark:hover:text-cream transition-colors"
           >
-            email <span className="opacity-50 group-hover:opacity-100 transition-opacity">?</span>
+            email <span className="opacity-50 group-hover:opacity-100 transition-opacity">&#8599;</span>
           </a>
         </div>
       </div>

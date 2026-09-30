@@ -54,7 +54,7 @@ export default function Certifications({ certifications = [] }: { certifications
                 {cert.link ? (
                   <a href={cert.link} target="_blank" rel="noopener noreferrer" className="hover:text-teal transition-colors group inline-flex items-center gap-1">
                     {cert.name}
-                    <span className="opacity-0 -translate-y-1 translate-x-1 group-hover:translate-y-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-300 text-[10px]">↗</span>
+                    <span className="opacity-0 -translate-y-1 translate-x-1 group-hover:translate-y-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-300 text-[10px]">&#8599;</span>
                   </a>
                 ) : (
                   cert.name

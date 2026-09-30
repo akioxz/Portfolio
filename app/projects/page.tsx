@@ -22,7 +22,7 @@ export default async function AllProjectsPage() {
           href="/#projects" 
           className="text-xs font-mono uppercase tracking-widest text-slate hover:text-neutral-900 dark:hover:text-cream transition-colors mb-8 inline-block"
         >
-          ? BACK
+          &#8592; BACK
         </Link>
         <h1 className="text-3xl font-mono text-neutral-900 dark:text-cream">All Projects</h1>
       </div>
@@ -41,7 +41,7 @@ export default async function AllProjectsPage() {
                 {project.name}
               </h2>
               <span className="font-mono text-xs text-slate opacity-0 -translate-y-1 translate-x-1 group-hover:translate-y-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-300 group-hover:text-teal">
-                ↗
+                &#8599;
               </span>
             </div>
 
