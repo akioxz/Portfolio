@@ -20,9 +20,16 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 export const revalidate = 3600; // Revalidate every hour
 
 export default async function Home() {
-  const [{ data: projectsData }, { data: experienceData }] = await Promise.all([
+  const [
+    { data: projectsData },
+    { data: experienceData },
+    { data: stackData },
+    { data: certificationsData },
+  ] = await Promise.all([
     supabase.from("projects").select("*").order("sort_order", { ascending: true }),
     supabase.from("experience").select("*").order("sort_order", { ascending: true }),
+    supabase.from("stack").select("*").order("sort_order", { ascending: true }),
+    supabase.from("certifications").select("*").order("sort_order", { ascending: true }),
   ]);
 
   return (
@@ -36,8 +43,8 @@ export default async function Home() {
         <StatsStrip />
 
         <Projects projects={projectsData || []} />
-        <Stack />
-        <Certifications />
+        <Stack stack={stackData || []} />
+        <Certifications certifications={certificationsData || []} />
         <BeyondTheCode />
         <Footer />
       </main>

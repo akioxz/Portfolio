@@ -128,3 +128,50 @@ export async function deleteExperience(id: string) {
   revalidatePath("/");
   revalidatePath("/admin/experience");
 }
+export async function createCertification(data: any) {
+  const supabase = await getAdminSupabase();
+  const { error } = await supabase.from('certifications').insert([data]);
+  if (error) throw new Error(error.message);
+  revalidatePath('/');
+  revalidatePath('/admin/certifications');
+}
+
+export async function updateCertification(id: string, data: any) {
+  const supabase = await getAdminSupabase();
+  const { error } = await supabase.from('certifications').update(data).eq('id', id);
+  if (error) throw new Error(error.message);
+  revalidatePath('/');
+  revalidatePath('/admin/certifications');
+}
+
+export async function deleteCertification(id: string) {
+  const supabase = await getAdminSupabase();
+  const { error } = await supabase.from('certifications').delete().eq('id', id);
+  if (error) throw new Error(error.message);
+  revalidatePath('/');
+  revalidatePath('/admin/certifications');
+}
+
+export async function createStack(data: any) {
+  const supabase = await getAdminSupabase();
+  const { error } = await supabase.from('stack').insert([data]);
+  if (error) throw new Error(error.message);
+  revalidatePath('/');
+  revalidatePath('/admin/stack');
+}
+
+export async function updateStack(id: string, data: any) {
+  const supabase = await getAdminSupabase();
+  const { error } = await supabase.from('stack').update(data).eq('id', id);
+  if (error) throw new Error(error.message);
+  revalidatePath('/');
+  revalidatePath('/admin/stack');
+}
+
+export async function deleteStack(id: string) {
+  const supabase = await getAdminSupabase();
+  const { error } = await supabase.from('stack').delete().eq('id', id);
+  if (error) throw new Error(error.message);
+  revalidatePath('/');
+  revalidatePath('/admin/stack');
+}

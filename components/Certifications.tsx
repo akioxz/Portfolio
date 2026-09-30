@@ -2,12 +2,19 @@
 
 import { useState } from "react";
 import SplitText from "./react-bits/SplitText";
-import { certificationsData } from "@/data/certifications";
 
-export default function Certifications() {
+interface CertificationItem {
+  id: string;
+  name: string;
+  issuer: string;
+  date: string;
+  link?: string;
+}
+
+export default function Certifications({ certifications = [] }: { certifications?: CertificationItem[] }) {
   const [showAll, setShowAll] = useState(false);
-  if (certificationsData.length === 0) return null;
-  const visibleCerts = showAll ? certificationsData : certificationsData.slice(0, 3);
+  if (certifications.length === 0) return null;
+  const visibleCerts = showAll ? certifications : certifications.slice(0, 3);
 
   return (
     <section id="certifications" className="mb-20 scroll-mt-24" aria-label="Certifications">
@@ -24,7 +31,7 @@ export default function Certifications() {
           threshold={0.2}
         />
 
-        {certificationsData.length > 3 && (
+        {certifications.length > 3 && (
           <button
             type="button"
             onClick={() => setShowAll(!showAll)}
@@ -36,19 +43,19 @@ export default function Certifications() {
       </div>
 
       <div className="flex flex-col gap-6">
-        {visibleCerts.map((cert, index) => (
+        {visibleCerts.map((cert) => (
           <div
-            key={index}
+            key={cert.id}
             className="grid grid-cols-1 sm:grid-cols-[120px_1fr] gap-2 sm:gap-6 items-start"
           >
             <div className="font-mono text-xs text-slate">{cert.date}</div>
             <div>
               <h3 className="font-mono text-sm text-cream font-medium leading-snug">
-                {cert.title}
+                {cert.name}
               </h3>
               <p className="text-slate text-xs mt-1">
                 {cert.issuer}
-                {cert.credentialId && ` ${"\u00B7"} Credential ID ${cert.credentialId}`}
+                {cert.link && ` ${"\u00B7"} ${cert.link}`}
               </p>
 
               <div className="mt-3 w-36 h-20 rounded border border-slate/15 bg-surface/30 p-2 flex flex-col justify-between font-mono text-[7px] text-slate/80 select-none shadow-md">
@@ -59,7 +66,7 @@ export default function Certifications() {
                   <span className="text-[5px] text-teal">VERIFIED</span>
                 </div>
                 <div className="text-[6px] text-cream truncate my-1.5 font-sans font-medium">
-                  {cert.title}
+                  {cert.name}
                 </div>
                 <div className="flex justify-between items-center text-[5px] text-slate/50">
                   <span>{cert.issuer}</span>

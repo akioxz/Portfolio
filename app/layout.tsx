@@ -3,6 +3,8 @@ import { Inter, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import ThemeProvider from "@/components/ThemeProvider";
 import ReactLenisWrapper from "@/components/ReactLenisWrapper";
+import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -83,7 +85,6 @@ export default function RootLayout({
         />
       </head>
       <body className="font-sans bg-ink text-cream antialiased">
-
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"
@@ -93,6 +94,8 @@ export default function RootLayout({
             {children}
           </ReactLenisWrapper>
         </ThemeProvider>
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );

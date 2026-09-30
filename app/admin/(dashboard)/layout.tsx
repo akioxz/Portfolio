@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { VscMail, VscCode, VscBriefcase, VscSignOut, VscHome } from "react-icons/vsc";
+import { VscMail, VscCode, VscBriefcase, VscSignOut, VscHome, VscWorkspaceTrusted, VscLayers } from "react-icons/vsc";
 import { useState } from "react";
 
 export default function AdminDashboardLayout({
@@ -29,6 +29,8 @@ export default function AdminDashboardLayout({
     { name: "Inbox", href: "/admin/inbox", icon: VscMail },
     { name: "Projects", href: "/admin/projects", icon: VscCode },
     { name: "Experience", href: "/admin/experience", icon: VscBriefcase },
+    { name: "Certifications", href: "/admin/certifications", icon: VscWorkspaceTrusted },
+    { name: "Stack", href: "/admin/stack", icon: VscLayers },
   ];
 
   return (
