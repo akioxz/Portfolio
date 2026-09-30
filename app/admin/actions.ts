@@ -175,3 +175,10 @@ export async function deleteStack(id: string) {
   revalidatePath('/');
   revalidatePath('/admin/stack');
 }
+
+export async function refreshLiveSite() {
+  const isAuthenticated = await checkAdminSession();
+  if (!isAuthenticated) throw new Error('Unauthorized');
+  revalidatePath('/');
+  return { success: true };
+}
