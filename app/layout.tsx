@@ -78,8 +78,27 @@ export default function RootLayout({
               "@type": "Person",
               "name": "Axel Villanueva",
               "url": "https://axelvillanueva.vercel.app",
-              "jobTitle": "Full-Stack Developer",
-              "sameAs": ["https://github.com/akioxz"],
+              "jobTitle": "Full-Stack Web & Mobile Developer",
+              "description": "4th-year BSIT student & full-stack web & mobile developer specializing in React, Next.js, React Native, and Supabase.",
+              "email": "dev.akioxz@gmail.com",
+              "address": {
+                "@type": "PostalAddress",
+                "addressCountry": "PH"
+              },
+              "knowsAbout": [
+                "React",
+                "Next.js",
+                "React Native",
+                "TypeScript",
+                "Supabase",
+                "PostgreSQL",
+                "Tailwind CSS"
+              ],
+              "alumniOf": {
+                "@type": "CollegeOrUniversity",
+                "name": "Information Technology (BSIT)"
+              },
+              "sameAs": ["https://github.com/akioxz"]
             }),
           }}
         />
