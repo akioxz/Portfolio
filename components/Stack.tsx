@@ -92,7 +92,7 @@ export default function Stack({ stack = [] }: { stack?: StackItem[] }) {
                 Frontend
               </span>
               <div className="flex-1 overflow-hidden mask-edges py-2 sm:py-3 border-y border-white/5 bg-white/[0.01]">
-                <LogoLoop items={getLogoItems(frontendItems, "group-hover:text-teal")} speed={30} />
+                <LogoLoop logos={getLogoItems(frontendItems, "group-hover:text-teal")} speed={30} />
               </div>
             </div>
           )}
@@ -103,7 +103,7 @@ export default function Stack({ stack = [] }: { stack?: StackItem[] }) {
                 Backend
               </span>
               <div className="flex-1 overflow-hidden mask-edges py-2 sm:py-3 border-y border-white/5 bg-white/[0.01]">
-                <LogoLoop items={getLogoItems(backendItems, "group-hover:text-orange-400")} speed={25} direction="right" />
+                <LogoLoop logos={getLogoItems(backendItems, "group-hover:text-orange-400")} speed={25} direction="right" />
               </div>
             </div>
           )}
@@ -114,7 +114,7 @@ export default function Stack({ stack = [] }: { stack?: StackItem[] }) {
                 Tools
               </span>
               <div className="flex-1 overflow-hidden mask-edges py-2 sm:py-3 border-y border-white/5 bg-white/[0.01]">
-                <LogoLoop items={getLogoItems(toolsItems, "group-hover:text-purple-400")} speed={35} />
+                <LogoLoop logos={getLogoItems(toolsItems, "group-hover:text-purple-400")} speed={35} />
               </div>
             </div>
           )}
