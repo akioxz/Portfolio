@@ -51,11 +51,17 @@ export default function Certifications({ certifications = [] }: { certifications
             <div className="font-mono text-xs text-slate">{cert.date}</div>
             <div>
               <h3 className="font-mono text-sm text-cream font-medium leading-snug">
-                {cert.name}
+                {cert.link ? (
+                  <a href={cert.link} target="_blank" rel="noopener noreferrer" className="hover:text-teal transition-colors group inline-flex items-center gap-1">
+                    {cert.name}
+                    <span className="opacity-0 -translate-y-1 translate-x-1 group-hover:translate-y-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-300 text-[10px]">↗</span>
+                  </a>
+                ) : (
+                  cert.name
+                )}
               </h3>
               <p className="text-slate text-xs mt-1">
                 {cert.issuer}
-                {cert.link && ` ${"\u00B7"} ${cert.link}`}
               </p>
 
               <div className="mt-3 w-36 h-20 rounded border border-slate/15 bg-surface/30 p-2 flex flex-col justify-between font-mono text-[7px] text-slate/80 select-none shadow-md">
