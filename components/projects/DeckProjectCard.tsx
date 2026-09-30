@@ -9,12 +9,12 @@ export default function DeckProjectCard({
   project: ProjectData;
 }) {
   return (
-    <div className="w-full max-w-[20rem] mx-auto h-[320px] bg-white dark:bg-ink rounded-3xl border border-slate/10 dark:border-slate/20 p-6 shadow-2xl flex flex-col transition-colors">
+    <div className="w-full max-w-[20rem] mx-auto h-[320px] bg-white dark:bg-[#0a0a0a] rounded-[24px] border border-slate/10 dark:border-white/10 p-6 shadow-2xl flex flex-col transition-colors">
       
       <div className="flex items-start justify-between mb-5">
         <div className="flex items-center gap-4">
           {/* Minimalist Logo */}
-          <div className="w-12 h-12 rounded-2xl bg-neutral-100 dark:bg-surface border border-slate/10 flex items-center justify-center shadow-sm shrink-0">
+          <div className="w-12 h-12 rounded-2xl bg-neutral-100 dark:bg-white/5 border border-slate/10 dark:border-white/5 flex items-center justify-center shadow-sm shrink-0">
             <span className="font-mono text-xl font-bold text-neutral-800 dark:text-cream">
               {project.name.charAt(0)}
             </span>
