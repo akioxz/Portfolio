@@ -205,8 +205,8 @@ export default function BeyondTheCode() {
             </div>
             
             {/* Hover Action Pill */}
-            <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10 pointer-events-none">
-              <span className="px-6 py-3 rounded-full bg-neutral-900/80 dark:bg-ink/80 text-white dark:text-cream text-xs font-mono tracking-widest uppercase border border-white/10 backdrop-blur-md shadow-2xl">
+            <div className="absolute bottom-6 right-6 opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10 pointer-events-none">
+              <span className="px-5 py-2.5 rounded-full bg-neutral-900/90 dark:bg-ink/90 text-white dark:text-cream text-[10px] sm:text-xs font-mono tracking-widest uppercase border border-white/10 backdrop-blur-md shadow-2xl">
                 View Gallery &#8599;
               </span>
             </div>
