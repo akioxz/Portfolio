@@ -7,7 +7,6 @@ import {
   VscMailRead,
   VscChevronDown,
   VscChevronUp,
-  VscSignOut,
   VscRefresh,
   VscError,
   VscArchive,
@@ -168,71 +167,66 @@ export default function InboxClient({ initialMessages }: InboxClientProps) {
   };
 
   return (
-    <div className="p-4 sm:p-8 font-sans">
+    <div className="p-6 sm:p-10 font-sans">
       <div className="max-w-4xl mx-auto">
-        {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-8 mb-8 border-b border-white/5">
-          <div>
-            <div className="flex items-center gap-3 mb-1.5">
-              <h1 className="font-mono text-2xl font-bold tracking-tighter uppercase text-cream">
-                Admin Inbox
-              </h1>
-              <span className="font-mono text-[10px] px-2.5 py-1 rounded-full bg-white/10 text-cream border border-white/10 font-bold uppercase tracking-widest shadow-[0_0_10px_rgba(255,255,255,0.05)]">
+        {/* Header — ultra minimal */}
+        <div className="flex items-center justify-between mb-10">
+          <div className="flex items-baseline gap-3">
+            <h1 className="font-mono text-xl font-bold tracking-tighter text-cream">
+              Inbox
+            </h1>
+            {unreadCount > 0 && (
+              <span className="font-mono text-xs text-slate">
                 {unreadCount} unread
               </span>
-            </div>
-            <p className="font-mono text-[10px] text-slate uppercase tracking-widest font-medium">
-              Logged contact form submissions from Supabase
-            </p>
+            )}
           </div>
 
-          <div className="flex items-center gap-3 select-none">
-            <button
-              type="button"
-              onClick={handleRefresh}
-              disabled={isRefreshing || isLoggingOut}
-              className="flex items-center gap-2 px-4 py-2.5 bg-white/5 text-slate hover:text-cream hover:bg-white/10 border border-white/5 rounded-lg font-mono text-sm transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] active:scale-[0.98] cursor-pointer disabled:opacity-50"
-            >
-              <VscRefresh className={`w-4 h-4 ${isRefreshing ? "animate-spin" : ""}`} />
-              <span>{isRefreshing ? "Refreshing..." : "Refresh"}</span>
-            </button>
-            {/* Removed redundant Logout button since it is now natively built into the global layout sidebar */}
-          </div>
+          <button
+            type="button"
+            onClick={handleRefresh}
+            disabled={isRefreshing || isLoggingOut}
+            aria-label="Refresh inbox"
+            className="p-2 text-slate hover:text-cream transition-colors duration-300 active:scale-90 disabled:opacity-50"
+          >
+            <VscRefresh className={`w-4 h-4 ${isRefreshing ? "animate-spin" : ""}`} />
+          </button>
         </div>
 
         {actionError && (
           <div
             role="alert"
-            className="mb-8 flex items-start gap-3 rounded-xl border border-red-500/20 bg-red-500/10 p-4 font-mono text-xs text-red-400"
+            className="mb-8 flex items-center gap-3 font-mono text-xs text-red-400"
           >
-            <VscError className="mt-0.5 h-4 w-4 shrink-0" />
+            <VscError className="h-4 w-4 shrink-0" />
             <span>{actionError}</span>
           </div>
         )}
 
-        <div className="mb-8 flex flex-col gap-4 sm:flex-row">
+        {/* Search & Filters — borderless */}
+        <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center">
           <label className="relative flex-1">
-            <VscSearch className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate" />
+            <VscSearch className="pointer-events-none absolute left-0 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-slate/50" />
             <span className="sr-only">Search messages</span>
             <input
               type="search"
               value={searchQuery}
               onChange={(event) => setSearchQuery(event.target.value)}
-              placeholder="Search messages..."
-              className="w-full bg-white/5 border border-white/5 rounded-xl py-3.5 pl-11 pr-4 font-mono text-sm text-cream placeholder:text-slate outline-none transition-all duration-300 focus:bg-white/10 focus:border-white/20 focus:ring-1 focus:ring-white/20"
+              placeholder="Search..."
+              className="w-full bg-transparent border-b border-white/10 py-2.5 pl-6 pr-4 font-mono text-sm text-cream placeholder:text-slate/40 outline-none transition-all duration-300 focus:border-white/30"
             />
           </label>
-          <div className="flex bg-black/40 backdrop-blur-md rounded-xl p-1.5 border border-white/5 select-none w-full sm:w-auto h-fit">
+          <div className="flex gap-1 select-none">
             {(["active", "unread", "archived"] as const).map((option) => (
               <button
                 key={option}
                 type="button"
                 onClick={() => setFilter(option)}
                 aria-pressed={filter === option}
-                className={`flex-1 sm:flex-none cursor-pointer rounded-lg px-4 py-2 font-mono text-xs capitalize transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] active:scale-[0.95] ${
+                className={`px-3 py-1.5 font-mono text-xs capitalize transition-all duration-300 rounded-md ${
                   filter === option
-                    ? "bg-white/10 text-cream font-bold shadow-[0_0_15px_rgba(255,255,255,0.05)] border border-white/5"
-                    : "text-slate hover:bg-white/5 hover:text-cream border border-transparent"
+                    ? "text-cream"
+                    : "text-slate/40 hover:text-slate"
                 }`}
               >
                 {option}
@@ -241,20 +235,20 @@ export default function InboxClient({ initialMessages }: InboxClientProps) {
           </div>
         </div>
 
-        {/* Messages List */}
+        {/* Messages List — no boxes, just rows */}
         {messages.length === 0 ? (
-          <div className="p-16 text-center border border-white/5 border-dashed rounded-2xl bg-black/20 backdrop-blur-md shadow-2xl font-mono text-sm text-slate">
-            <VscMail className="mx-auto mb-4 h-8 w-8 text-slate/50" />
-            No contact messages received yet.
+          <div className="py-20 text-center font-mono text-sm text-slate/40">
+            <VscMail className="mx-auto mb-4 h-6 w-6 text-slate/20" />
+            No messages yet.
           </div>
         ) : visibleMessages.length === 0 ? (
-          <div className="p-16 text-center border border-white/5 border-dashed rounded-2xl bg-black/20 backdrop-blur-md shadow-2xl font-mono text-sm text-slate">
-            <VscSearch className="mx-auto mb-4 h-8 w-8 text-slate/50" />
-            No messages match the current search.
+          <div className="py-20 text-center font-mono text-sm text-slate/40">
+            <VscSearch className="mx-auto mb-4 h-6 w-6 text-slate/20" />
+            No results.
           </div>
         ) : (
-          <div className="flex flex-col gap-4">
-            {visibleMessages.map((msg) => {
+          <div className="flex flex-col">
+            {visibleMessages.map((msg, index) => {
               const isExpanded = expandedId === msg.id;
               const formattedDate = new Date(msg.created_at).toLocaleString("en-US", {
                 month: "short",
@@ -268,96 +262,97 @@ export default function InboxClient({ initialMessages }: InboxClientProps) {
               return (
                 <div
                   key={msg.id}
-                  className={`rounded-2xl border transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] overflow-hidden ${
-                    !msg.is_read
-                      ? "border-white/10 bg-white/5 shadow-[0_0_15px_rgba(255,255,255,0.03)]"
-                      : "border-white/5 bg-black/40 backdrop-blur-md hover:bg-white/5 hover:border-white/10"
+                  className={`transition-colors duration-300 ${
+                    index > 0 ? "border-t border-white/5" : ""
                   }`}
                 >
-                  {/* Summary Bar */}
+                  {/* Summary Row */}
                   <button
                     type="button"
                     onClick={() => handleToggleExpand(msg.id, msg.is_read)}
                     aria-expanded={isExpanded}
                     aria-controls={`message-${msg.id}`}
-                    className="w-full text-left p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 cursor-pointer select-none focus-visible:outline-none focus-visible:bg-white/5 transition-colors"
+                    className="w-full text-left py-4 px-2 flex items-center gap-4 cursor-pointer select-none focus-visible:outline-none hover:bg-white/[0.03] transition-colors duration-300 group"
                   >
-                    <div className="flex items-start sm:items-center gap-4 flex-1 min-w-0">
-                      {/* Unread indicator icon */}
-                      <div className="pt-0.5 sm:pt-0 shrink-0">
-                        {!msg.is_read ? (
-                          <div className="w-2.5 h-2.5 rounded-full bg-cream animate-pulse shadow-[0_0_10px_rgba(255,255,255,0.8)]" />
-                        ) : (
-                          <VscMailRead className="w-4 h-4 text-slate/40" />
-                        )}
-                      </div>
-
-                      <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-6 flex-1 min-w-0">
-                        <span
-                          className={`font-mono text-sm shrink-0 truncate max-w-[180px] ${
-                            !msg.is_read ? "font-bold text-cream tracking-tight" : "text-slate"
-                          }`}
-                        >
-                          {msg.name}
-                        </span>
-
-                        <span className="font-mono text-xs text-slate shrink-0 truncate max-w-[200px]">
-                          {msg.email}
-                        </span>
-
-                        <span className="font-sans text-xs text-slate/60 truncate flex-1">
-                          {msg.message}
-                        </span>
-                      </div>
+                    {/* Unread dot */}
+                    <div className="w-5 shrink-0 flex justify-center">
+                      {!msg.is_read ? (
+                        <div className="w-1.5 h-1.5 rounded-full bg-cream" />
+                      ) : (
+                        <VscMailRead className="w-3.5 h-3.5 text-white/15" />
+                      )}
                     </div>
 
-                    <div className="flex items-center gap-4 shrink-0 self-end sm:self-auto">
-                      <span className="font-mono text-[10px] text-slate/50 whitespace-nowrap uppercase tracking-wider">
-                        {formattedDate}
-                      </span>
+                    {/* Name */}
+                    <span
+                      className={`font-mono text-sm shrink-0 w-[140px] truncate ${
+                        !msg.is_read ? "font-bold text-cream" : "text-white/50"
+                      }`}
+                    >
+                      {msg.name}
+                    </span>
+
+                    {/* Email */}
+                    <span className="font-mono text-xs text-white/20 shrink-0 w-[180px] truncate hidden md:block">
+                      {msg.email}
+                    </span>
+
+                    {/* Message preview */}
+                    <span className="text-xs text-white/25 truncate flex-1 hidden sm:block">
+                      {msg.message}
+                    </span>
+
+                    {/* Date */}
+                    <span className="font-mono text-[11px] text-white/20 whitespace-nowrap shrink-0">
+                      {formattedDate}
+                    </span>
+
+                    {/* Chevron */}
+                    <div className="shrink-0 text-white/15 group-hover:text-white/30 transition-colors duration-300">
                       {isExpanded ? (
-                        <VscChevronUp className="w-4 h-4 text-slate" />
+                        <VscChevronUp className="w-3.5 h-3.5" />
                       ) : (
-                        <VscChevronDown className="w-4 h-4 text-slate" />
+                        <VscChevronDown className="w-3.5 h-3.5" />
                       )}
                     </div>
                   </button>
 
-                  {/* Expanded Full Message Content */}
+                  {/* Expanded Content */}
                   {isExpanded && (
                     <div
                       id={`message-${msg.id}`}
-                      className="px-6 pb-6 pt-4 border-t border-white/5 bg-black/20 flex flex-col gap-6"
+                      className="pl-11 pr-2 pb-6 pt-2 flex flex-col gap-5"
                     >
-                      <div className="flex flex-col gap-1.5 text-xs font-mono">
-                        <div className="text-slate">
-                          <strong className="text-cream font-bold">From:</strong> {msg.name} &lt;
+                      <div className="flex flex-col gap-1 text-xs font-mono">
+                        <div className="text-white/30">
+                          <span className="text-white/50">From</span>{" "}
+                          {msg.name} &lt;
                           <a
                             href={`mailto:${msg.email}`}
-                            className="text-white underline hover:text-cream/80"
+                            className="text-white/50 underline underline-offset-2 hover:text-cream transition-colors duration-300"
                           >
                             {msg.email}
                           </a>
                           &gt;
                         </div>
-                        <div className="text-slate/60">
-                          <strong className="text-cream font-bold">Date:</strong> {formattedDate}
+                        <div className="text-white/20">
+                          {formattedDate}
                         </div>
                       </div>
 
-                      <div className="p-5 rounded-xl bg-white/5 border border-white/5 text-sm text-cream font-sans whitespace-pre-wrap leading-relaxed shadow-[inset_0_0_20px_rgba(0,0,0,0.5)]">
+                      <div className="text-sm text-cream/80 font-sans whitespace-pre-wrap leading-relaxed">
                         {msg.message}
                       </div>
 
-                      <div className="flex items-center gap-3 self-start">
+                      <div className="flex items-center gap-3 pt-2">
                         <a
                           href={`mailto:${msg.email}?subject=${encodeURIComponent(
                             `Re: Portfolio Contact`
                           )}`}
-                          className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white/10 text-cream border border-white/5 font-mono text-xs hover:bg-white/15 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] active:scale-[0.95]"
+                          className="flex items-center gap-2 px-3 py-1.5 rounded-md font-mono text-xs text-white/40 hover:text-cream hover:bg-white/5 transition-all duration-300 active:scale-[0.95]"
                         >
-                          <VscMail className="w-4 h-4" />
-                          <span>Reply via Email</span>
+                          <VscMail className="w-3.5 h-3.5" />
+                          Reply
                         </a>
                         <button
                           type="button"
@@ -368,14 +363,12 @@ export default function InboxClient({ initialMessages }: InboxClientProps) {
                             })
                           }
                           disabled={archivingId === msg.id}
-                          className="flex items-center gap-2 px-4 py-2 rounded-lg border border-red-500/20 bg-red-500/10 font-mono text-xs text-red-400 hover:bg-red-500/20 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] active:scale-[0.95] disabled:opacity-50"
+                          className="flex items-center gap-2 px-3 py-1.5 rounded-md font-mono text-xs text-white/40 hover:text-red-400 hover:bg-red-500/5 transition-all duration-300 active:scale-[0.95] disabled:opacity-50"
                         >
-                          <VscArchive className="h-4 w-4" />
-                          <span>
-                            {archivingId === msg.id
-                              ? msg.archived_at ? "Restoring..." : "Archiving..."
-                              : msg.archived_at ? "Restore" : "Archive"}
-                          </span>
+                          <VscArchive className="h-3.5 w-3.5" />
+                          {archivingId === msg.id
+                            ? msg.archived_at ? "Restoring..." : "Archiving..."
+                            : msg.archived_at ? "Restore" : "Archive"}
                         </button>
                       </div>
                     </div>
@@ -387,9 +380,10 @@ export default function InboxClient({ initialMessages }: InboxClientProps) {
         )}
       </div>
 
+      {/* Archive Confirmation Dialog */}
       {pendingArchive && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-2xl"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-xl"
           role="presentation"
           onMouseDown={(event) => {
             if (event.target === event.currentTarget) setPendingArchive(null);
@@ -400,29 +394,22 @@ export default function InboxClient({ initialMessages }: InboxClientProps) {
             aria-modal="true"
             aria-labelledby="archive-dialog-title"
             aria-describedby="archive-dialog-description"
-            className="w-full max-w-md rounded-2xl border border-white/10 bg-ink/90 p-8 shadow-[0_0_50px_rgba(0,0,0,0.5)] backdrop-blur-md"
+            className="w-full max-w-sm rounded-xl border border-white/10 bg-ink p-6 shadow-2xl"
           >
-            <div className="mb-6 flex items-start gap-4">
-              <div className="rounded-xl border border-red-500/20 bg-red-500/10 p-3 text-red-400">
-                <VscArchive className="h-6 w-6" />
-              </div>
-              <div>
-                <h2 id="archive-dialog-title" className="font-mono text-base font-bold uppercase tracking-widest text-cream">
-                  {pendingArchive.isArchived ? "Restore message?" : "Archive message?"}
-                </h2>
-                <p id="archive-dialog-description" className="mt-2 text-sm leading-relaxed text-slate">
-                  {pendingArchive.isArchived
-                    ? "This message will return to your active inbox."
-                    : "This message will be hidden from the active inbox. You can restore it later."}
-                </p>
-              </div>
-            </div>
-            <div className="flex justify-end gap-3 pt-2">
+            <h2 id="archive-dialog-title" className="font-mono text-sm font-bold text-cream mb-2">
+              {pendingArchive.isArchived ? "Restore message?" : "Archive message?"}
+            </h2>
+            <p id="archive-dialog-description" className="text-xs leading-relaxed text-white/40 mb-6">
+              {pendingArchive.isArchived
+                ? "This will return the message to your active inbox."
+                : "This will hide the message from view. You can restore it later."}
+            </p>
+            <div className="flex justify-end gap-2">
               <button
                 ref={cancelArchiveRef}
                 type="button"
                 onClick={() => setPendingArchive(null)}
-                className="rounded-lg px-6 py-2.5 font-mono text-xs text-slate transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:text-cream hover:bg-white/5 active:scale-[0.95]"
+                className="rounded-md px-4 py-2 font-mono text-xs text-white/40 hover:text-cream transition-colors duration-300 active:scale-[0.95]"
               >
                 Cancel
               </button>
@@ -433,9 +420,9 @@ export default function InboxClient({ initialMessages }: InboxClientProps) {
                   setPendingArchive(null);
                   void handleArchive(id, isArchived);
                 }}
-                className="rounded-lg border border-red-500/20 bg-red-500/10 px-6 py-2.5 font-mono text-xs text-red-400 font-bold transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:bg-red-500/20 active:scale-[0.95]"
+                className="rounded-md px-4 py-2 font-mono text-xs text-red-400 bg-red-500/10 hover:bg-red-500/20 transition-all duration-300 active:scale-[0.95]"
               >
-                {pendingArchive.isArchived ? "Restore message" : "Archive message"}
+                {pendingArchive.isArchived ? "Restore" : "Archive"}
               </button>
             </div>
           </div>
