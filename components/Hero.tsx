@@ -206,10 +206,10 @@ export default function Hero({ experience }: { experience: ExperienceData[] }) {
             className="font-mono text-[1.35rem] font-normal text-cream tracking-tight leading-tight inline-flex items-baseline"
             splitType="words"
             delay={40}
-            duration={0.6}
-            ease="power3.out"
-            from={{ opacity: 0, y: 24 }}
-            to={{ opacity: 1, y: 0 }}
+            duration={0.8}
+            ease="power4.out"
+            from={{ opacity: 0, y: 40, clipPath: "inset(0% 0% 100% 0%)" }}
+            to={{ opacity: 1, y: 0, clipPath: "inset(0% 0% 0% 0%)" }}
             textAlign="left"
             threshold={0}
             rootMargin="0px"
