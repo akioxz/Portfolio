@@ -46,7 +46,7 @@ export default function Projects({ projects }: { projects: ProjectData[] }) {
           data-magnetic
         >
           ALL PROJECTS 
-          <span className="transform transition-transform group-hover:translate-x-1">→</span>
+          <span className="transform transition-transform group-hover:translate-x-1">?</span>
         </Link>
       </div>
 
@@ -60,7 +60,6 @@ export default function Projects({ projects }: { projects: ProjectData[] }) {
 
             if (position === "hidden") return null;
 
-            // X offsets are relative to the card's width (max-w-sm is ~384px)
             const variants = {
               center: { 
                 x: "0%", y: "0%", scale: 1, rotateY: 0, rotateZ: 0, zIndex: 30, opacity: 1 
@@ -71,6 +70,15 @@ export default function Projects({ projects }: { projects: ProjectData[] }) {
               right: { 
                 x: "65%", y: "5%", scale: 0.88, rotateY: -15, rotateZ: 6, zIndex: 20, opacity: 0.4 
               },
+              centerHover: { 
+                y: "-4%", scale: 1.02 
+              },
+              leftHover: { 
+                x: "-72%", y: "2%", scale: 0.92, rotateY: 10, rotateZ: -8, opacity: 0.8 
+              },
+              rightHover: { 
+                x: "72%", y: "2%", scale: 0.92, rotateY: -10, rotateZ: 8, opacity: 0.8 
+              },
             };
 
             return (
@@ -80,6 +88,7 @@ export default function Projects({ projects }: { projects: ProjectData[] }) {
                 variants={variants}
                 initial={false}
                 animate={position}
+                whileHover={`${position}Hover`}
                 transition={{ type: "spring", stiffness: 260, damping: 25, mass: 1.2 }}
                 onClick={() => {
                   if (position === "left") handlePrev();
@@ -95,8 +104,16 @@ export default function Projects({ projects }: { projects: ProjectData[] }) {
                 {/* Dimming overlay for background cards */}
                 <motion.div 
                   className="absolute inset-0 z-50 bg-neutral-900 dark:bg-ink rounded-3xl pointer-events-none"
+                  variants={{
+                    center: { opacity: 0 },
+                    left: { opacity: 0.6 },
+                    right: { opacity: 0.6 },
+                    centerHover: { opacity: 0 },
+                    leftHover: { opacity: 0.2 },
+                    rightHover: { opacity: 0.2 },
+                  }}
                   initial={false}
-                  animate={{ opacity: position === "center" ? 0 : 0.6 }}
+                  animate={position}
                   transition={{ duration: 0.4 }}
                 />
                 <DeckProjectCard project={project} />
