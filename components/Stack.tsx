@@ -27,11 +27,29 @@ import {
 } from "react-icons/si";
 import { VscCode } from "react-icons/vsc";
 
-const ICON_MAP: Record<string, any> = {
-  SiHtml5, SiCss, SiJavascript, SiTypescript, SiReact, SiExpo,
-  SiNextdotjs, SiFlutter, SiVuedotjs, SiTailwindcss, SiNodedotjs,
-  SiExpress, SiPhp, SiLaravel, SiPython, SiPrisma, SiMysql,
-  SiPostgresql, SiSupabase, SiGit, SiGithub, VscCode
+const ICON_MAP: Record<string, { component: any; color: string }> = {
+  SiHtml5: { component: SiHtml5, color: "#E34F26" },
+  SiCss: { component: SiCss, color: "#1572B6" },
+  SiJavascript: { component: SiJavascript, color: "#F7DF1E" },
+  SiTypescript: { component: SiTypescript, color: "#3178C6" },
+  SiReact: { component: SiReact, color: "#61DAFB" },
+  SiExpo: { component: SiExpo, color: "#ffffff" },
+  SiNextdotjs: { component: SiNextdotjs, color: "#ffffff" },
+  SiFlutter: { component: SiFlutter, color: "#02569B" },
+  SiVuedotjs: { component: SiVuedotjs, color: "#4FC08D" },
+  SiTailwindcss: { component: SiTailwindcss, color: "#06B6D4" },
+  SiNodedotjs: { component: SiNodedotjs, color: "#339933" },
+  SiExpress: { component: SiExpress, color: "#ffffff" },
+  SiPhp: { component: SiPhp, color: "#777BB4" },
+  SiLaravel: { component: SiLaravel, color: "#FF2D20" },
+  SiPython: { component: SiPython, color: "#3776AB" },
+  SiPrisma: { component: SiPrisma, color: "#ffffff" },
+  SiMysql: { component: SiMysql, color: "#4479A1" },
+  SiPostgresql: { component: SiPostgresql, color: "#4169E1" },
+  SiSupabase: { component: SiSupabase, color: "#3ECF8E" },
+  SiGit: { component: SiGit, color: "#F05032" },
+  SiGithub: { component: SiGithub, color: "#ffffff" },
+  VscCode: { component: VscCode, color: "#007ACC" }
 };
 
 interface StackItem {
@@ -42,16 +60,19 @@ interface StackItem {
 }
 
 export default function Stack({ stack = [] }: { stack?: StackItem[] }) {
-  const getLogoItems = (
-    items: StackItem[],
-    accentColorClass: string,
-  ): LogoItem[] => {
+  const getLogoItems = (items: StackItem[]): LogoItem[] => {
     return items.map((item) => {
-      const Icon = ICON_MAP[item.icon] || VscCode;
+      const mappedIcon = ICON_MAP[item.icon] || ICON_MAP["VscCode"];
+      const Icon = mappedIcon.component;
+      const brandColor = mappedIcon.color;
       return {
         node: (
-          <div className="flex items-center gap-2 text-cream font-mono text-xs border border-slate/15 bg-surface/40 rounded-md px-3 py-2 select-none">
-            <Icon aria-hidden="true" className={`w-4 h-4 ${accentColorClass}`} />
+          <div className="flex items-center gap-2 text-cream font-mono text-xs border border-slate/15 bg-surface/40 rounded-md px-3 py-2 select-none group transition-colors hover:border-slate/30">
+            <Icon 
+              aria-hidden="true" 
+              className="w-4 h-4 transition-transform group-hover:scale-110" 
+              style={{ color: brandColor }}
+            />
             <span>{item.name}</span>
           </div>
         ),
@@ -85,7 +106,7 @@ export default function Stack({ stack = [] }: { stack?: StackItem[] }) {
           <div>
             <p className="font-mono text-xs text-slate mb-3">frontend</p>
             <LogoLoop
-              logos={getLogoItems(frontendItems, "text-teal")}
+              logos={getLogoItems(frontendItems)}
               speed={80}
               direction="left"
               logoHeight={32}
@@ -102,7 +123,7 @@ export default function Stack({ stack = [] }: { stack?: StackItem[] }) {
           <div>
             <p className="font-mono text-xs text-slate mb-3">backend</p>
             <LogoLoop
-              logos={getLogoItems(backendItems, "text-orange-400")}
+              logos={getLogoItems(backendItems)}
               speed={80}
               direction="right"
               logoHeight={32}
@@ -119,7 +140,7 @@ export default function Stack({ stack = [] }: { stack?: StackItem[] }) {
           <div>
             <p className="font-mono text-xs text-slate mb-3">tools</p>
             <LogoLoop
-              logos={getLogoItems(toolsItems, "text-purple-400")}
+              logos={getLogoItems(toolsItems)}
               speed={80}
               direction="left"
               logoHeight={32}
