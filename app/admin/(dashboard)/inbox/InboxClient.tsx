@@ -308,7 +308,7 @@ export default function InboxClient({ initialMessages }: InboxClientProps) {
                     </span>
 
                     {/* Chevron */}
-                    <div className="shrink-0 text-white/15 group-hover:text-white/30 transition-colors duration-300">
+                    <div className="shrink-0 text-white/15 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                       {isExpanded ? (
                         <VscChevronUp className="w-3.5 h-3.5" />
                       ) : (
