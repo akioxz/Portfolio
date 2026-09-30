@@ -50,7 +50,7 @@ export default async function AllProjectsPage() {
               <span className="font-mono text-[9px] font-semibold tracking-[0.2em] uppercase text-slate mb-1">
                 {project.eyebrow}
               </span>
-              <p className="text-slate text-sm font-sans truncate">
+              <p className="text-slate text-sm font-sans line-clamp-2 text-pretty">
                 {project.description}
               </p>
             </div>
