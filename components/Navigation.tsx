@@ -37,7 +37,7 @@ export function Sidebar() {
   );
 
   return (
-    <aside className="fixed top-0 left-0 h-screen w-[240px] hidden lg:flex flex-col justify-between border-r border-slate/10 px-8 py-10 z-50 bg-white/50 dark:bg-[#0c0c0c]/80 backdrop-blur-xl">
+    <aside className="fixed top-0 left-0 h-screen w-56 hidden lg:flex flex-col justify-between border-r border-slate/10 dark:border-white/[0.06] px-7 py-8 z-50 bg-white/50 dark:bg-[#0c0c0c]/80 backdrop-blur-xl">
       <div className="flex flex-col gap-10">
         <Link href="/" className="font-mono font-medium text-neutral-900 dark:text-cream text-lg hover:text-teal transition-colors tracking-tight">
           Axel Villanueva

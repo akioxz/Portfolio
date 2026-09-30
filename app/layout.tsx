@@ -119,7 +119,7 @@ export default function RootLayout({
           <ReactLenisWrapper>
             <Sidebar />
             <MobileMenu />
-            <div className="lg:pl-[240px] w-full min-h-screen flex flex-col relative z-10">
+            <div className="lg:pl-56 w-full min-h-screen flex flex-col relative z-10">
               {children}
             </div>
           </ReactLenisWrapper>

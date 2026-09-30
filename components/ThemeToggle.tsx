@@ -58,47 +58,47 @@ export default function ThemeToggle() {
   };
 
   return (
-    <div className="flex items-center gap-0.5 p-[2px] rounded-full border border-slate/20 dark:border-white/10 bg-transparent w-fit">
+    <div className="flex items-center gap-[1px] p-[2px] rounded-full border border-slate/15 dark:border-white/10 bg-transparent w-fit">
       <button
         onClick={(e) => handleToggle("system", e)}
         aria-busy={isSwitching}
         aria-label="System theme"
-        className={`flex items-center justify-center w-[26px] h-[26px] rounded-full transition-all duration-300 ${
+        className={`flex items-center justify-center w-[1.35rem] h-[1.35rem] rounded-full transition-all duration-200 ${
           theme === "system"
-            ? "bg-slate/10 dark:bg-white/10 text-neutral-900 dark:text-cream"
-            : "text-slate/40 hover:text-neutral-900 dark:hover:text-cream"
+            ? "bg-neutral-100 dark:bg-white/10 text-neutral-900 dark:text-cream"
+            : "text-neutral-400 dark:text-white/30 hover:text-neutral-900 dark:hover:text-cream"
         }`}
         title="System theme"
       >
-        <FiMonitor className="w-3 h-3" />
+        <FiMonitor style={{ width: 13, height: 13 }} />
       </button>
       
       <button
         onClick={(e) => handleToggle("light", e)}
         aria-busy={isSwitching}
         aria-label="Light theme"
-        className={`flex items-center justify-center w-[26px] h-[26px] rounded-full transition-all duration-300 ${
+        className={`flex items-center justify-center w-[1.35rem] h-[1.35rem] rounded-full transition-all duration-200 ${
           theme === "light"
-            ? "bg-slate/10 dark:bg-white/10 text-neutral-900 dark:text-cream"
-            : "text-slate/40 hover:text-neutral-900 dark:hover:text-cream"
+            ? "bg-neutral-100 dark:bg-white/10 text-neutral-900 dark:text-cream"
+            : "text-neutral-400 dark:text-white/30 hover:text-neutral-900 dark:hover:text-cream"
         }`}
         title="Light theme"
       >
-        <FiSun className="w-3.5 h-3.5" />
+        <FiSun style={{ width: 13, height: 13 }} />
       </button>
 
       <button
         onClick={(e) => handleToggle("dark", e)}
         aria-busy={isSwitching}
         aria-label="Dark theme"
-        className={`flex items-center justify-center w-[26px] h-[26px] rounded-full transition-all duration-300 ${
+        className={`flex items-center justify-center w-[1.35rem] h-[1.35rem] rounded-full transition-all duration-200 ${
           theme === "dark"
-            ? "bg-slate/10 dark:bg-white/10 text-neutral-900 dark:text-cream"
-            : "text-slate/40 hover:text-neutral-900 dark:hover:text-cream"
+            ? "bg-neutral-100 dark:bg-white/10 text-neutral-900 dark:text-cream"
+            : "text-neutral-400 dark:text-white/30 hover:text-neutral-900 dark:hover:text-cream"
         }`}
         title="Dark theme"
       >
-        <FiMoon className="w-3 h-3" />
+        <FiMoon style={{ width: 13, height: 13 }} />
       </button>
     </div>
   );
