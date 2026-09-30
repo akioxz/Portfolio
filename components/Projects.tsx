@@ -46,7 +46,7 @@ export default function Projects({ projects }: { projects: ProjectData[] }) {
           data-magnetic
         >
           ALL PROJECTS 
-          <span className="transform transition-transform group-hover:translate-x-1">?</span>
+          <span className="transform transition-transform group-hover:translate-x-1">&#8594;</span>
         </Link>
       </div>
 

@@ -1,21 +1,32 @@
 "use client";
 
+import React from "react";
 import Image from "next/image";
 import { motion } from "motion/react";
 
 export default function Hero() {
+  const [isFirstLoad, setIsFirstLoad] = React.useState(true);
+  const [isMounted, setIsMounted] = React.useState(false);
+
+  React.useEffect(() => {
+    setIsMounted(true);
+    if (sessionStorage.getItem("splashShown")) {
+      setIsFirstLoad(false);
+    }
+  }, []);
+
   return (
     <motion.section
       id="hero"
       className="mb-12 flex flex-col md:flex-row gap-10 md:gap-16 items-center md:items-start max-w-4xl pt-10"
-      initial="hidden"
+      initial={isMounted ? "hidden" : false}
       animate="visible"
       variants={{
         hidden: { opacity: 0 },
         visible: {
           opacity: 1,
           transition: {
-            delayChildren: 1.5,
+            delayChildren: isFirstLoad ? 1.5 : 0.1,
             staggerChildren: 0.15,
           },
         },

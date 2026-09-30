@@ -17,6 +17,13 @@ export default function LogoSplash({
 
   // Scramble effect
   useEffect(() => {
+    // Only show once per session
+    if (sessionStorage.getItem("splashShown")) {
+      setVisible(false);
+      if (onComplete) onComplete();
+      return;
+    }
+
     const target = "AXEL";
     const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%*";
     let iterations = 0;
@@ -33,6 +40,7 @@ export default function LogoSplash({
 
     const holdTimer = setTimeout(() => {
       setVisible(false);
+      sessionStorage.setItem("splashShown", "true");
       if (onComplete) {
         setTimeout(onComplete, 800); // Wait for slide up animation
       }
