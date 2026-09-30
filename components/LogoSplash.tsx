@@ -41,7 +41,7 @@ export default function LogoSplash({
             transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
             className="font-mono font-bold text-cream text-2xl tracking-[0.3em] select-none"
           >
-            AJV
+            AXEL
           </motion.span>
         </motion.div>
       )}

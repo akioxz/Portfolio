@@ -20,7 +20,7 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
     <ReactLenisWrapper>
       <Sidebar />
       <MobileMenu />
-      <div className="lg:pl-56 w-full min-h-screen flex flex-col relative z-10">
+      <div className="lg:pl-56 w-full min-h-screen flex flex-col">
         {children}
       </div>
     </ReactLenisWrapper>
