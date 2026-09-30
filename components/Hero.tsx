@@ -34,10 +34,7 @@ export default function Hero() {
         
         <div className="flex flex-col gap-6 text-slate dark:text-slate/80 text-sm md:text-base leading-relaxed max-w-lg font-sans">
           <p>
-            I'm a full-stack engineer and a 4th-year BSIT student. I build modern web & mobile apps, and these days I'm heavily focused on crafting clean, high-performance user interfaces and integrating generative AI.
-          </p>
-          <p>
-            Right now, I'm building cool new stuff every day with React, Node, and Supabase. I love turning rough ideas into scalable software that people actually use.
+            4th-year IT student building production-grade web &amp; mobile software. Still learning every day {"\u2014"} currently deep into high-performance interfaces and generative AI.
           </p>
         </div>
 
