@@ -19,6 +19,7 @@ export default function Experience({ experience }: { experience: ExperienceData[
   return (
     <section id="experience" className="scroll-mt-24" aria-label="Experience">
       <div className="mb-16">
+        <p className="font-pixel text-xs text-slate mb-2 uppercase tracking-wider">02 — experience</p>
         <SplitText
           text="Experience & Education"
           tag="h2"

@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Geist_Mono } from "next/font/google";
+import { Inter, Geist_Mono, DotGothic16 } from "next/font/google";
 import "./globals.css";
 import LayoutWrapper from "@/components/LayoutWrapper";
 import CommandMenu from "@/components/CommandMenu";
@@ -13,6 +13,11 @@ const inter = Inter({
   variable: "--font-inter",
 });
 
+const dotGothic = DotGothic16({
+  subsets: ["latin"],
+  weight: ["400"],
+  variable: "--font-pixel",
+});
 const geistMono = Geist_Mono({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
@@ -74,7 +79,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`overflow-x-hidden ${inter.variable} ${geistMono.variable}`}
+      className={`overflow-x-hidden ${inter.variable} ${geistMono.variable} ${dotGothic.variable}`}
       suppressHydrationWarning
     >
       <head>
