@@ -5,14 +5,16 @@ import Image from "next/image";
 import { motion } from "motion/react";
 
 export default function Hero() {
-  const [isFirstLoad, setIsFirstLoad] = React.useState(true);
+  const [isFirstLoad, setIsFirstLoad] = React.useState(() => {
+    if (typeof window !== "undefined") {
+      return !sessionStorage.getItem("splashShown");
+    }
+    return true;
+  });
   const [isMounted, setIsMounted] = React.useState(false);
 
   React.useEffect(() => {
     setIsMounted(true);
-    if (sessionStorage.getItem("splashShown")) {
-      setIsFirstLoad(false);
-    }
   }, []);
 
   return (

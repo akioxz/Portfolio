@@ -33,8 +33,8 @@ export default function Footer() {
           <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" /> Next Steps
         </span>
         
-        <div className="flex items-center justify-center gap-4">
-          <h2 className="font-sans text-4xl sm:text-6xl md:text-8xl font-bold tracking-tighter text-neutral-900 dark:text-white transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-active:scale-95 group-hover:-translate-y-2">
+        <div className="flex items-center justify-center gap-4 w-full overflow-hidden px-4">
+          <h2 className="font-sans text-4xl sm:text-6xl md:text-8xl font-bold tracking-tighter text-neutral-900 dark:text-white transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-active:scale-95 group-hover:-translate-y-2 whitespace-nowrap">
             {scramble.displayText}
           </h2>
           <div className="hidden sm:flex items-center justify-center w-12 h-12 md:w-16 md:h-16 rounded-full bg-neutral-100 dark:bg-white/5 border border-black/5 dark:border-white/10 group-hover:bg-neutral-200 dark:group-hover:bg-white/10 group-hover:-translate-y-2 group-active:scale-95 transition-all duration-500">

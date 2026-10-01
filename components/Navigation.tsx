@@ -40,17 +40,17 @@ export function Sidebar() {
     
     const observer = new IntersectionObserver(
       (entries) => {
+        if (isScrollingRef.current) return;
+        
         entries.forEach((entry) => {
-          if (entry.isIntersecting && !isScrollingRef.current) {
+          if (entry.isIntersecting) {
             setActiveSection(entry.target.id);
           }
         });
       },
-      // Expanded detection zone so bottom elements can trigger it even if they don't reach the top
-      { rootMargin: "-20% 0px -40% 0px" }
+      { rootMargin: "-10% 0px -40% 0px" }
     );
 
-    // Give the DOM a tiny bit of time to render dynamic content like footer before observing
     setTimeout(() => {
       sectionsToObserve.forEach((id) => {
         const element = document.getElementById(id);
@@ -58,7 +58,19 @@ export function Sidebar() {
       });
     }, 100);
 
-    return () => observer.disconnect();
+    const handleScroll = () => {
+      if (window.scrollY < 150 && !isScrollingRef.current) {
+        setActiveSection("hero");
+      }
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    // Run once on mount
+    handleScroll();
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("scroll", handleScroll);
+    };
   }, []);
 
   useEffect(() => {
