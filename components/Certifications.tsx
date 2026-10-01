@@ -23,7 +23,7 @@ export default function Certifications({ certifications = [] }: { certifications
         <SplitText
           text="Certifications"
           tag="h2"
-          className="text-xl font-mono text-cream font-medium"
+          className="text-2xl sm:text-[1.75rem] tracking-tight font-mono text-neutral-900 dark:text-cream"
           splitType="words"
           delay={40}
           duration={0.5}

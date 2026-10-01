@@ -22,7 +22,7 @@ export default function Experience({ experience }: { experience: ExperienceData[
         <SplitText
           text="Experience & Education"
           tag="h2"
-          className="text-[2rem] font-mono text-neutral-900 dark:text-cream tracking-tight"
+          className="text-2xl sm:text-[1.75rem] font-mono text-neutral-900 dark:text-cream tracking-tight"
           splitType="words"
           delay={40}
           duration={0.5}
@@ -35,7 +35,7 @@ export default function Experience({ experience }: { experience: ExperienceData[
       <div className="flex flex-col lg:flex-row gap-16 lg:gap-12">
         {/* Education Block (Left) */}
         <div className="w-full lg:w-1/3">
-          <span className="block font-mono text-[10px] tracking-[0.2em] uppercase text-neutral-500 dark:text-white/40 mb-8">
+          <span className="block font-mono text-[11px] tracking-widest uppercase text-neutral-500 dark:text-white/40 mb-8">
             Education
           </span>
           <div className="flex flex-col gap-6">
@@ -54,7 +54,7 @@ export default function Experience({ experience }: { experience: ExperienceData[
 
         {/* Experience Block (Right) - Focus Mode & Ledger Layout */}
         <div className="w-full lg:w-2/3">
-          <span className="block font-mono text-[10px] tracking-[0.2em] uppercase text-neutral-500 dark:text-white/40 mb-8">
+          <span className="block font-mono text-[11px] tracking-widest uppercase text-neutral-500 dark:text-white/40 mb-8">
             Experience
           </span>
           

@@ -32,7 +32,7 @@ export default function BeyondTheCode() {
             <SplitText
               text="AFK"
               tag="h2"
-              className="text-3xl sm:text-4xl font-mono text-neutral-900 dark:text-cream mb-4 tracking-tight"
+              className="text-2xl sm:text-[1.75rem] font-mono text-neutral-900 dark:text-cream mb-4 tracking-tight"
               splitType="words"
               delay={40}
               duration={0.5}
@@ -40,7 +40,7 @@ export default function BeyondTheCode() {
               to={{ opacity: 1, y: 0 }}
               threshold={0.2}
             />
-            <p className="text-slate dark:text-slate/80 text-sm md:text-base leading-relaxed font-sans">
+            <p className="text-slate dark:text-slate/80 text-[15px] leading-relaxed font-sans">
               A lot of my best debugging happens when I step away. Here's what keeps me balanced outside of the code - anime, gaming setups, and a bit of exploring.
             </p>
           </div>

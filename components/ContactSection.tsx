@@ -70,13 +70,13 @@ export default function ContactSection() {
         
         {/* Header */}
         <div className="mb-10">
-          <p className="font-sans text-[10px] font-bold text-zinc-400 dark:text-zinc-500 tracking-[0.2em] uppercase mb-3">
+          <p className="font-sans text-[11px] tracking-widest font-bold text-zinc-400 dark:text-zinc-500 uppercase mb-3">
             Collaboration Inquiry
           </p>
-          <h2 className="font-sans text-3xl sm:text-4xl font-bold tracking-tight text-neutral-900 dark:text-white mb-4">
+          <h2 className="font-sans text-2xl sm:text-[1.75rem] font-bold tracking-tight text-neutral-900 dark:text-white mb-4">
             tell me about it
           </h2>
-          <p className="font-sans text-sm text-zinc-600 dark:text-zinc-400 max-w-xl leading-relaxed">
+          <p className="font-sans text-[15px] text-zinc-600 dark:text-zinc-400 max-w-xl leading-relaxed">
             Share the essentials and I'll reply with next steps. The more context you include, the more useful my first response can be.
           </p>
         </div>
@@ -116,7 +116,7 @@ export default function ContactSection() {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div className="flex flex-col gap-2">
-                  <label htmlFor="name" className="font-sans text-[10px] font-bold text-zinc-500 tracking-[0.1em] uppercase">
+                  <label htmlFor="name" className="font-sans text-[11px] tracking-widest font-bold text-zinc-500 uppercase">
                     Name <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -127,7 +127,7 @@ export default function ContactSection() {
                   />
                 </div>
                 <div className="flex flex-col gap-2">
-                  <label htmlFor="email" className="font-sans text-[10px] font-bold text-zinc-500 tracking-[0.1em] uppercase">
+                  <label htmlFor="email" className="font-sans text-[11px] tracking-widest font-bold text-zinc-500 uppercase">
                     Email <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -140,7 +140,7 @@ export default function ContactSection() {
               </div>
 
               <div className="flex flex-col gap-2">
-                <label htmlFor="message" className="font-sans text-[10px] font-bold text-zinc-500 tracking-[0.1em] uppercase">
+                <label htmlFor="message" className="font-sans text-[11px] tracking-widest font-bold text-zinc-500 uppercase">
                   Project Details <span className="text-red-500">*</span>
                 </label>
                 <textarea

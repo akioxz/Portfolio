@@ -74,7 +74,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${geistMono.variable}`}
+      className={`overflow-x-hidden ${inter.variable} ${geistMono.variable}`}
       suppressHydrationWarning
     >
       <head>
@@ -124,7 +124,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="font-sans bg-white dark:bg-ink text-neutral-900 dark:text-cream antialiased relative">
+      <body className="overflow-x-hidden font-sans bg-white dark:bg-ink text-neutral-900 dark:text-cream antialiased relative">
         <ThemeProvider
           attribute="class"
           defaultTheme="system"

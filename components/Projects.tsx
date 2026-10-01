@@ -34,7 +34,7 @@ export default function Projects({ projects }: { projects: ProjectData[] }) {
         <SplitText
           text="Projects"
           tag="h2"
-          className="text-[2rem] font-mono text-neutral-900 dark:text-cream"
+          className="text-2xl sm:text-[1.75rem] font-mono text-neutral-900 dark:text-cream"
           splitType="words"
           delay={40}
           duration={0.5}

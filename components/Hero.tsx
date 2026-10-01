@@ -61,7 +61,7 @@ export default function Hero() {
             hidden: { opacity: 0, y: 20 },
             visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } }
           }}
-          className="font-mono text-4xl md:text-5xl font-medium text-neutral-900 dark:text-white mb-6 tracking-tight"
+          className="font-mono text-[2.5rem] sm:text-[2.75rem] leading-none font-medium text-neutral-900 dark:text-white mb-6 tracking-tight"
         >
           Axel Villanueva
         </motion.h1>
@@ -71,7 +71,7 @@ export default function Hero() {
             hidden: { opacity: 0, y: 20 },
             visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } }
           }}
-          className="flex flex-col gap-6 text-zinc-500 text-sm md:text-base leading-relaxed max-w-lg font-sans font-medium"
+          className="flex flex-col gap-6 text-zinc-500 text-[15px] leading-relaxed max-w-lg font-sans font-medium"
         >
           <p>
             4th-year IT student building production-grade web &amp; mobile software. Still learning every day {"\u2014"} currently deep into high-performance interfaces and generative AI.
