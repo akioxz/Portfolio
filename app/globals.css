@@ -116,3 +116,9 @@ html, body {
   -ms-overflow-style: none !important;  /* IE and Edge */
   scrollbar-width: none !important;  /* Firefox */
 }
+
+
+/* Skip splash screen completely on repeat visits */
+html.skip-splash .splash-screen {
+  display: none !important;
+}

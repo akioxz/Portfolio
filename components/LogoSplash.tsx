@@ -66,7 +66,7 @@ export default function LogoSplash({ onComplete }: LogoSplashProps) {
           initial={{ y: 0 }}
           exit={{ y: "-100%" }}
           transition={{ duration: 0.85, ease: [0.85, 0, 0.15, 1] }}
-          className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-ink"
+          className="splash-screen fixed inset-0 z-[100] flex flex-col items-center justify-center bg-ink"
         >
           <div className="overflow-hidden">
             <motion.span
