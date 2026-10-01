@@ -194,9 +194,9 @@ export default function CommandMenu() {
                     initial={{ opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: "auto" }}
                     exit={{ opacity: 0, height: 0 }}
-                    className="flex items-start gap-3 text-zinc-500 dark:text-zinc-400 overflow-hidden"
+                    className="flex items-baseline gap-3 text-zinc-500 dark:text-zinc-400 overflow-hidden"
                   >
-                    <span className="font-mono text-sm md:text-base mt-1">{'>'}</span>
+                    <span className="font-mono text-sm md:text-base flex-shrink-0">{'>'}</span>
                     <p className="font-mono text-sm md:text-base lowercase leading-relaxed">
                       {answer}
                       {isTyping && <span className="animate-pulse">_</span>}
