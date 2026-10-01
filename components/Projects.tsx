@@ -47,8 +47,8 @@ export default function Projects({ projects }: { projects: ProjectData[] }) {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-50px" }}
             transition={{ duration: 0.5, delay: i * 0.1 }}
-            key={project.id || project.name}
-            href={project.link || project.github || "#"}
+            key={project.name}
+            href={project.link || "#"}
             target="_blank"
             rel="noopener noreferrer"
             className="group flex flex-col md:flex-row md:items-center justify-between py-8 border-b border-black/10 dark:border-white/5 hover:bg-neutral-50 dark:hover:bg-white/[0.02] transition-colors relative"

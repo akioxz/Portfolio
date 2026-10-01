@@ -20,7 +20,7 @@ export default function Certifications({ certifications = [] }: { certifications
   return (
     <section id="certifications" className="scroll-mt-24" aria-label="Certifications">
       <div className="flex items-center justify-between mb-8">
-        <p className="font-pixel text-xs text-slate mb-2 uppercase tracking-wider">04 — certifications</p>
+        <p className="font-pixel text-xs text-slate mb-2 uppercase tracking-wider">04 â€” certifications</p>
         <SplitText
           text="Certifications"
           tag="h2"

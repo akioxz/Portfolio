@@ -89,7 +89,7 @@ export default function Stack({ stack = [] }: { stack?: StackItem[] }) {
 
   return (
     <section id="stack" className="scroll-mt-24" aria-label="Technology Stack">
-        <p className="font-pixel text-xs text-slate mb-2 uppercase tracking-wider">03 — stack</p>
+        <p className="font-pixel text-xs text-slate mb-2 uppercase tracking-wider">03 â€” stack</p>
       <SplitText
         text="Stack"
         tag="h2"
