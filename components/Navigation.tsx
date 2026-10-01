@@ -58,13 +58,18 @@ export function Sidebar() {
   }, []);
 
   useEffect(() => {
-    if (!activeSection || activeSection === "hero") {
-      document.title = "Axel Villanueva | Full-Stack Developer";
+    if (pathname !== "/") {
+      setActiveSection("");
+      // Let Next.js metadata handle the title for other pages
     } else {
-      const formattedName = activeSection.charAt(0).toUpperCase() + activeSection.slice(1);
-      document.title = `${formattedName} - Axel Villanueva`;
+      if (!activeSection || activeSection === "hero") {
+        document.title = "Axel Villanueva | Full-Stack Developer";
+      } else {
+        const formattedName = activeSection.charAt(0).toUpperCase() + activeSection.slice(1);
+        document.title = `${formattedName} - Axel Villanueva`;
+      }
     }
-  }, [activeSection]);
+  }, [activeSection, pathname]);
 
   const handleNavClick = useCallback(
     (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {

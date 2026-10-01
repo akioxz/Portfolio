@@ -119,6 +119,6 @@ html, body {
 
 
 /* Skip splash screen completely on repeat visits */
-html.skip-splash .splash-screen {
+html[data-skip-splash="true"] .splash-screen {
   display: none !important;
 }
