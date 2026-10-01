@@ -123,7 +123,7 @@ export default function ContactSection() {
                     id="name" type="text" required disabled={isLoading}
                     value={name} onChange={(e) => setName(e.target.value)}
                     placeholder="Your name"
-                    className="w-full bg-transparent border border-black/10 dark:border-white/10 rounded-xl px-4 py-3 text-neutral-900 dark:text-white font-sans text-sm focus:outline-none focus:border-neutral-900 dark:focus:border-white transition-colors disabled:opacity-50"
+                    className="w-full bg-transparent border border-black/10 dark:border-white/10 rounded-xl px-4 py-3 text-neutral-900 dark:text-white font-sans text-base sm:text-sm focus:outline-none focus:border-neutral-900 dark:focus:border-white transition-colors disabled:opacity-50"
                   />
                 </div>
                 <div className="flex flex-col gap-2">
@@ -134,7 +134,7 @@ export default function ContactSection() {
                     id="email" type="email" required disabled={isLoading}
                     value={email} onChange={(e) => setEmail(e.target.value)}
                     placeholder="you@company.com"
-                    className="w-full bg-transparent border border-black/10 dark:border-white/10 rounded-xl px-4 py-3 text-neutral-900 dark:text-white font-sans text-sm focus:outline-none focus:border-neutral-900 dark:focus:border-white transition-colors disabled:opacity-50"
+                    className="w-full bg-transparent border border-black/10 dark:border-white/10 rounded-xl px-4 py-3 text-neutral-900 dark:text-white font-sans text-base sm:text-sm focus:outline-none focus:border-neutral-900 dark:focus:border-white transition-colors disabled:opacity-50"
                   />
                 </div>
               </div>
@@ -148,7 +148,7 @@ export default function ContactSection() {
                   value={message} onChange={(e) => setMessage(e.target.value)}
                   placeholder="What are you working on, who is it for, and what would a successful outcome look like?"
                   rows={4}
-                  className="w-full bg-transparent border border-black/10 dark:border-white/10 rounded-xl px-4 py-3 text-neutral-900 dark:text-white font-sans text-sm focus:outline-none focus:border-neutral-900 dark:focus:border-white transition-colors resize-none disabled:opacity-50"
+                  className="w-full bg-transparent border border-black/10 dark:border-white/10 rounded-xl px-4 py-3 text-neutral-900 dark:text-white font-sans text-base sm:text-sm focus:outline-none focus:border-neutral-900 dark:focus:border-white transition-colors resize-none disabled:opacity-50"
                 />
               </div>
 
