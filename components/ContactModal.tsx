@@ -67,8 +67,7 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
 
   return createPortal(
     <div
-      className="fixed inset-0 z-[60] flex items-center justify-center bg-black/40 p-4 sm:p-6 backdrop-blur-md transform-gpu will-change-opacity"
-      style={{ WebkitBackfaceVisibility: "hidden" }}
+      className="fixed inset-0 z-[60] flex items-center justify-center bg-black/60 p-4 sm:p-6"
       onClick={onClose}
       role="dialog"
       aria-modal="true"
