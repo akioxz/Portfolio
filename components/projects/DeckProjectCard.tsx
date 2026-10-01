@@ -9,7 +9,7 @@ export default function DeckProjectCard({
   project: ProjectData;
 }) {
   return (
-    <div className="w-full max-w-[20rem] mx-auto h-[320px] bg-white dark:bg-[#0a0a0a] rounded-[24px] border border-black/5 dark:border-white/10 p-6 shadow-2xl flex flex-col transition-colors group">
+    <div className="w-full max-w-[20rem] mx-auto h-auto min-h-[320px] bg-white dark:bg-[#0a0a0a] rounded-[24px] border border-black/5 dark:border-white/10 p-6 shadow-2xl flex flex-col transition-colors group">
       
       <div className="flex items-start justify-between mb-5">
         <div className="flex items-center gap-4">

@@ -53,7 +53,7 @@ export default function Projects({ projects }: { projects: ProjectData[] }) {
         </Magnetic>
       </div>
 
-      <div className="relative w-full h-[380px] flex items-center justify-center overflow-visible perspective-[2000px]">
+      <div className="relative w-full h-[480px] sm:h-[400px] flex items-center justify-center overflow-visible perspective-[2000px]">
         <AnimatePresence mode="popLayout">
           {projects.map((project, index) => {
             let position = "hidden";
