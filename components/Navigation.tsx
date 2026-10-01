@@ -36,7 +36,7 @@ export function Sidebar() {
   }, []);
 
   useEffect(() => {
-    const sectionsToObserve = ["hero", ...mainNavLinks.map(l => l.href.replace("/#", ""))];
+    const sectionsToObserve = ["hero", ...mainNavLinks.map(l => l.href.replace("/#", "")), "afk", "footer"];
     
     const observer = new IntersectionObserver(
       (entries) => {
@@ -46,13 +46,17 @@ export function Sidebar() {
           }
         });
       },
-      { rootMargin: "-20% 0px -60% 0px" }
+      // Expanded detection zone so bottom elements can trigger it even if they don't reach the top
+      { rootMargin: "-20% 0px -40% 0px" }
     );
 
-    sectionsToObserve.forEach((id) => {
-      const element = document.getElementById(id);
-      if (element) observer.observe(element);
-    });
+    // Give the DOM a tiny bit of time to render dynamic content like footer before observing
+    setTimeout(() => {
+      sectionsToObserve.forEach((id) => {
+        const element = document.getElementById(id);
+        if (element) observer.observe(element);
+      });
+    }, 100);
 
     return () => observer.disconnect();
   }, []);

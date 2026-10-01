@@ -22,7 +22,7 @@ export default function Footer() {
   };
 
   return (
-    <footer className="w-full flex flex-col items-center justify-center pt-24 pb-8 mt-12 border-t border-black/5 dark:border-white/5 relative">
+    <footer id="footer" className="w-full flex flex-col items-center justify-center pt-24 pb-8 mt-12 border-t border-black/5 dark:border-white/5 relative">
       <button
         onClick={openContact}
         onPointerEnter={handlePointerEnter}
