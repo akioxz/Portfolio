@@ -28,7 +28,7 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
         <MobileMenu />
         <motion.div
           key={pathname}
-          className="lg:pl-56 w-full min-h-screen flex flex-col"
+          className="lg:pl-56 w-full max-w-full overflow-x-hidden min-h-screen flex flex-col"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
