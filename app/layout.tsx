@@ -3,6 +3,7 @@ import { Inter, Geist_Mono, DotGothic16 } from "next/font/google";
 import "./globals.css";
 import LayoutWrapper from "@/components/LayoutWrapper";
 import CommandMenu from "@/components/CommandMenu";
+import CustomCursor from "@/components/CustomCursor";
 import ThemeProvider from "@/components/ThemeProvider";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
@@ -144,7 +145,8 @@ export default function RootLayout({
           <LayoutWrapper>
             {children}
           </LayoutWrapper>
-          <CommandMenu />
+          <CustomCursor />
+        <CommandMenu />
           <Analytics />
           <SpeedInsights />
         </ThemeProvider>

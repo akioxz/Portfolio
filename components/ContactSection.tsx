@@ -4,6 +4,7 @@ import { useState, useRef } from "react";
 import { Turnstile, TurnstileInstance } from "@marsidev/react-turnstile";
 import { motion, AnimatePresence } from "motion/react";
 import { VscCheck, VscError } from "react-icons/vsc";
+import Magnetic from "./Magnetic";
 
 export default function ContactSection() {
   const [name, setName] = useState("");
@@ -169,8 +170,7 @@ export default function ContactSection() {
                   </p>
                 </div>
                 
-                <button
-                  type="submit" disabled={isLoading}
+                <Magnetic className="w-full sm:w-auto"><button type="submit" disabled={isLoading}
                   className="group flex items-center justify-center gap-2 bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 px-6 py-3 rounded-xl font-sans text-sm font-semibold hover:opacity-90 transition-all duration-300 active:scale-[0.98] disabled:opacity-50 cursor-pointer w-full sm:w-auto shrink-0"
                 >
                   {isLoading ? (
@@ -186,7 +186,7 @@ export default function ContactSection() {
                       </svg>
                     </>
                   )}
-                </button>
+                </button></Magnetic>
               </div>
             </motion.form>
           )}
