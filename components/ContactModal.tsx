@@ -14,6 +14,7 @@ interface ContactModalProps {
 
 export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
   const [mounted, setMounted] = useState(false);
+  const [showTurnstile, setShowTurnstile] = useState(false);
   const prefersReducedMotion = useReducedMotion();
   const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
 
@@ -33,6 +34,15 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  useEffect(() => {
+    if (isOpen) {
+      const t = setTimeout(() => setShowTurnstile(true), 300);
+      return () => clearTimeout(t);
+    } else {
+      setShowTurnstile(false);
+    }
+  }, [isOpen]);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -57,7 +67,8 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
 
   return createPortal(
     <div
-      className="fixed inset-0 z-[60] flex items-center justify-center bg-black/60 p-4 sm:p-6 transition-opacity"
+      className="fixed inset-0 z-[60] flex items-center justify-center bg-black/40 p-4 sm:p-6 backdrop-blur-md transform-gpu will-change-opacity"
+      style={{ WebkitBackfaceVisibility: "hidden" }}
       onClick={onClose}
       role="dialog"
       aria-modal="true"
@@ -205,7 +216,7 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
               {fieldErrors?.message && <span className="font-sans text-xs text-red-500">{fieldErrors.message[0]}</span>}
             </div>
 
-            {siteKey && (
+            {siteKey && showTurnstile && (
               <div className="my-2 flex justify-center">
                 <Turnstile
                   ref={turnstileRef} siteKey={siteKey}
