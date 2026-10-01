@@ -8,11 +8,13 @@ import DeckProjectCard from "./projects/DeckProjectCard";
 import Magnetic from "./Magnetic";
 import { ProjectData } from "./projects/StickyProjectCard";
 import { useUISounds } from "@/hooks/useUISounds";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
 
 export default function Projects({ projects }: { projects: ProjectData[] }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const total = projects.length;
   const { playHover, playClick } = useUISounds();
+  const isMobile = useMediaQuery("(max-width: 640px)");
 
   if (total === 0) return null;
 
@@ -67,19 +69,27 @@ export default function Projects({ projects }: { projects: ProjectData[] }) {
               center: { 
                 x: "0%", y: "0%", scale: 1, rotateY: 0, rotateZ: 0, zIndex: 30, opacity: 1 
               },
-              left: { 
+              left: isMobile ? {
+                x: "-15%", y: "0%", scale: 0.85, rotateY: 0, rotateZ: -4, zIndex: 10, opacity: 0
+              } : { 
                 x: "-65%", y: "5%", scale: 0.88, rotateY: 15, rotateZ: -6, zIndex: 10, opacity: 0.4 
               },
-              right: { 
+              right: isMobile ? {
+                x: "15%", y: "0%", scale: 0.85, rotateY: 0, rotateZ: 4, zIndex: 20, opacity: 0
+              } : { 
                 x: "65%", y: "5%", scale: 0.88, rotateY: -15, rotateZ: 6, zIndex: 20, opacity: 0.4 
               },
               centerHover: { 
-                y: "-4%", scale: 1.02, opacity: 1 
+                y: isMobile ? "0%" : "-4%", scale: isMobile ? 1 : 1.02, opacity: 1 
               },
-              leftHover: { 
+              leftHover: isMobile ? {
+                x: "-15%", y: "0%", scale: 0.85, rotateY: 0, rotateZ: -4, zIndex: 10, opacity: 0
+              } : { 
                 x: "-72%", y: "2%", scale: 0.92, rotateY: 10, rotateZ: -8, opacity: 0.85 
               },
-              rightHover: { 
+              rightHover: isMobile ? {
+                x: "15%", y: "0%", scale: 0.85, rotateY: 0, rotateZ: 4, zIndex: 20, opacity: 0
+              } : { 
                 x: "72%", y: "2%", scale: 0.92, rotateY: -10, rotateZ: 8, opacity: 0.85 
               },
             };
