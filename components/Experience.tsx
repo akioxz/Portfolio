@@ -19,7 +19,7 @@ export default function Experience({ experience }: { experience: ExperienceData[
   return (
     <section id="experience" className="scroll-mt-24" aria-label="Experience">
       <div className="mb-16">
-        <p className="font-pixel text-xs text-slate mb-2 uppercase tracking-wider">02 — experience</p>
+        
         <SplitText
           text="Experience & Education"
           tag="h2"
@@ -36,9 +36,7 @@ export default function Experience({ experience }: { experience: ExperienceData[
       <div className="flex flex-col lg:flex-row gap-16 lg:gap-12">
         {/* Education Block (Left) */}
         <div className="w-full lg:w-1/3">
-          <span className="block font-mono text-[11px] tracking-widest uppercase text-neutral-500 dark:text-white/40 mb-8">
-            Education
-          </span>
+          
           <div className="flex flex-col gap-6">
             <div className="transition-opacity duration-300 hover:opacity-100">
               <p className="font-mono text-[11px] text-slate/60 mb-2">2023 {"\u2014"} Present</p>
@@ -55,9 +53,7 @@ export default function Experience({ experience }: { experience: ExperienceData[
 
         {/* Experience Block (Right) - Focus Mode & Ledger Layout */}
         <div className="w-full lg:w-2/3">
-          <span className="block font-mono text-[11px] tracking-widest uppercase text-neutral-500 dark:text-white/40 mb-8">
-            Experience
-          </span>
+          
           
           {/* FOCUS MODE: 'group/list' triggers dimming on children, while 'hover:!opacity-100' restores the active one */}
           <div className="group/list flex flex-col">

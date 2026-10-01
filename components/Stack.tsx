@@ -89,8 +89,7 @@ export default function Stack({ stack = [] }: { stack?: StackItem[] }) {
 
   return (
     <section id="stack" className="scroll-mt-24" aria-label="Technology Stack">
-        <p className="font-pixel text-xs text-slate mb-2 uppercase tracking-wider">03 — stack</p>
-      <SplitText
+        <SplitText
         text="Stack"
         tag="h2"
         className="text-2xl sm:text-[1.75rem] tracking-tight font-mono text-neutral-900 dark:text-cream mb-6"

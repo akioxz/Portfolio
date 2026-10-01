@@ -30,7 +30,7 @@ export default function Projects({ projects }: { projects: ProjectData[] }) {
 
   return (
     <section id="projects" className="scroll-mt-24" aria-label="Projects">
-      <div className="mb-12"><p className="font-pixel text-xs text-slate mb-2 uppercase tracking-wider">01 - projects</p><div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6">
+      <div className="mb-12"><div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6">
         <SplitText text="Projects" tag="h2" className="text-2xl sm:text-[1.75rem] font-mono text-neutral-900 dark:text-cream"
           splitType="words"
           delay={40}
