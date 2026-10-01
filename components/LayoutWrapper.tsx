@@ -3,6 +3,7 @@
 import { usePathname } from "next/navigation";
 import { Sidebar, MobileMenu } from "@/components/Navigation";
 import ReactLenisWrapper from "@/components/ReactLenisWrapper";
+import LogoSplash from "@/components/LogoSplash";
 import { AnimatePresence, motion } from "motion/react";
 
 export default function LayoutWrapper({ children }: { children: React.ReactNode }) {
@@ -19,6 +20,7 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
 
   return (
     <ReactLenisWrapper>
+      <LogoSplash />
       <Sidebar />
       <MobileMenu />
       <AnimatePresence mode="wait">

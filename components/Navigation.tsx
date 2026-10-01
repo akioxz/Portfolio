@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useLenis } from "lenis/react";
@@ -24,6 +24,7 @@ const extraLinks = [
 export function Sidebar() {
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("");
+  const isScrollingRef = useRef(false);
   const lenis = useLenis();
   const pathname = usePathname();
   const router = useRouter();
@@ -40,7 +41,7 @@ export function Sidebar() {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) {
+          if (entry.isIntersecting && !isScrollingRef.current) {
             setActiveSection(entry.target.id);
           }
         });
@@ -74,8 +75,13 @@ export function Sidebar() {
 
       if (isAnchor) {
         const targetId = href.replace("/#", "");
+        setActiveSection(targetId);
         if (isHome) {
+          isScrollingRef.current = true;
           lenis?.scrollTo(`#${targetId}`, { duration: 1.2, offset: -96 });
+          setTimeout(() => {
+            isScrollingRef.current = false;
+          }, 1250);
         } else {
           router.push(href);
         }
@@ -94,7 +100,12 @@ export function Sidebar() {
           onClick={(e) => {
             if (pathname === "/") {
               e.preventDefault();
+              setActiveSection("hero");
+              isScrollingRef.current = true;
               lenis?.scrollTo(0, { duration: 1.2 });
+              setTimeout(() => {
+                isScrollingRef.current = false;
+              }, 1250);
             }
           }}
           className="font-mono text-[15px] text-neutral-900 dark:text-white hover:opacity-70 transition-opacity"
