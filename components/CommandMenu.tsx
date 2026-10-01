@@ -153,7 +153,7 @@ export default function CommandMenu() {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-          className="fixed inset-0 z-[100] flex flex-col justify-center pl-[clamp(1.5rem,9vw,8rem)] pr-6 bg-white/80 dark:bg-[#0c0c0c]/85 backdrop-blur-md"
+          className="fixed inset-0 z-[100] flex flex-col justify-center pl-[clamp(1.5rem,9vw,8rem)] pr-6 bg-white/95 dark:bg-[#0c0c0c]/95"
           onClick={(e) => {
             if (e.target === e.currentTarget) setIsOpen(false);
           }}
