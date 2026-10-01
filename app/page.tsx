@@ -9,6 +9,7 @@ import Stack from "@/components/Stack";
 import Certifications from "@/components/Certifications";
 import BeyondTheCode from "@/components/BeyondTheCode";
 import Footer from "@/components/Footer";
+import ContactSection from "@/components/ContactSection";
 
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
@@ -40,6 +41,7 @@ export default async function Home() {
         <Certifications certifications={certificationsData || []} />
         <BeyondTheCode />
         
+        <ContactSection />
         <Footer />
       </main>
     </>

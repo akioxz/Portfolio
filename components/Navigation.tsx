@@ -8,7 +8,7 @@ import { motion, AnimatePresence } from "motion/react";
 import { VscMenu, VscClose, VscMail, VscGithub, VscSend } from "react-icons/vsc";
 import { FaDiscord } from "react-icons/fa6";
 import ThemeToggle from "./ThemeToggle";
-import ContactModal from "./ContactModal";
+
 
 const mainNavLinks = [
   { label: "Experience", href: "/#experience" },
@@ -22,7 +22,7 @@ const extraLinks = [
 ];
 
 export function Sidebar() {
-  const [isContactModalOpen, setIsContactModalOpen] = useState(false);
+  
   const [activeSection, setActiveSection] = useState("");
   const isScrollingRef = useRef(false);
   const lenis = useLenis();
@@ -30,7 +30,7 @@ export function Sidebar() {
   const router = useRouter();
 
   useEffect(() => {
-    const handleOpenModal = () => setIsContactModalOpen(true);
+    const handleOpenModal = () => { const el = document.getElementById("contact"); if (el) el.scrollIntoView({ behavior: "smooth" }); };
     window.addEventListener("openContactModal", handleOpenModal);
     return () => window.removeEventListener("openContactModal", handleOpenModal);
   }, []);
@@ -210,7 +210,7 @@ export function Sidebar() {
             </a>
             <button
               type="button"
-              onClick={() => setIsContactModalOpen(true)}
+              onClick={() => window.dispatchEvent(new CustomEvent("openContactModal"))}
               aria-label="Send a message"
               className="text-zinc-500 hover:text-neutral-900 dark:hover:text-white transition-colors"
             >
@@ -220,14 +220,14 @@ export function Sidebar() {
         </div>
       </div>
       
-      <ContactModal isOpen={isContactModalOpen} onClose={() => setIsContactModalOpen(false)} />
+      
     </aside>
   );
 }
 
 export function MobileMenu() {
   const [isOpen, setIsOpen] = useState(false);
-  const [isContactModalOpen, setIsContactModalOpen] = useState(false);
+  
   const lenis = useLenis();
   const pathname = usePathname();
   const router = useRouter();
@@ -354,7 +354,7 @@ export function MobileMenu() {
                   <a href="https://github.com/akioxz" target="_blank" rel="noopener noreferrer" aria-label="GitHub" className="text-zinc-500 hover:text-neutral-900 dark:hover:text-white transition-colors p-3 bg-neutral-100 dark:bg-white/5 rounded-full active:scale-95">
                     <VscGithub className="w-5 h-5" />
                   </a>
-                  <button onClick={() => setIsContactModalOpen(true)} aria-label="Message" className="text-zinc-500 hover:text-neutral-900 dark:hover:text-white transition-colors p-3 bg-neutral-100 dark:bg-white/5 rounded-full active:scale-95">
+                  <button onClick={() => { setIsOpen(false); window.dispatchEvent(new CustomEvent("openContactModal")); }} aria-label="Message" className="text-zinc-500 hover:text-neutral-900 dark:hover:text-white transition-colors p-3 bg-neutral-100 dark:bg-white/5 rounded-full active:scale-95">
                     <VscSend className="w-5 h-5" />
                   </button>
                 </div>
@@ -363,7 +363,7 @@ export function MobileMenu() {
           </motion.div>
         )}
       </AnimatePresence>
-      <ContactModal isOpen={isContactModalOpen} onClose={() => setIsContactModalOpen(false)} />
+      
     </>
   );
 }

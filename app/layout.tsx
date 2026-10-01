@@ -76,7 +76,9 @@ export default function RootLayout({
             __html: `
               try {
                 if (sessionStorage.getItem('splashShown')) {
-                  document.documentElement.setAttribute('data-skip-splash', 'true');
+                  var style = document.createElement('style');
+                  style.innerHTML = '.splash-screen { display: none !important; }';
+                  document.head.appendChild(style);
                 }
               } catch (e) {}
             `,
