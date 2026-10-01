@@ -75,7 +75,7 @@ export default function CommandMenu() {
     } else if (q.includes("hire") || q.includes("freelance")) {
       responseText = "i'm open to interesting projects. type 'contact' to send me a message.";
     } else if (q.includes("who are you") || q.includes("about")) {
-      responseText = "i am axel villanueva, a full-stack developer specializing in react, next.js, and scalable web apps.";
+      responseText = "i am axel villanueva, a 4th-year bsit student and aspiring full-stack developer specializing in react, next.js, and scalable web apps.";
     } else if (q.includes("hello") || q.includes("hi")) {
       responseText = "hello there. what can i help you find today?";
     } else {
