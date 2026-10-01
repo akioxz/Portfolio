@@ -93,8 +93,8 @@ export default function BeyondTheCode() {
                   ))}
                 </motion.div>
                 
-                <div className="absolute inset-y-0 left-0 w-16 md:w-32 bg-gradient-to-r from-neutral-50 dark:from-[#0F1115] to-transparent pointer-events-none z-10" />
-                <div className="absolute inset-y-0 right-0 w-16 md:w-32 bg-gradient-to-l from-neutral-50 dark:from-[#0F1115] to-transparent pointer-events-none z-10" />
+                <div className="absolute inset-y-0 left-0 w-16 md:w-32 bg-gradient-to-r from-white dark:from-[#0F1115] to-transparent pointer-events-none z-10" />
+                <div className="absolute inset-y-0 right-0 w-16 md:w-32 bg-gradient-to-l from-white dark:from-[#0F1115] to-transparent pointer-events-none z-10" />
               </motion.div>
             ) : (
               <motion.div

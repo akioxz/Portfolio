@@ -111,8 +111,8 @@ export default function Stack({ stack = [] }: { stack?: StackItem[] }) {
               direction="left"
               logoHeight={32}
               gap={12}
-              fadeOut
-              fadeOutColor="rgb(var(--bg))"
+              fadeOut={false}
+              
               scaleOnHover
               ariaLabel="Frontend stack"
             />
@@ -128,8 +128,8 @@ export default function Stack({ stack = [] }: { stack?: StackItem[] }) {
               direction="right"
               logoHeight={32}
               gap={12}
-              fadeOut
-              fadeOutColor="rgb(var(--bg))"
+              fadeOut={false}
+              
               scaleOnHover
               ariaLabel="Backend stack"
             />
@@ -145,8 +145,8 @@ export default function Stack({ stack = [] }: { stack?: StackItem[] }) {
               direction="left"
               logoHeight={32}
               gap={12}
-              fadeOut
-              fadeOutColor="rgb(var(--bg))"
+              fadeOut={false}
+              
               scaleOnHover
               ariaLabel="Tools stack"
             />

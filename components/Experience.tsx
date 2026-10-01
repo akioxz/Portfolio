@@ -17,7 +17,7 @@ export default function Experience({ experience }: { experience: ExperienceData[
   if (!experience || experience.length === 0) return null;
 
   return (
-    <section id="experience" className="scroll-mt-24 mb-32" aria-label="Experience">
+    <section id="experience" className="scroll-mt-24" aria-label="Experience">
       <div className="mb-16">
         <SplitText
           text="Experience & Education"

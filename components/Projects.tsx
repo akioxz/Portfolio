@@ -29,7 +29,7 @@ export default function Projects({ projects }: { projects: ProjectData[] }) {
   };
 
   return (
-    <section id="projects" className="scroll-mt-24 mb-32" aria-label="Projects">
+    <section id="projects" className="scroll-mt-24" aria-label="Projects">
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-8 sm:mb-12">
         <SplitText
           text="Projects"
@@ -55,7 +55,7 @@ export default function Projects({ projects }: { projects: ProjectData[] }) {
         </Magnetic>
       </div>
 
-      <div className="relative w-full h-[480px] sm:h-[400px] flex items-center justify-center overflow-visible perspective-[2000px]">
+      <div className="relative w-full h-[400px] flex items-center justify-center overflow-visible perspective-[2000px]">
         <AnimatePresence mode="popLayout">
           {projects.map((project, index) => {
             let position = "hidden";
