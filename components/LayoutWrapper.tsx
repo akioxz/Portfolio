@@ -4,7 +4,7 @@ import { usePathname } from "next/navigation";
 import { Sidebar, MobileMenu } from "@/components/Navigation";
 import ReactLenisWrapper from "@/components/ReactLenisWrapper";
 import LogoSplash from "@/components/LogoSplash";
-import { AnimatePresence, motion } from "motion/react";
+import { motion } from "motion/react";
 
 export default function LayoutWrapper({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -19,22 +19,23 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
   }
 
   return (
-    <ReactLenisWrapper>
+    <>
+      {/* LogoSplash sits OUTSIDE ReactLenisWrapper and motion so it's never affected by route transitions */}
       <LogoSplash />
-      <Sidebar />
-      <MobileMenu />
-      <AnimatePresence mode="wait">
-        <motion.div 
+
+      <ReactLenisWrapper>
+        <Sidebar />
+        <MobileMenu />
+        <motion.div
           key={pathname}
           className="lg:pl-56 w-full min-h-screen flex flex-col"
-          initial={{ opacity: 0, filter: "blur(4px)", y: 8 }}
-          animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
-          exit={{ opacity: 0, filter: "blur(4px)", y: -8 }}
-          transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
         >
           {children}
         </motion.div>
-      </AnimatePresence>
-    </ReactLenisWrapper>
+      </ReactLenisWrapper>
+    </>
   );
 }

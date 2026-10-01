@@ -11,8 +11,8 @@ import ThemeToggle from "./ThemeToggle";
 import ContactModal from "./ContactModal";
 
 const mainNavLinks = [
-  { label: "Projects", href: "/#projects" },
   { label: "Experience", href: "/#experience" },
+  { label: "Projects", href: "/#projects" },
   { label: "Stack", href: "/#stack" },
   { label: "Certifications", href: "/#certifications" },
 ];
