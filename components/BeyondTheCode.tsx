@@ -67,7 +67,7 @@ export default function BeyondTheCode() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.5 }}
-                className="w-full -mx-4 px-4 sm:-mx-8 sm:px-8 md:mx-0 md:px-0 relative"
+                className="w-auto -mx-4 sm:-mx-6 md:mx-0 relative"
               >
                 <motion.div
                   className="flex gap-4 md:gap-6 w-max"
