@@ -290,49 +290,13 @@ export async function POST(request: Request) {
       `,
     });
 
-    const autoReplyPromise = resend.emails.send({
-      from: "Axel Villanueva <onboarding@resend.dev>",
-      to: [email],
-      subject: `Thanks for reaching out, ${name}!`,
-      html: `
-        <div style="font-family: sans-serif; line-height: 1.6; color: #222; max-w: 500px; margin: 0 auto; padding: 20px; border: 1px solid #eaeaea; border-radius: 8px;">
-          <p style="font-size: 15px;">Hi ${safeName},</p>
-          <p style="font-size: 14px; color: #444;">Thanks for reaching out! I've received your message and I'll get back to you soon — usually within a day or two.</p>
-          <p style="font-size: 14px; color: #111; margin-top: 20px;">— Axel</p>
-        </div>
-      `,
-    });
-
-    const [notificationResult, autoReplyResult] = await Promise.allSettled([
-      notificationPromise,
-      autoReplyPromise,
-    ]);
-
-    const notificationFailed =
-      notificationResult.status === "rejected" ||
-      notificationResult.value.error !== null ||
-      notificationResult.value.data === null;
-
-    if (notificationFailed) {
-      console.error(
-        "[Resend Notification Failed]",
-        notificationResult.status === "rejected"
-          ? notificationResult.reason
-          : notificationResult.value.error,
-      );
+    const notificationResult = await notificationPromise;
+    
+    if (notificationResult.error) {
+      console.error("[Resend Notification Failed]", notificationResult.error);
       return NextResponse.json(
-        {
-          error:
-            "Failed to send notification email. Please try emailing me directly at dev.akioxz@gmail.com instead.",
-        },
-        { status: 500 },
-      );
-    }
-
-    if (autoReplyResult.status === "rejected") {
-      console.warn(
-        "[Resend Auto-Reply Failed (Note: onboarding@resend.dev requires verified domain for strangers)]",
-        autoReplyResult.reason,
+        { error: "Failed to send notification email. Please try emailing me directly at dev.akioxz@gmail.com instead." },
+        { status: 500 }
       );
     }
 
