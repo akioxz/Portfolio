@@ -73,8 +73,8 @@ export default function CommandMenu() {
     } 
     // Normal Command Parsing
     else {
-      if (["experience", "work", "job", "history"].some(k => q.includes(k))) {
-        responseText = "navigating to experience...";
+      if (["experience", "work", "job", "history", "education", "school", "university", "college", "degree", "bsit"].some(k => q.includes(k))) {
+        responseText = "navigating to experience & education...";
         action = () => { 
           if (pathname !== "/") router.push("/"); 
           setTimeout(() => document.getElementById("experience")?.scrollIntoView({behavior: 'smooth'}), 100); 
