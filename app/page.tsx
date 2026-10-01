@@ -33,7 +33,7 @@ export default async function Home() {
 
   return (
     <>
-      <main className="mx-auto w-full max-w-7xl flex flex-col gap-24 sm:gap-32 px-4 sm:px-6 pb-10 sm:pb-24 pt-16 sm:pt-20">
+      <main className="mx-auto w-full max-w-7xl flex flex-col gap-16 sm:gap-32 px-4 sm:px-6 pb-10 sm:pb-24 pt-12 sm:pt-20">
         <Hero />
         <Experience experience={experienceData || []} />
         <Projects projects={projectsData || []} />

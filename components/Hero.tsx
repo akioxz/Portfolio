@@ -20,7 +20,7 @@ export default function Hero() {
   return (
     <motion.section
       id="hero"
-      className="mb-12 flex flex-col md:flex-row gap-10 md:gap-16 items-center md:items-start max-w-4xl pt-10"
+      className="flex flex-col md:flex-row gap-10 md:gap-16 items-center md:items-start max-w-4xl"
       initial={isMounted ? "hidden" : false}
       animate="visible"
       variants={{

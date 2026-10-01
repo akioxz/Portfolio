@@ -18,7 +18,7 @@ export default function Certifications({ certifications = [] }: { certifications
   const visibleCerts = certifications.slice(0, 3);
 
   return (
-    <section id="certifications" className="mb-20 scroll-mt-24" aria-label="Certifications">
+    <section id="certifications" className="scroll-mt-24" aria-label="Certifications">
       <div className="flex items-center justify-between mb-8">
         <SplitText
           text="Certifications"

@@ -24,7 +24,7 @@ export default function BeyondTheCode() {
   const marqueeItems = [...galleryItems, ...galleryItems];
 
   return (
-    <section ref={sectionRef} id="afk" className="mb-24 scroll-mt-24 overflow-hidden w-full" aria-label="AFK / Beyond the Code">
+    <section ref={sectionRef} id="afk" className="scroll-mt-24 overflow-hidden w-full" aria-label="AFK / Beyond the Code">
       <div className="flex flex-col gap-10">
         
         <div className="w-full flex flex-col sm:flex-row justify-between items-start sm:items-end gap-6">

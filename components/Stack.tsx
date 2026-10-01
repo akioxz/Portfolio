@@ -88,7 +88,7 @@ export default function Stack({ stack = [] }: { stack?: StackItem[] }) {
   if (stack.length === 0) return null;
 
   return (
-    <section id="stack" className="mb-20 scroll-mt-24" aria-label="Technology Stack">
+    <section id="stack" className="scroll-mt-24" aria-label="Technology Stack">
       <SplitText
         text="Stack"
         tag="h2"

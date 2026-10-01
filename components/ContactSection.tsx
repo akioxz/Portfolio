@@ -65,7 +65,7 @@ export default function ContactSection() {
   };
 
   return (
-    <section id="contact" className="w-full flex flex-col items-center justify-center pt-24 pb-8 border-t border-black/5 dark:border-white/5 relative">
+    <section id="contact" className="w-full flex flex-col items-center justify-center pt-12 sm:pt-24 pb-8 border-t border-black/5 dark:border-white/5 relative">
       <div className="w-full max-w-3xl rounded-[2rem] border border-black/5 dark:border-white/5 bg-[#fcfcfc] dark:bg-[#0c0c0c] p-6 sm:p-12 shadow-sm relative overflow-hidden">
         
         {/* Header */}
