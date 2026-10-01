@@ -41,6 +41,10 @@ export function Sidebar() {
     const observer = new IntersectionObserver(
       (entries) => {
         if (isScrollingRef.current) return;
+        if (window.scrollY < 150) {
+          setActiveSection("hero");
+          return;
+        }
         
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
