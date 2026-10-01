@@ -2,15 +2,18 @@
 
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 
 export default function CommandMenu() {
   const [isOpen, setIsOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [answer, setAnswer] = useState("");
   const [isTyping, setIsTyping] = useState(false);
+  const [awaitingConfirm, setAwaitingConfirm] = useState<string | null>(null);
+  
   const inputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
+  const pathname = usePathname();
 
   // Handle Keyboard Shortcut (Alt+K)
   useEffect(() => {
@@ -28,7 +31,7 @@ export default function CommandMenu() {
     return () => document.removeEventListener("keydown", down);
   }, []);
 
-  // Focus input when opened
+  // Reset state and focus input when opened
   useEffect(() => {
     if (isOpen) {
       setTimeout(() => inputRef.current?.focus(), 100);
@@ -36,6 +39,7 @@ export default function CommandMenu() {
       setQuery("");
       setAnswer("");
       setIsTyping(false);
+      setAwaitingConfirm(null);
     }
   }, [isOpen]);
 
@@ -49,37 +53,73 @@ export default function CommandMenu() {
 
     let responseText = "";
     let action: (() => void) | null = null;
+    let shouldClearQuery = false;
 
-    // Simple Command / Keyword Matching
-    if (["experience", "work", "job", "history"].some(k => q.includes(k))) {
-      responseText = "navigating to experience...";
-      action = () => { router.push("/"); setTimeout(() => document.getElementById("experience")?.scrollIntoView({behavior: 'smooth'}), 100) };
-    } else if (["projects", "portfolio", "builds"].some(k => q.includes(k))) {
-      responseText = "navigating to projects...";
-      action = () => { router.push("/"); setTimeout(() => document.getElementById("projects")?.scrollIntoView({behavior: 'smooth'}), 100) };
-    } else if (["stack", "skills", "tech"].some(k => q.includes(k))) {
-      responseText = "navigating to tech stack...";
-      action = () => { router.push("/"); setTimeout(() => document.getElementById("stack")?.scrollIntoView({behavior: 'smooth'}), 100) };
-    } else if (["certifications", "certs"].some(k => q.includes(k))) {
-      responseText = "navigating to certifications...";
-      action = () => { router.push("/"); setTimeout(() => document.getElementById("certifications")?.scrollIntoView({behavior: 'smooth'}), 100) };
-    } else if (["uses", "gear", "setup", "equipment"].some(k => q.includes(k))) {
-      responseText = "opening my workspace & gear setup...";
-      action = () => router.push("/uses");
-    } else if (["contact", "email", "message", "chat"].some(k => q.includes(k))) {
-      responseText = "opening contact modal...";
-      action = () => window.dispatchEvent(new CustomEvent('openContactModal'));
-    } else if (["admin", "login"].some(k => q.includes(k))) {
-      responseText = "initiating admin protocol...";
-      action = () => router.push("/admin/login");
-    } else if (q.includes("hire") || q.includes("freelance")) {
-      responseText = "i'm open to interesting projects. type 'contact' to send me a message.";
-    } else if (q.includes("who are you") || q.includes("about")) {
-      responseText = "i am axel villanueva, a 4th-year bsit student and aspiring full-stack developer specializing in react, next.js, and scalable web apps.";
-    } else if (q.includes("hello") || q.includes("hi")) {
-      responseText = "hello there. what can i help you find today?";
-    } else {
-      responseText = "i don't have an automated answer for that yet. try asking about my 'projects', 'stack', 'uses', or 'contact'.";
+    // Handle Follow-up Confirmation (e.g. for contact modal)
+    if (awaitingConfirm === "contact") {
+      if (["yes", "y", "sure", "ok", "yeah"].includes(q)) {
+        responseText = "opening contact form...";
+        action = () => window.dispatchEvent(new CustomEvent('openContactModal'));
+      } else if (["no", "n", "nope", "cancel"].includes(q)) {
+        responseText = "no problem. what else can i help you find?";
+        shouldClearQuery = true;
+      } else {
+        responseText = "please answer yes or no. do you want to open the contact form?";
+        shouldClearQuery = true;
+      }
+      if (["yes", "y", "sure", "ok", "yeah", "no", "n", "nope", "cancel"].includes(q)) {
+        setAwaitingConfirm(null);
+      }
+    } 
+    // Normal Command Parsing
+    else {
+      if (["experience", "work", "job", "history"].some(k => q.includes(k))) {
+        responseText = "navigating to experience...";
+        action = () => { 
+          if (pathname !== "/") router.push("/"); 
+          setTimeout(() => document.getElementById("experience")?.scrollIntoView({behavior: 'smooth'}), 100); 
+        };
+      } else if (["projects", "portfolio", "builds"].some(k => q.includes(k))) {
+        responseText = "navigating to projects...";
+        action = () => { 
+          if (pathname !== "/") router.push("/"); 
+          setTimeout(() => document.getElementById("projects")?.scrollIntoView({behavior: 'smooth'}), 100); 
+        };
+      } else if (["stack", "skills", "tech"].some(k => q.includes(k))) {
+        responseText = "navigating to tech stack...";
+        action = () => { 
+          if (pathname !== "/") router.push("/"); 
+          setTimeout(() => document.getElementById("stack")?.scrollIntoView({behavior: 'smooth'}), 100); 
+        };
+      } else if (["certifications", "certs"].some(k => q.includes(k))) {
+        responseText = "navigating to certifications...";
+        action = () => { 
+          if (pathname !== "/") router.push("/"); 
+          setTimeout(() => document.getElementById("certifications")?.scrollIntoView({behavior: 'smooth'}), 100); 
+        };
+      } else if (["uses", "gear", "setup", "equipment"].some(k => q.includes(k))) {
+        responseText = "opening my workspace & gear setup...";
+        action = () => router.push("/uses");
+      } else if (["contact", "email", "message", "chat"].some(k => q.includes(k))) {
+        responseText = "email: dev.akioxz@gmail.com | github: @akioxz. do you want to open the contact form? (yes/no)";
+        setAwaitingConfirm("contact");
+        shouldClearQuery = true;
+      } else if (["admin", "login"].some(k => q.includes(k))) {
+        responseText = "initiating admin protocol...";
+        action = () => router.push("/admin/login");
+      } else if (q.includes("hire") || q.includes("freelance")) {
+        responseText = "i'm open to interesting projects. type 'contact' if you want to reach out.";
+        shouldClearQuery = true;
+      } else if (q.includes("who are you") || q.includes("about")) {
+        responseText = "i am axel villanueva, a 4th-year bsit student and aspiring full-stack developer specializing in react, next.js, and scalable web apps.";
+        shouldClearQuery = true;
+      } else if (q.includes("hello") || q.includes("hi")) {
+        responseText = "hello there. what can i help you find today?";
+        shouldClearQuery = true;
+      } else {
+        responseText = "i don't have an automated answer for that yet. try asking about my 'projects', 'stack', 'uses', or 'contact'.";
+        shouldClearQuery = true;
+      }
     }
 
     // Typewriter effect
@@ -90,14 +130,19 @@ export default function CommandMenu() {
       if (i >= responseText.length) {
         clearInterval(interval);
         setIsTyping(false);
+        
         if (action) {
           setTimeout(() => {
-            action();
+            action!();
             setIsOpen(false);
-          }, 600);
+          }, 800);
+        } else if (shouldClearQuery) {
+          // Clear query so user can type immediately, and refocus
+          setQuery("");
+          setTimeout(() => inputRef.current?.focus(), 50);
         }
       }
-    }, 25); // typing speed
+    }, 25);
   };
 
   return (
@@ -137,23 +182,26 @@ export default function CommandMenu() {
                 onChange={(e) => {
                   if (!isTyping) setQuery(e.target.value);
                 }}
-                disabled={isTyping}
-                className="w-full bg-transparent font-pixel text-[clamp(1.9rem,5.5vw,3.4rem)] leading-[1.05] text-neutral-900 dark:text-cream outline-none placeholder:text-transparent caret-neutral-900 dark:caret-cream font-normal lowercase disabled:opacity-50"
+                readOnly={isTyping}
+                className={`w-full bg-transparent font-pixel text-[clamp(1.9rem,5.5vw,3.4rem)] leading-[1.05] text-neutral-900 dark:text-cream outline-none placeholder:text-transparent caret-neutral-900 dark:caret-cream font-normal lowercase transition-opacity duration-300 ${isTyping ? "opacity-50" : "opacity-100"}`}
                 spellCheck={false}
                 autoComplete="off"
               />
               
               <AnimatePresence>
                 {answer && (
-                  <motion.p
+                  <motion.div
                     initial={{ opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: "auto" }}
                     exit={{ opacity: 0, height: 0 }}
-                    className="font-mono text-sm md:text-base text-zinc-500 dark:text-zinc-400 lowercase"
+                    className="flex items-start gap-3 text-zinc-500 dark:text-zinc-400 overflow-hidden"
                   >
-                    {'>'} {answer}
-                    {isTyping && <span className="animate-pulse">_</span>}
-                  </motion.p>
+                    <span className="font-mono text-sm md:text-base mt-1">{'>'}</span>
+                    <p className="font-mono text-sm md:text-base lowercase leading-relaxed">
+                      {answer}
+                      {isTyping && <span className="animate-pulse">_</span>}
+                    </p>
+                  </motion.div>
                 )}
               </AnimatePresence>
             </motion.form>
