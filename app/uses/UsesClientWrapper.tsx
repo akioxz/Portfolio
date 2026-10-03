@@ -29,7 +29,6 @@ export default function UsesClientWrapper({ grouped }: { grouped: GroupedGear[] 
       opacity: 1,
       transition: {
         staggerChildren: 0.1,
-        delayChildren: 1.0, // Wait for the splash screen to slide up
       },
     },
   };
@@ -46,7 +45,7 @@ export default function UsesClientWrapper({ grouped }: { grouped: GroupedGear[] 
           className="mb-10"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.0, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
         >
           <BackLink />
           <h1 className="text-3xl font-mono text-neutral-900 dark:text-white">
