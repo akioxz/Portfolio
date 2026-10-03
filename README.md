@@ -38,3 +38,4 @@ All page content lives in `components/`:
 To add a new project, copy a `<ProjectCard />` block inside `Projects.tsx` and
 fill in the props (`status="shipped"` or `status="progress"` with a
 `percent`).
+
