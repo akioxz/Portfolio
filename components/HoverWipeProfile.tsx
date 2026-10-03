@@ -14,7 +14,7 @@ export default function HoverWipeProfile({ imageSrc, videoSrc }: HoverWipeProfil
 
   return (
     <div 
-      className="relative w-full h-full overflow-hidden cursor-crosshair bg-transparent dark:bg-white rounded-md"
+      className="relative w-full h-full overflow-hidden cursor-crosshair bg-transparent"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
