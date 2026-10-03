@@ -48,7 +48,7 @@ export default function HoverWipeProfile({ imageSrc, videoSrc }: HoverWipeProfil
             : "polygon(-5% -5%, 105% -5%, 105% 105%, -5% 105%)"
         }}
         transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-        className="absolute inset-0 w-full h-full"
+        className="absolute inset-0 w-full h-full bg-white dark:bg-ink"
       >
         <Image
           src={imageSrc}
