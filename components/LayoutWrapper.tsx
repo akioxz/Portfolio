@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation";
 import { Sidebar, MobileMenu } from "@/components/Navigation";
 import ReactLenisWrapper from "@/components/ReactLenisWrapper";
 import LogoSplash from "@/components/LogoSplash";
+import FrozenRoute from "@/components/FrozenRoute";
 import { motion, AnimatePresence } from "motion/react";
 
 export default function LayoutWrapper({ children }: { children: React.ReactNode }) {
@@ -33,7 +34,9 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
           animate={{ opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] } }}
           exit={{ opacity: 0, y: 15, transition: { duration: 0.4, ease: [0.22, 1, 0.36, 1] } }}
         >
-          {children}
+          <FrozenRoute>
+            {children}
+          </FrozenRoute>
         </motion.div>
         </AnimatePresence>
       </ReactLenisWrapper>
