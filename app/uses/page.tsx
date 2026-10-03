@@ -2,6 +2,7 @@ import React from "react";
 import { createClient } from "@supabase/supabase-js";
 import Image from "next/image";
 import Link from "next/link";
+import BackLink from "@/components/BackLink";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "";
@@ -54,12 +55,7 @@ export default async function UsesPage() {
   return (
     <main className="min-h-screen pt-20 pb-24 px-6 md:px-12 max-w-5xl mx-auto">
       <div className="mb-10">
-        <Link
-          href="/"
-          className="text-xs font-mono uppercase tracking-widest text-zinc-500 hover:text-neutral-900 dark:hover:text-white transition-colors mb-6 inline-block"
-        >
-          &#8592; BACK
-        </Link>
+        <BackLink />
         <h1 className="text-3xl font-mono text-neutral-900 dark:text-white">
           uses
         </h1>

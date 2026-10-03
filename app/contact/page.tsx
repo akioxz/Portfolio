@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from "motion/react";
 import { VscCheck, VscError } from "react-icons/vsc";
 import Magnetic from "@/components/Magnetic";
 import WorldMap from "@/components/WorldMap";
+import BackLink from "@/components/BackLink";
 
 const PROJECT_TYPES = [
   "Web Application",
@@ -127,6 +128,10 @@ ${details}
   return (
     <main className="min-h-screen pt-24 pb-20 px-4 sm:px-6 md:px-12 flex flex-col items-center justify-start relative z-10 overflow-x-hidden bg-white dark:bg-[#000000]">
       
+      <div className="w-full max-w-[800px]">
+        <BackLink />
+      </div>
+
       {/* HEADER SECTION (Strict Left-Aligned Stacked) */}
       <motion.div 
         initial={{ opacity: 0, y: 20 }}

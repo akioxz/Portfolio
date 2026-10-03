@@ -1,6 +1,7 @@
 import React from "react";
 import { createClient } from "@supabase/supabase-js";
 import SplitText from "@/components/react-bits/SplitText";
+import BackLink from "@/components/BackLink";
 import { FiShoppingBag, FiBox, FiEdit3, FiUsers, FiFolder, FiExternalLink } from "react-icons/fi";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
@@ -26,6 +27,7 @@ export default async function AllProjectsPage() {
 
   return (
     <main className="min-h-screen pt-12 sm:pt-32 pb-24 px-4 sm:px-6 md:px-12 max-w-5xl mx-auto">
+      <BackLink />
       <div className="mb-16 max-w-2xl">
         <SplitText 
           text="Products & Platforms" 

@@ -1,6 +1,7 @@
 import React from "react";
 import { createClient } from "@supabase/supabase-js";
 import StackGrid from "@/components/StackGrid";
+import BackLink from "@/components/BackLink";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "";
@@ -16,6 +17,7 @@ export default async function StackPage() {
 
   return (
     <main className="mx-auto w-full max-w-7xl px-4 sm:px-6 pb-24 pt-32">
+      <BackLink />
       <StackGrid stack={stackData || []} />
     </main>
   );

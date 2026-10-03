@@ -1,6 +1,7 @@
 import React from "react";
 import { createClient } from "@supabase/supabase-js";
 import Experience from "@/components/Experience";
+import BackLink from "@/components/BackLink";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "";
@@ -16,6 +17,7 @@ export default async function ExperiencePage() {
 
   return (
     <main className="mx-auto w-full max-w-7xl px-4 sm:px-6 pb-24 pt-32">
+      <BackLink />
       <Experience experience={experienceData || []} />
     </main>
   );
