@@ -56,7 +56,7 @@ export default function HoverWipeProfile({ imageSrc, videoSrc }: HoverWipeProfil
           fill
           priority
           sizes="(max-width: 768px) 200px, 240px"
-          className="object-cover"
+          className="object-cover dark:invert"
         />
       </motion.div>
     </div>
