@@ -22,7 +22,7 @@ export default function HoverWipeProfile({ imageSrc, videoSrc }: HoverWipeProfil
       <img
         src={imageSrc}
         alt="Profile"
-        className="absolute inset-0 w-full h-full object-cover object-bottom scale-[1.08] translate-y-[5%]"
+        className="absolute inset-0 w-full h-full object-cover object-bottom"
       />
 
       {/* Top Layer: Anime Video or GIF (Wipes IN to cover the photo on hover) */}
