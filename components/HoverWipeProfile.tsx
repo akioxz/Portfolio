@@ -19,14 +19,10 @@ export default function HoverWipeProfile({ imageSrc, videoSrc }: HoverWipeProfil
       onMouseLeave={() => setIsHovered(false)}
     >
       {/* Base Layer: Dithered Photo (Always visible, seamlessly blends with transparent background) */}
-      <Image
+      <img
         src={imageSrc}
         alt="Profile"
-        fill
-        priority
-        unoptimized
-        sizes="(max-width: 768px) 200px, 240px"
-        className="object-cover object-bottom"
+        className="absolute inset-0 w-full h-full object-cover object-bottom"
       />
 
       {/* Top Layer: Anime Video or GIF (Wipes IN to cover the photo on hover) */}
