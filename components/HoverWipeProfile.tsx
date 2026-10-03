@@ -24,8 +24,9 @@ export default function HoverWipeProfile({ imageSrc, videoSrc }: HoverWipeProfil
         alt="Profile"
         fill
         priority
+        unoptimized
         sizes="(max-width: 768px) 200px, 240px"
-        className="object-cover"
+        className="object-cover object-bottom"
       />
 
       {/* Top Layer: Anime Video or GIF (Wipes IN to cover the photo on hover) */}
