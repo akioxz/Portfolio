@@ -18,45 +18,45 @@ export default function HoverWipeProfile({ imageSrc, videoSrc }: HoverWipeProfil
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      {/* Background Layer (Anime Video or GIF) */}
-      {videoSrc.endsWith('.mp4') || videoSrc.endsWith('.webm') ? (
-        <video
-          src={videoSrc}
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="absolute inset-0 w-full h-full object-cover object-right scale-105"
-        />
-      ) : (
-        <Image
-          src={videoSrc}
-          alt="Anime Wallpaper"
-          fill
-          unoptimized
-          className="object-cover object-right scale-105"
-        />
-      )}
+      {/* Base Layer: Dithered Photo (Always visible, seamlessly blends with transparent background) */}
+      <Image
+        src={imageSrc}
+        alt="Profile"
+        fill
+        priority
+        sizes="(max-width: 768px) 200px, 240px"
+        className="object-cover"
+      />
 
-      {/* Foreground Layer (Dithered Photo) with Wipe Transition */}
+      {/* Top Layer: Anime Video or GIF (Wipes IN to cover the photo on hover) */}
       <motion.div
         initial={false}
         animate={{
           clipPath: isHovered 
-            ? "polygon(105% -5%, 105% -5%, 105% 105%, 105% 105%)" 
-            : "polygon(-5% -5%, 105% -5%, 105% 105%, -5% 105%)"
+            ? "polygon(-5% -5%, 105% -5%, 105% 105%, -5% 105%)" // Fully visible
+            : "polygon(-5% -5%, -5% -5%, -5% 105%, -5% 105%)" // Hidden (zero width on left)
         }}
         transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-        className="absolute inset-0 w-full h-full"
+        className="absolute inset-0 w-full h-full z-10"
       >
-        <Image
-          src={imageSrc}
-          alt="Profile"
-          fill
-          priority
-          sizes="(max-width: 768px) 200px, 240px"
-          className="object-cover"
-        />
+        {videoSrc.endsWith('.mp4') || videoSrc.endsWith('.webm') ? (
+          <video
+            src={videoSrc}
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="absolute inset-0 w-full h-full object-cover object-right scale-105"
+          />
+        ) : (
+          <Image
+            src={videoSrc}
+            alt="Anime Wallpaper"
+            fill
+            unoptimized
+            className="object-cover object-right scale-105"
+          />
+        )}
       </motion.div>
     </div>
   );
