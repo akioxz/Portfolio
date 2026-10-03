@@ -42,13 +42,12 @@ export default function HoverWipeProfile({ imageSrc, videoSrc }: HoverWipeProfil
       <motion.div
         initial={false}
         animate={{
-          // Pushed boundaries to -5% and 105% to avoid browser 1px rendering artifacts
           clipPath: isHovered 
             ? "polygon(105% -5%, 105% -5%, 105% 105%, 105% 105%)" 
             : "polygon(-5% -5%, 105% -5%, 105% 105%, -5% 105%)"
         }}
         transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-        className="absolute inset-0 w-full h-full bg-white dark:bg-ink"
+        className="absolute inset-0 w-full h-full"
       >
         <Image
           src={imageSrc}
@@ -56,7 +55,7 @@ export default function HoverWipeProfile({ imageSrc, videoSrc }: HoverWipeProfil
           fill
           priority
           sizes="(max-width: 768px) 200px, 240px"
-          className="object-cover dark:invert"
+          className="object-cover"
         />
       </motion.div>
     </div>
