@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "motion/react";
-import SplitText from "./react-bits/SplitText";
+import ScrambleTitle from "./ScrambleTitle";
 
 export interface ExperienceData {
   id: string;
@@ -19,16 +19,10 @@ export default function Experience({ experience }: { experience: ExperienceData[
   return (
     <section id="experience" className="scroll-mt-24 mb-16" aria-label="Experience and Education">
       <div className="mb-6">
-        <SplitText
+        <ScrambleTitle
           text="Experience & Education"
-          tag="h2"
+          as="h2"
           className="text-2xl sm:text-[1.75rem] font-mono text-neutral-900 dark:text-cream"
-          splitType="words"
-          delay={40}
-          duration={0.5}
-          from={{ opacity: 0, y: 16 }}
-          to={{ opacity: 1, y: 0 }}
-          threshold={0.2}
         />
       </div>
 

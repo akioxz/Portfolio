@@ -1,7 +1,7 @@
 "use client";
 
 import LogoLoop, { LogoItem } from "./react-bits/LogoLoop";
-import SplitText from "./react-bits/SplitText";
+import ScrambleTitle from "./ScrambleTitle";
 import {
   SiHtml5,
   SiCss,
@@ -90,16 +90,10 @@ export default function Stack({ stack = [] }: { stack?: StackItem[] }) {
   return (
     <section id="stack" className="scroll-mt-24" aria-label="Technology Stack">
         <p className="font-pixel text-xs text-slate mb-2 uppercase tracking-wider">03 — stack</p>
-      <SplitText
+      <ScrambleTitle
         text="Stack"
-        tag="h2"
+        as="h2"
         className="text-2xl sm:text-[1.75rem] tracking-tight font-mono text-neutral-900 dark:text-cream mb-6"
-        splitType="words"
-        delay={40}
-        duration={0.5}
-        from={{ opacity: 0, y: 16 }}
-        to={{ opacity: 1, y: 0 }}
-        threshold={0.2}
       />
 
       <div className="flex flex-col gap-6">

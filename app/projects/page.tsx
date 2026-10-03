@@ -1,6 +1,6 @@
 import React from "react";
 import { createClient } from "@supabase/supabase-js";
-import SplitText from "@/components/react-bits/SplitText";
+import ScrambleTitle from "@/components/ScrambleTitle";
 import BackLink from "@/components/BackLink";
 import { FiShoppingBag, FiBox, FiEdit3, FiUsers, FiFolder, FiExternalLink } from "react-icons/fi";
 
@@ -29,16 +29,10 @@ export default async function AllProjectsPage() {
     <main className="min-h-screen pt-12 sm:pt-32 pb-24 px-4 sm:px-6 md:px-12 max-w-5xl mx-auto">
       <BackLink />
       <div className="mb-16 max-w-2xl">
-        <SplitText 
+        <ScrambleTitle 
           text="Products & Platforms" 
-          tag="h1" 
+          as="h1" 
           className="text-3xl font-mono text-neutral-900 dark:text-cream mb-4"
-          splitType="words"
-          delay={40}
-          duration={0.5}
-          from={{ opacity: 0, y: 16 }}
-          to={{ opacity: 1, y: 0 }}
-          threshold={0.2}
         />
         <p className="text-neutral-600 dark:text-neutral-400 font-sans text-sm sm:text-base leading-relaxed">
           A collection of full-stack applications I've designed and shipped — spanning e-commerce, real-time inventory, and AI-powered tools.

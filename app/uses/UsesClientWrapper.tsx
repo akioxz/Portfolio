@@ -4,6 +4,7 @@ import React from "react";
 import Image from "next/image";
 import BackLink from "@/components/BackLink";
 import { motion } from "motion/react";
+import TiltWrapper from "@/components/TiltWrapper";
 
 interface GearItem {
   id: string;
@@ -80,7 +81,7 @@ export default function UsesClientWrapper({ grouped }: { grouped: GroupedGear[] 
                             fill
                             priority={group.category === "pc" && idx < 3}
                             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                            className="object-contain p-8 group-hover:scale-105 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] mix-blend-multiply dark:mix-blend-normal absolute inset-0 w-full h-full"
+                            className="object-contain p-8 group-hover:scale-105 grayscale group-hover:grayscale-0 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] mix-blend-multiply dark:mix-blend-normal absolute inset-0 w-full h-full"
                           />
                         ) : (
                           <div className="absolute inset-0 flex items-center justify-center w-full h-full">
@@ -117,12 +118,18 @@ export default function UsesClientWrapper({ grouped }: { grouped: GroupedGear[] 
                       href={item.link}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="block h-full"
+                      className="block h-full outline-none focus-visible:ring-2 focus-visible:ring-neutral-500 rounded-2xl"
                     >
-                      {CardContent}
+                      <TiltWrapper className="h-full">
+                        {CardContent}
+                      </TiltWrapper>
                     </a>
                   ) : (
-                    <div key={item.id} className="h-full">{CardContent}</div>
+                    <div key={item.id} className="h-full">
+                      <TiltWrapper className="h-full">
+                        {CardContent}
+                      </TiltWrapper>
+                    </div>
                   );
                 })}
               </div>

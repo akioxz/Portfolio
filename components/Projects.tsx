@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "motion/react";
-import SplitText from "./react-bits/SplitText";
+import ScrambleTitle from "./ScrambleTitle";
 import DeckProjectCard from "./projects/DeckProjectCard";
 import Magnetic from "./Magnetic";
 import { ProjectData } from "./projects/StickyProjectCard";
@@ -34,14 +34,7 @@ export default function Projects({ projects }: { projects: ProjectData[] }) {
     <section id="projects" className="scroll-mt-24" aria-label="Projects">
       <div className="mb-12">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6">
-          <SplitText text="Projects" tag="h2" className="text-2xl sm:text-[1.75rem] font-mono text-neutral-900 dark:text-cream"
-            splitType="words"
-            delay={40}
-            duration={0.5}
-            from={{ opacity: 0, y: 16 }}
-            to={{ opacity: 1, y: 0 }}
-            threshold={0.2}
-          />
+          <ScrambleTitle text="Projects" as="h2" className="text-2xl sm:text-[1.75rem] font-mono text-neutral-900 dark:text-cream" />
           
           {pathname !== "/projects" && (
             <Magnetic>

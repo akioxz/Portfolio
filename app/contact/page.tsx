@@ -7,6 +7,7 @@ import { VscCheck, VscError } from "react-icons/vsc";
 import Magnetic from "@/components/Magnetic";
 import WorldMap from "@/components/WorldMap";
 import BackLink from "@/components/BackLink";
+import CopyEmail from "@/components/CopyEmail";
 
 const PROJECT_TYPES = [
   "Web Application",
@@ -418,7 +419,7 @@ ${details}
               <div className="col-span-full pt-4 mt-2 border-t border-black/5 dark:border-[#1a1a1a]">
                 <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
                   <p className="text-[12px] text-neutral-500 dark:text-[#666] font-sans font-light">
-                    Prefer email? <a href="mailto:dev.akioxz@gmail.com" className="font-medium text-neutral-600 dark:text-[#ccc] hover:text-neutral-900 dark:hover:text-white transition">dev.akioxz@gmail.com</a>
+                    Prefer email? <CopyEmail />
                   </p>
                   
                   <Magnetic>

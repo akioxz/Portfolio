@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useScrambleText } from "@/hooks/useScrambleText";
+import CopyEmail from "@/components/CopyEmail";
 
 export default function Footer() {
   const [isHovered, setIsHovered] = useState(false);
@@ -52,7 +53,7 @@ export default function Footer() {
       <div className="w-full flex flex-col sm:flex-row items-center justify-between text-zinc-400 font-sans text-xs font-medium mt-32 px-4 gap-6 sm:gap-0">
         <p>&copy; {new Date().getFullYear()} Axel Villanueva.</p>
         <div className="flex items-center gap-6">
-          <a href="mailto:dev.akioxz@gmail.com" className="hover:text-neutral-900 dark:hover:text-white transition-colors">Email</a>
+          <CopyEmail className="hover:text-neutral-900 dark:hover:text-white transition-colors" />
           <a href="https://discordapp.com/users/your_discord_id_here" target="_blank" rel="noopener noreferrer" className="hover:text-neutral-900 dark:hover:text-white transition-colors">Discord</a>
           <a href="https://github.com/akioxz" target="_blank" rel="noopener noreferrer" className="hover:text-neutral-900 dark:hover:text-white transition-colors">GitHub</a>
         </div>
