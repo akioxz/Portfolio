@@ -25,7 +25,7 @@ export default function HoverWipeProfile({ imageSrc, videoSrc }: HoverWipeProfil
         fill
         priority
         sizes="(max-width: 768px) 200px, 240px"
-        className="object-cover dark:drop-shadow-[0_0_15px_rgba(255,255,255,0.4)]"
+        className="object-cover"
       />
 
       {/* Top Layer: Anime Video or GIF (Wipes IN to cover the photo on hover) */}
