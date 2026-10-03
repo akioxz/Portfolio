@@ -44,8 +44,8 @@ export default function Hero() {
       >
         <div className="relative w-[200px] h-[240px] md:w-[240px] md:h-[300px]">
           <HoverWipeProfile 
-            imageSrc="/profile.png" 
-            videoSrc="/profile-anime.gif" 
+            imageSrc="/profile.png?v=2" 
+            videoSrc="/profile-anime.gif?v=2" 
           />
         </div>
       </motion.div>
