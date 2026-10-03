@@ -44,7 +44,7 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
               ? { opacity: 1, scale: 1, filter: "blur(0px)", transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] } }
               : { opacity: 1, y: 0, scale: 1, filter: "blur(0px)", transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] } },
             exit: (isUses: boolean) => isUses
-              ? { opacity: 0, scale: 1.05, filter: "blur(8px)", transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } }
+              ? { opacity: 1, scale: 1.05, filter: "blur(8px)", transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } }
               : { opacity: 0, y: 20, scale: 1, filter: "blur(0px)", transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] } }
           }}
         >

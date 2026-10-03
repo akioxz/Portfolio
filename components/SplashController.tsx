@@ -45,26 +45,20 @@ export default function SplashController() {
   }, [splashState.show]);
 
   return (
-    <AnimatePresence>
-      {splashState.show && (
-        <motion.div
-          className="fixed inset-0 z-[9999] bg-ink flex flex-col items-center justify-center pointer-events-none"
-          initial={{ y: "-100%" }}
-          animate={{ y: 0 }}
-          exit={{ y: "-100%" }}
-          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-        >
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0, transition: { duration: 0.1 } }}
-            transition={{ delay: 0.4, duration: 0.2 }}
-            className="font-pixel text-cream text-lg md:text-xl tracking-widest text-center px-4"
-          >
-            {splashState.text}
-          </motion.div>
-        </motion.div>
-      )}
-    </AnimatePresence>
+    <motion.div
+      className="fixed inset-0 z-[9999] bg-ink flex flex-col items-center justify-center pointer-events-none"
+      initial={{ y: "-100%" }}
+      animate={{ y: splashState.show ? "0%" : "-100%" }}
+      transition={{ duration: splashState.show ? 0.3 : 0.6, ease: [0.22, 1, 0.36, 1] }}
+    >
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: splashState.show ? 1 : 0 }}
+        transition={{ delay: splashState.show ? 0.3 : 0, duration: 0.2 }}
+        className="font-pixel text-cream text-lg md:text-xl tracking-widest text-center px-4"
+      >
+        {splashState.text}
+      </motion.div>
+    </motion.div>
   );
 }
