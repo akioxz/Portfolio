@@ -14,7 +14,7 @@ export default function HoverWipeProfile({ imageSrc, videoSrc }: HoverWipeProfil
 
   return (
     <div 
-      className="relative w-full h-full overflow-hidden cursor-crosshair bg-transparent dark:bg-white rounded-md"
+      className="relative w-full h-full overflow-hidden cursor-crosshair bg-transparent"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -26,7 +26,7 @@ export default function HoverWipeProfile({ imageSrc, videoSrc }: HoverWipeProfil
         priority
         unoptimized
         sizes="(max-width: 768px) 200px, 240px"
-        className="object-cover object-bottom"
+        className="object-cover object-bottom dark:brightness-0 dark:invert"
       />
 
       {/* Top Layer: Anime Video or GIF (Wipes IN to cover the photo on hover) */}
