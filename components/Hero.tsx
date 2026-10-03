@@ -1,8 +1,8 @@
 "use client";
 
 import React from "react";
-import Image from "next/image";
 import { motion } from "motion/react";
+import HoverWipeProfile from "./HoverWipeProfile";
 
 export default function Hero() {
   const [isFirstLoad, setIsFirstLoad] = React.useState(() => {
@@ -34,7 +34,7 @@ export default function Hero() {
         },
       }}
     >
-      {/* Left: Stylized Portrait */}
+      {/* Left: Interactive Pixel Portrait */}
       <motion.div 
         className="shrink-0"
         variants={{
@@ -42,14 +42,10 @@ export default function Hero() {
           visible: { opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: 1, ease: [0.16, 1, 0.3, 1] } }
         }}
       >
-        <div className="relative w-[200px] h-[240px] md:w-[240px] md:h-[300px] rounded-lg overflow-hidden bg-neutral-100 dark:bg-surface/30">
-          <Image
-            src="/photo1.png"
-            alt="Axel Villanueva"
-            fill
-            priority
-            sizes="(max-width: 768px) 200px, 240px"
-            className="object-cover grayscale contrast-125 hover:grayscale-0 hover:contrast-100 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]"
+        <div className="relative w-[200px] h-[240px] md:w-[240px] md:h-[300px]">
+          <HoverWipeProfile 
+            imageSrc="/profile.png" 
+            videoSrc="/profile-anime.gif" 
           />
         </div>
       </motion.div>

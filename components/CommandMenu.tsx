@@ -59,7 +59,7 @@ export default function CommandMenu() {
     if (awaitingConfirm === "contact") {
       if (["yes", "y", "sure", "ok", "yeah"].includes(q)) {
         responseText = "opening contact form...";
-        action = () => window.dispatchEvent(new CustomEvent('openContactModal'));
+        action = () => router.push("/contact");
       } else if (["no", "n", "nope", "cancel"].includes(q)) {
         responseText = "no problem. what else can i help you find?";
         shouldClearQuery = true;

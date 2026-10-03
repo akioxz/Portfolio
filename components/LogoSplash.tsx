@@ -13,9 +13,6 @@ export default function LogoSplash({ onComplete }: LogoSplashProps) {
   const hasRun = useRef(false);
 
   useEffect(() => {
-    // Prevent double-fire in StrictMode
-    if (hasRun.current) return;
-    hasRun.current = true;
 
     // Only show once per session
     if (sessionStorage.getItem("splashShown")) {

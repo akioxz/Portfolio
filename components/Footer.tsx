@@ -18,7 +18,7 @@ export default function Footer() {
   };
 
   const openContact = () => {
-    window.dispatchEvent(new CustomEvent('openContactModal'));
+    window.location.href = "/contact";
   };
 
   return (
@@ -33,7 +33,7 @@ export default function Footer() {
           <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" /> Next Steps
         </span>
         
-        <div className="flex items-center justify-center gap-4 w-full overflow-hidden px-4">
+        <div className="flex items-center justify-center gap-4 w-full overflow-hidden px-4 py-4">
           <h2 className="font-sans text-4xl sm:text-6xl md:text-8xl font-bold tracking-tighter text-neutral-900 dark:text-white transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-active:scale-95 group-hover:-translate-y-2 whitespace-nowrap">
             {scramble.displayText}
           </h2>

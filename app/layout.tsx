@@ -3,7 +3,7 @@ import { Inter, Geist_Mono, DotGothic16 } from "next/font/google";
 import "./globals.css";
 import LayoutWrapper from "@/components/LayoutWrapper";
 import CommandMenu from "@/components/CommandMenu";
-import CustomCursor from "@/components/CustomCursor";
+import ThemeTransition from '@/components/ThemeTransition';
 import ThemeProvider from "@/components/ThemeProvider";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
@@ -130,7 +130,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="overflow-x-hidden font-sans bg-white dark:bg-ink text-neutral-900 dark:text-cream antialiased relative">
+      <body className="overflow-x-hidden font-sans bg-white dark:bg-ink text-neutral-900 dark:text-cream antialiased relative transition-colors duration-500 ease-in-out">
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
@@ -145,8 +145,8 @@ export default function RootLayout({
           <LayoutWrapper>
             {children}
           </LayoutWrapper>
-          <CustomCursor />
-        <CommandMenu />
+                  <CommandMenu />
+          <ThemeTransition />
           <Analytics />
           <SpeedInsights />
         </ThemeProvider>

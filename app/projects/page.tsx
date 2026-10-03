@@ -1,13 +1,22 @@
 import React from "react";
 import { createClient } from "@supabase/supabase-js";
-import Link from "next/link";
-
+import SplitText from "@/components/react-bits/SplitText";
+import { FiShoppingBag, FiBox, FiEdit3, FiUsers, FiFolder, FiExternalLink } from "react-icons/fi";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "";
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 export const revalidate = 3600;
+
+const getProjectIcon = (name: string) => {
+  const lower = name.toLowerCase();
+  if (lower.includes("atelier")) return <FiShoppingBag className="w-8 h-8 sm:w-10 sm:h-10" />;
+  if (lower.includes("quorin")) return <FiBox className="w-8 h-8 sm:w-10 sm:h-10" />;
+  if (lower.includes("notiq")) return <FiEdit3 className="w-8 h-8 sm:w-10 sm:h-10" />;
+  if (lower.includes("salo")) return <FiUsers className="w-8 h-8 sm:w-10 sm:h-10" />;
+  return <FiFolder className="w-8 h-8 sm:w-10 sm:h-10" />;
+};
 
 export default async function AllProjectsPage() {
   const { data: projects } = await supabase
@@ -16,15 +25,22 @@ export default async function AllProjectsPage() {
     .order("sort_order", { ascending: true });
 
   return (
-    <main className="min-h-screen pt-32 pb-24 px-6 md:px-12 max-w-5xl mx-auto">
-      <div className="mb-16">
-        <Link 
-          href="/#projects" 
-          className="text-xs font-mono uppercase tracking-widest text-slate hover:text-neutral-900 dark:hover:text-cream transition-colors mb-8 inline-block"
-        >
-          &#8592; BACK
-        </Link>
-        <h1 className="text-3xl font-mono text-neutral-900 dark:text-cream">All Projects</h1>
+    <main className="min-h-screen pt-12 sm:pt-32 pb-24 px-4 sm:px-6 md:px-12 max-w-5xl mx-auto">
+      <div className="mb-16 max-w-2xl">
+        <SplitText 
+          text="Products & Platforms" 
+          tag="h1" 
+          className="text-3xl font-mono text-neutral-900 dark:text-cream mb-4"
+          splitType="words"
+          delay={40}
+          duration={0.5}
+          from={{ opacity: 0, y: 16 }}
+          to={{ opacity: 1, y: 0 }}
+          threshold={0.2}
+        />
+        <p className="text-neutral-600 dark:text-neutral-400 font-sans text-sm sm:text-base leading-relaxed">
+          A collection of full-stack applications I've designed and shipped — spanning e-commerce, real-time inventory, and AI-powered tools.
+        </p>
       </div>
 
       <div className="flex flex-col">
@@ -45,7 +61,6 @@ export default async function AllProjectsPage() {
               </span>
             </div>
 
-            {/* Right side: Eyebrow + 1-line description */}
             <div className="flex flex-col w-full md:w-2/3">
               <span className="font-mono text-[9px] font-semibold tracking-[0.2em] uppercase text-slate mb-1">
                 {project.eyebrow}

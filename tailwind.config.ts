@@ -16,7 +16,7 @@ const config: Config = {
       fontFamily: {
         mono: ["var(--font-geist-mono)", "monospace"],
         sans: ["var(--font-inter)", "sans-serif"],
-        pixel: ["var(--font-pixel)", "monospace"],
+        pixel: ['"Geist Pixel"', "monospace"],
       },
     },
   },

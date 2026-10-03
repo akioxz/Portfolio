@@ -9,10 +9,12 @@ import Magnetic from "./Magnetic";
 import { ProjectData } from "./projects/StickyProjectCard";
 import { useUISounds } from "@/hooks/useUISounds";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
+import { usePathname } from "next/navigation";
 
 export default function Projects({ projects }: { projects: ProjectData[] }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const total = projects.length;
+  const pathname = usePathname();
   const { playHover, playClick } = useUISounds();
   const isMobile = useMediaQuery("(max-width: 640px)");
 
@@ -30,26 +32,31 @@ export default function Projects({ projects }: { projects: ProjectData[] }) {
 
   return (
     <section id="projects" className="scroll-mt-24" aria-label="Projects">
-      <div className="mb-12"><div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6">
-        <SplitText text="Projects" tag="h2" className="text-2xl sm:text-[1.75rem] font-mono text-neutral-900 dark:text-cream"
-          splitType="words"
-          delay={40}
-          duration={0.5}
-          from={{ opacity: 0, y: 16 }}
-          to={{ opacity: 1, y: 0 }}
-          threshold={0.2}
-        />
-        
-        <Magnetic>
-          <Link 
-            href="/projects" 
-            className="group flex items-center gap-2 font-mono text-[11px] tracking-widest font-bold uppercase text-slate hover:text-neutral-900 dark:hover:text-cream transition-colors"
-            data-magnetic
-          >
-            ALL PROJECTS 
-            <span className="transform transition-transform group-hover:translate-x-1">&#8594;</span>
-          </Link>
-        </Magnetic></div></div>
+      <div className="mb-12">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6">
+          <SplitText text="Projects" tag="h2" className="text-2xl sm:text-[1.75rem] font-mono text-neutral-900 dark:text-cream"
+            splitType="words"
+            delay={40}
+            duration={0.5}
+            from={{ opacity: 0, y: 16 }}
+            to={{ opacity: 1, y: 0 }}
+            threshold={0.2}
+          />
+          
+          {pathname !== "/projects" && (
+            <Magnetic>
+              <Link 
+                href="/projects" 
+                className="group flex items-center gap-2 font-mono text-[11px] tracking-widest font-bold uppercase text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-cream transition-colors"
+                data-magnetic
+              >
+                ALL PROJECTS 
+                <span className="transform transition-transform group-hover:translate-x-1">&#8594;</span>
+              </Link>
+            </Magnetic>
+          )}
+        </div>
+      </div>
 
       <div className="relative w-full h-[400px] flex items-center justify-center overflow-visible perspective-[2000px]">
         <AnimatePresence mode="popLayout">

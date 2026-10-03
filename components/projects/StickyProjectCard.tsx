@@ -148,15 +148,15 @@ export default function StickyProjectCard({
               <div className="grid grid-cols-3 gap-4 mb-6">
                 {project.specs.map((spec) => (
                   <div key={spec.label} className="flex flex-col gap-1">
-                    <span className="font-mono text-[10px] uppercase tracking-wider text-slate">{spec.label}</span>
+                    <span className="font-mono text-[10px] uppercase tracking-wider text-neutral-600 dark:text-neutral-400">{spec.label}</span>
                     <span className="font-mono text-xs text-cream">{spec.value}</span>
                   </div>
                 ))}
               </div>
-              <p className="text-slate text-sm sm:text-base leading-relaxed mb-8">{project.description}</p>
+              <p className="text-neutral-600 dark:text-neutral-400 text-sm sm:text-base leading-relaxed mb-8">{project.description}</p>
               <div className="flex flex-wrap items-center gap-3 sm:gap-4">
                 {project.tags.map((tag) => (
-                  <div key={tag} className="flex items-center gap-2 bg-surface/50 border border-slate/10 rounded-full px-3 py-1.5 text-xs text-slate">
+                  <div key={tag} className="flex items-center gap-2 bg-surface/50 border border-slate/10 rounded-full px-3 py-1.5 text-xs text-neutral-600 dark:text-neutral-400">
                     {getTagIcon(tag)}
                     <span className="font-mono tracking-wide">{tag}</span>
                   </div>
@@ -166,7 +166,7 @@ export default function StickyProjectCard({
           </div>
           {index === 0 && (
             <div className="hidden lg:flex items-center justify-center mt-8 opacity-40">
-              <motion.span className="font-mono text-[10px] uppercase tracking-widest text-slate" animate={{ y: [0, 6, 0] }} transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}>
+              <motion.span className="font-mono text-[10px] uppercase tracking-widest text-neutral-600 dark:text-neutral-400" animate={{ y: [0, 6, 0] }} transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}>
                 ↓ scroll to explore
               </motion.span>
             </div>

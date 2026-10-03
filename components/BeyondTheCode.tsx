@@ -85,7 +85,7 @@ export default function BeyondTheCode() {
                         width={0} 
                         height={0} 
                         sizes="(max-width: 640px) 100vw, 50vw" 
-                        quality={50}
+                        quality={75}
                         style={{ height: '100%', width: 'auto', display: 'block' }}
                         className="grayscale-[0.8] brightness-75 hover:grayscale-0 hover:brightness-110 hover:scale-105 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]" 
                       />

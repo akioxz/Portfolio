@@ -1,22 +1,17 @@
-import dynamic from "next/dynamic";
-import { createClient } from "@supabase/supabase-js";
-
 import Hero from "@/components/Hero";
-import Experience from "@/components/Experience";
-
 import Projects from "@/components/Projects";
 import Stack from "@/components/Stack";
 import Certifications from "@/components/Certifications";
 import BeyondTheCode from "@/components/BeyondTheCode";
 import Footer from "@/components/Footer";
-import ContactSection from "@/components/ContactSection";
-
+import Experience from "@/components/Experience";
+import { createClient } from "@supabase/supabase-js";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "";
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-export const revalidate = 3600; // Revalidate every hour
+export const revalidate = 3600;
 
 export default async function Home() {
   const [
@@ -40,8 +35,6 @@ export default async function Home() {
         <Stack stack={stackData || []} />
         <Certifications certifications={certificationsData || []} />
         <BeyondTheCode />
-        
-        <ContactSection />
         <Footer />
       </main>
     </>

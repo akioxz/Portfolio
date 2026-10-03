@@ -1,369 +1,192 @@
 "use client";
 
-import { useState, useCallback, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
-import { useLenis } from "lenis/react";
+import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "motion/react";
-import { VscMenu, VscClose, VscMail, VscGithub, VscSend } from "react-icons/vsc";
-import { FaDiscord } from "react-icons/fa6";
+import { VscMenu, VscClose } from "react-icons/vsc";
 import ThemeToggle from "./ThemeToggle";
 
-
 const mainNavLinks = [
-  { label: "Experience", href: "/#experience" },
-  { label: "Projects", href: "/#projects" },
-  { label: "Stack", href: "/#stack" },
-  { label: "Certifications", href: "/#certifications" },
-];
-
-const extraLinks = [
+  { label: "Experience", href: "/experience" },
+  { label: "Projects", href: "/projects" },
+  { label: "Stack", href: "/stack" },
+  { label: "Certifications", href: "/certifications" },
+  { label: "Contact", href: "/contact" },
   { label: "Uses", href: "/uses" },
 ];
 
 export function Sidebar() {
-  
-  const [activeSection, setActiveSection] = useState("");
-  const isScrollingRef = useRef(false);
-  const lenis = useLenis();
   const pathname = usePathname();
-  const router = useRouter();
 
   useEffect(() => {
-    const handleOpenModal = () => { const el = document.getElementById("contact"); if (el) el.scrollIntoView({ behavior: "smooth" }); };
-    window.addEventListener("openContactModal", handleOpenModal);
-    return () => window.removeEventListener("openContactModal", handleOpenModal);
-  }, []);
-
-  useEffect(() => {
-    const sectionsToObserve = ["hero", ...mainNavLinks.map(l => l.href.replace("/#", "")), "afk", "footer"];
-    
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (isScrollingRef.current) return;
-        if (window.scrollY < 150) {
-          setActiveSection("hero");
-          return;
-        }
-        
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActiveSection(entry.target.id);
-          }
-        });
-      },
-      { rootMargin: "-10% 0px -40% 0px" }
-    );
-
-    setTimeout(() => {
-      sectionsToObserve.forEach((id) => {
-        const element = document.getElementById(id);
-        if (element) observer.observe(element);
-      });
-    }, 100);
-
-    const handleScroll = () => {
-      if (window.scrollY < 150 && !isScrollingRef.current) {
-        setActiveSection("hero");
-      }
-    };
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    // Run once on mount
-    handleScroll();
-
-    return () => {
-      observer.disconnect();
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
-
-  useEffect(() => {
+    let title = "Axel Villanueva | Full-Stack Developer";
     if (pathname !== "/") {
-      setActiveSection("");
-      // Let Next.js metadata handle the title for other pages
-    } else {
-      if (!activeSection || activeSection === "hero") {
-        document.title = "Axel Villanueva | Full-Stack Developer";
-      } else {
-        const formattedName = activeSection.charAt(0).toUpperCase() + activeSection.slice(1);
-        document.title = `${formattedName} - Axel Villanueva`;
+      const pageName = pathname.split("/")[1];
+      if (pageName) {
+        title = `${pageName.charAt(0).toUpperCase() + pageName.slice(1)} - Axel Villanueva`;
       }
     }
-  }, [activeSection, pathname]);
-
-  const handleNavClick = useCallback(
-    (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-      e.preventDefault();
-      
-      const isHome = pathname === "/";
-      const isAnchor = href.startsWith("/#");
-
-      if (isAnchor) {
-        const targetId = href.replace("/#", "");
-        setActiveSection(targetId);
-        if (isHome) {
-          isScrollingRef.current = true;
-          lenis?.scrollTo(`#${targetId}`, { duration: 1.2, offset: -96 });
-          setTimeout(() => {
-            isScrollingRef.current = false;
-          }, 1250);
-        } else {
-          router.push(href);
-        }
-      } else {
-        router.push(href);
-      }
-    },
-    [lenis, pathname, router]
-  );
+    document.title = title;
+  }, [pathname]);
 
   return (
     <aside className="fixed top-0 left-0 h-screen w-56 hidden lg:flex flex-col justify-between border-r border-slate/10 dark:border-white/[0.06] px-7 py-8 z-50 bg-white/50 dark:bg-[#0c0c0c]/80 backdrop-blur-xl">
-      <div className="flex flex-col gap-10">
+      <div className="flex flex-col gap-8">
         <Link 
           href="/" 
-          onClick={(e) => {
-            if (pathname === "/") {
-              e.preventDefault();
-              setActiveSection("hero");
-              isScrollingRef.current = true;
-              lenis?.scrollTo(0, { duration: 1.2 });
-              setTimeout(() => {
-                isScrollingRef.current = false;
-              }, 1250);
-            }
-          }}
           className="font-mono text-[15px] text-neutral-900 dark:text-white hover:opacity-70 transition-opacity"
         >
           Axel Villanueva
         </Link>
         
-        <nav className="flex flex-col gap-4 font-mono text-[13px]">
+        <nav className="flex flex-col gap-[14px] font-mono text-[13px]">
           {mainNavLinks.map((link) => {
-            const isActive = link.href.startsWith("/#")
-              ? activeSection === link.href.replace("/#", "")
-              : pathname === link.href;
+            // For active state, check if pathname matches the link exactly
+            const isActive = pathname === link.href || pathname.startsWith(`${link.href}/`);
             return (
-              <a
+              <Link
                 key={link.href}
                 href={link.href}
-                onClick={(e) => handleNavClick(e, link.href)}
-                className={`group relative flex items-center hover:text-neutral-900 dark:hover:text-white transition-colors w-fit ${isActive ? "text-neutral-900 dark:text-white" : "text-zinc-500"}`}
+                className={`group relative flex items-center hover:text-neutral-900 dark:hover:text-white transition-colors w-fit ${isActive ? "text-neutral-900 dark:text-white font-bold" : "text-neutral-500 dark:text-neutral-400"}`}
               >
                 <span className={`absolute -left-5 transition-all duration-300 font-mono text-neutral-900 dark:text-white ${isActive ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-2"}`}>
-                  -&gt;
+                  {"->"}
                 </span>
-                <span className={`transition-transform duration-300 ${isActive ? "translate-x-1" : ""}`}>
-                  {link.label}
-                </span>
-              </a>
+                {link.label}
+              </Link>
             );
           })}
         </nav>
       </div>
 
-      <div className="flex flex-col gap-6 mt-auto">
-        {/* Separator */}
-        <div className="w-full h-px bg-black/5 dark:bg-white/[0.06] mb-2" />
+      <div className="flex flex-col gap-8">
+        <div className="flex flex-col gap-4">
+          <button 
+            onClick={() => window.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', altKey: true }))}
+            className="flex items-center gap-2 text-[12px] text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-cream transition-colors group"
+          >
+            <span>Ask anything</span>
+            <span className="flex items-center gap-1">
+              <kbd className="px-1.5 py-0.5 rounded border border-neutral-200 dark:border-white/10 bg-neutral-50 dark:bg-white/5 font-mono text-[10px] text-neutral-500 group-hover:text-neutral-900 dark:group-hover:text-cream transition-colors">Alt</kbd>
+              <span className="text-[10px]">+</span>
+              <kbd className="px-1.5 py-0.5 rounded border border-neutral-200 dark:border-white/10 bg-neutral-50 dark:bg-white/5 font-mono text-[10px] text-neutral-500 group-hover:text-neutral-900 dark:group-hover:text-cream transition-colors">K</kbd>
+            </span>
+          </button>
+          <ThemeToggle />
 
-        {/* Extra Links (Gear) */}
-        <div className="font-mono text-[13px]">
-          {extraLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className={`hover:text-neutral-900 dark:hover:text-white transition-colors w-fit ${pathname === link.href ? "text-neutral-900 dark:text-white" : "text-zinc-500"}`}
-            >
-              {link.label}
-            </Link>
-          ))}
-        </div>
-
-        {/* Ask Anything (Alt+K) */}
-        <button 
-          onClick={() => window.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', altKey: true }))}
-          className="flex items-center gap-2 text-[12px] text-slate/50 hover:text-neutral-900 dark:hover:text-cream transition-colors group"
-        >
-          <span>Ask anything</span>
-          <span className="flex items-center gap-1">
-            <kbd className="px-1.5 py-0.5 rounded border border-slate/20 dark:border-white/10 bg-slate/5 dark:bg-white/5 font-mono text-[10px] text-slate/50 group-hover:text-neutral-900 dark:group-hover:text-cream transition-colors">Alt</kbd>
-            <span className="text-[10px]">+</span>
-            <kbd className="px-1.5 py-0.5 rounded border border-slate/20 dark:border-white/10 bg-slate/5 dark:bg-white/5 font-mono text-[10px] text-slate/50 group-hover:text-neutral-900 dark:group-hover:text-cream transition-colors">K</kbd>
-          </span>
-        </button>
-
-        {/* Theme Toggle Pill */}
-        <ThemeToggle />
-
-        {/* Ethereal Glass Contact Button & Socials */}
-        <div className="flex flex-col gap-4 mt-2">
+          <p className="font-mono text-[11px] text-neutral-400 dark:text-neutral-500 leading-relaxed mt-2 pt-8 border-t border-slate/10 dark:border-white/[0.06]">
+            For work, collabs & everything else, reach me at
+          </p>
           
-          <div className="flex items-center gap-4 px-1">
-            <a href="mailto:dev.akioxz@gmail.com" aria-label="Email" className="text-zinc-500 hover:text-neutral-900 dark:hover:text-white transition-colors">
-              <VscMail className="w-5 h-5" />
+          <div className="flex flex-col gap-3">
+            <a href="mailto:dev.akioxz@gmail.com" className="font-mono text-[12px] text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-cream transition-colors">
+              dev.akioxz@gmail.com
             </a>
-            <a href="https://discordapp.com/users/your_discord_id_here" target="_blank" rel="noopener noreferrer" aria-label="Discord" className="text-zinc-500 hover:text-neutral-900 dark:hover:text-white transition-colors">
-              <FaDiscord className="w-5 h-5" />
+            <a href="https://discordapp.com/users/359218967990599682" target="_blank" rel="noopener noreferrer" className="font-mono text-[12px] text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-cream transition-colors">
+              akioxz
             </a>
-            <a href="https://github.com/akioxz" target="_blank" rel="noopener noreferrer" aria-label="GitHub" className="text-zinc-500 hover:text-neutral-900 dark:hover:text-white transition-colors">
-              <VscGithub className="w-5 h-5" />
+            <a href="https://github.com/akioxz" target="_blank" rel="noopener noreferrer" className="font-mono text-[12px] text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-cream transition-colors">
+              github.com/akioxz
             </a>
-            <button
-              type="button"
-              onClick={() => window.dispatchEvent(new CustomEvent("openContactModal"))}
-              aria-label="Send a message"
-              className="text-zinc-500 hover:text-neutral-900 dark:hover:text-white transition-colors"
-            >
-              <VscSend className="w-5 h-5" />
-            </button>
           </div>
         </div>
       </div>
-      
-      
     </aside>
   );
 }
 
 export function MobileMenu() {
   const [isOpen, setIsOpen] = useState(false);
-  
-  const lenis = useLenis();
   const pathname = usePathname();
-  const router = useRouter();
 
-  const handleNavClick = useCallback(
-    (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-      e.preventDefault();
-      setIsOpen(false);
-      
-      const isHome = pathname === "/";
-      const isAnchor = href.startsWith("/#");
-
-      setTimeout(() => {
-        if (isAnchor) {
-          const targetId = href.replace("/#", "");
-          if (isHome) {
-            lenis?.scrollTo(`#${targetId}`, { duration: 1.2, offset: -96 });
-          } else {
-            router.push(href);
-          }
-        } else {
-          router.push(href);
-        }
-      }, 300);
-    },
-    [lenis, pathname, router]
-  );
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [isOpen]);
 
   return (
-    <>
+    <div className="lg:hidden">
       <button
         onClick={() => setIsOpen(true)}
-        className="lg:hidden fixed top-6 right-6 z-50 w-12 h-12 rounded-full bg-white/80 dark:bg-[#0A0A0A]/80 backdrop-blur-md border border-black/5 dark:border-white/10 flex items-center justify-center text-neutral-900 dark:text-white shadow-lg active:scale-95 transition-transform"
+        className="fixed top-6 right-6 z-50 p-2.5 bg-white/50 dark:bg-black/50 backdrop-blur-xl border border-slate/10 dark:border-white/10 rounded-full shadow-sm hover:scale-105 active:scale-95 transition-all"
         aria-label="Open menu"
       >
-        <VscMenu className="w-5 h-5" />
+        <VscMenu className="w-5 h-5 text-neutral-900 dark:text-white" />
       </button>
 
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+            initial={{ opacity: 0, backdropFilter: "blur(0px)" }}
+            animate={{ opacity: 1, backdropFilter: "blur(16px)" }}
+            exit={{ opacity: 0, backdropFilter: "blur(0px)" }}
             transition={{ duration: 0.3 }}
-            className="fixed inset-0 z-[60] bg-white/95 dark:bg-[#0A0A0A]/95 backdrop-blur-2xl flex flex-col justify-between p-8"
+            className="fixed inset-0 z-[100] bg-white/90 dark:bg-[#0c0c0c]/90 flex flex-col"
           >
-            <div className="flex items-center justify-between">
-              <Link 
-                href="/" 
-                onClick={(e) => {
-                  setIsOpen(false);
-                  if (pathname === "/") {
-                    e.preventDefault();
-                    lenis?.scrollTo(0, { duration: 1.2 });
-                  }
-                }} 
-                className="font-mono text-[15px] text-neutral-900 dark:text-white"
-              >
-                Axel Villanueva
-              </Link>
+            <div className="flex justify-end p-6">
               <button
                 onClick={() => setIsOpen(false)}
-                className="w-12 h-12 rounded-full flex items-center justify-center text-neutral-900 dark:text-white active:scale-95 transition-transform bg-black/5 dark:bg-white/5"
+                className="p-2.5 bg-black/5 dark:bg-white/5 rounded-full hover:scale-105 active:scale-95 transition-all"
                 aria-label="Close menu"
               >
-                <VscClose className="w-6 h-6" />
+                <VscClose className="w-5 h-5 text-neutral-900 dark:text-white" />
               </button>
             </div>
 
-            <nav className="flex flex-col items-center gap-8 font-sans font-bold tracking-tight text-2xl text-neutral-900 dark:text-white">
-              {mainNavLinks.map((link, i) => (
-                <motion.a
-                  key={link.href}
-                  href={link.href}
-                  onClick={(e) => handleNavClick(e, link.href)}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.1 + i * 0.05 }}
-                  className="hover:opacity-70 transition-opacity"
+            <div className="flex-1 flex flex-col px-8 py-4 justify-between h-full overflow-y-auto pb-12">
+              <div className="flex flex-col gap-10">
+                <Link 
+                  href="/" 
+                  onClick={() => setIsOpen(false)}
+                  className="font-mono text-lg text-neutral-900 dark:text-white"
                 >
-                  {link.label}
-                </motion.a>
-              ))}
+                  Axel Villanueva
+                </Link>
 
-            </nav>
-
-            <motion.div 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.4 }}
-              className="flex flex-col gap-6 pb-8 w-full max-w-sm mx-auto"
-            >
-              <div className="flex flex-col items-center gap-6">
-                {/* Separator */}
-                <div className="w-8 h-px bg-black/10 dark:bg-white/10" />
-
-                {/* Extra Links (Gear) */}
-                <div className="flex justify-center gap-6 font-mono text-sm">
-                  {extraLinks.map((link) => (
+                <nav className="flex flex-col gap-6 font-mono text-xl">
+                  {mainNavLinks.map((link) => (
                     <Link
                       key={link.href}
                       href={link.href}
                       onClick={() => setIsOpen(false)}
-                      className={`transition-colors ${pathname === link.href ? "text-neutral-900 dark:text-white" : "text-zinc-500 hover:text-neutral-900 dark:hover:text-white"}`}
+                      className={`transition-colors ${pathname === link.href || pathname.startsWith(link.href + "/") ? "text-neutral-900 dark:text-white font-bold" : "text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white"}`}
                     >
                       {link.label}
                     </Link>
                   ))}
-                </div>
+                </nav>
+              </div>
 
+              <div className="flex flex-col gap-6 mt-12 pt-8 border-t border-slate/10 dark:border-white/[0.06]">
                 <ThemeToggle />
-              </div>
-              
-              <div className="flex flex-col gap-4 mt-2">
                 
-                <div className="flex items-center justify-center gap-6">
-                  <a href="mailto:dev.akioxz@gmail.com" aria-label="Email" className="text-zinc-500 hover:text-neutral-900 dark:hover:text-white transition-colors p-3 bg-neutral-100 dark:bg-white/5 rounded-full active:scale-95">
-                    <VscMail className="w-5 h-5" />
+                <p className="font-mono text-sm text-neutral-400 dark:text-neutral-500 leading-relaxed">
+                  For work, collabs & everything else, reach me at
+                </p>
+
+                <div className="flex flex-col gap-4">
+                  <a href="mailto:dev.akioxz@gmail.com" className="font-mono text-sm font-medium tracking-tight text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-cream transition-colors duration-200">
+                    dev.akioxz@gmail.com
                   </a>
-                  <a href="https://discordapp.com/users/your_discord_id_here" target="_blank" rel="noopener noreferrer" aria-label="Discord" className="text-zinc-500 hover:text-neutral-900 dark:hover:text-white transition-colors p-3 bg-neutral-100 dark:bg-white/5 rounded-full active:scale-95">
-                    <FaDiscord className="w-5 h-5" />
+                  <a href="https://discordapp.com/users/359218967990599682" target="_blank" rel="noopener noreferrer" className="font-mono text-sm font-medium tracking-tight text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-cream transition-colors duration-200">
+                    akioxz
                   </a>
-                  <a href="https://github.com/akioxz" target="_blank" rel="noopener noreferrer" aria-label="GitHub" className="text-zinc-500 hover:text-neutral-900 dark:hover:text-white transition-colors p-3 bg-neutral-100 dark:bg-white/5 rounded-full active:scale-95">
-                    <VscGithub className="w-5 h-5" />
+                  <a href="https://github.com/akioxz" target="_blank" rel="noopener noreferrer" className="font-mono text-sm font-medium tracking-tight text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-cream transition-colors duration-200">
+                    github.com/akioxz
                   </a>
-                  <button onClick={() => { setIsOpen(false); window.dispatchEvent(new CustomEvent("openContactModal")); }} aria-label="Message" className="text-zinc-500 hover:text-neutral-900 dark:hover:text-white transition-colors p-3 bg-neutral-100 dark:bg-white/5 rounded-full active:scale-95">
-                    <VscSend className="w-5 h-5" />
-                  </button>
                 </div>
               </div>
-            </motion.div>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
-      
-    </>
+    </div>
   );
 }
